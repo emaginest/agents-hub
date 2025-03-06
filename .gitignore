@@ -1,0 +1,78 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+
+# Node.js / CDK
+node_modules/
+cdk.out/
+.cdk.staging/
+cdk-outputs.json
+
+# AWS
+.aws-sam/
+deploy/lambda_deployment.zip
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Project specific
+*.log
+logs/
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets
+.env
+.env.*
+!.env.example
+secrets.json
+*_key.json
+*_credentials.json
+
+# DynamoDB Local
+.dynamodb/
+dynamodb_local_latest/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
