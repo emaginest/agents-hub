@@ -2,7 +2,82 @@
 
 A FastAPI application that combines Retrieval Augmented Generation (RAG) with ARIA, an AI-powered maternal health assistant. The application uses pgvector for vector storage, DynamoDB for conversation memory, OpenAI's API for embeddings and text generation, and Langfuse for monitoring.
 
-[Previous Project Structure section remains the same...]
+## Project Structure
+
+```
+journey-rag/
+├── app/                      # Main application code
+│   ├── core/                # Core business logic
+│   │   ├── agent.py        # ARIA agent implementation
+│   │   ├── constants.py    # Application constants
+│   │   ├── generation.py   # Text generation utilities
+│   │   ├── memory.py       # Conversation memory management
+│   │   ├── moderation.py   # Content moderation
+│   │   └── retrieval.py    # RAG retrieval logic
+│   ├── models/             # Data models and schemas
+│   │   └── schema.py       # Pydantic models
+│   ├── routes/             # API endpoints
+│   │   ├── aria.py         # ARIA endpoints
+│   │   ├── health.py       # Health check endpoint
+│   │   └── rag.py         # RAG endpoints
+│   ├── tools/              # Agent tools
+│   │   └── calculator.py   # Math operations tool
+│   ├── utils/              # Utility functions
+│   │   ├── date_utils.py   # Date handling utilities
+│   │   ├── monitoring.py   # Langfuse monitoring
+│   │   └── scraper.py      # URL content scraper
+│   ├── config.py           # Application configuration
+│   └── main.py            # FastAPI application setup
+├── cdk/                    # AWS CDK infrastructure
+│   ├── app.py             # CDK app entry point
+│   └── stack.py           # Infrastructure stack definition
+├── deploy/                 # Deployment scripts
+│   ├── build_lambda.ps1    # Windows build script
+│   ├── build_lambda.sh     # Unix build script
+│   ├── deploy.ps1         # Windows deployment script
+│   └── deploy.sh          # Unix deployment script
+├── examples/               # Usage examples
+│   ├── api_requests.md    # API request examples
+│   └── test_api.py        # API test script
+├── tests/                 # Test suite
+├── .env.example           # Environment variables template
+├── Dockerfile             # Container definition
+├── lambda_handler.py      # AWS Lambda handler
+└── requirements.txt       # Python dependencies
+```
+
+The project follows a modular structure:
+
+1. Core Components (`app/core/`):
+   - ARIA agent implementation
+   - RAG retrieval system
+   - Memory management
+   - Content generation
+   - Moderation services
+
+2. API Layer (`app/routes/`):
+   - RESTful endpoints
+   - Request/response handling
+   - Authentication
+   - Health monitoring
+
+3. Infrastructure (`cdk/`):
+   - AWS CDK stack
+   - Lambda configuration
+   - API Gateway setup
+   - DynamoDB resources
+
+4. Deployment (`deploy/`):
+   - Cross-platform build scripts
+   - Deployment automation
+   - Environment configuration
+
+5. Development Tools:
+   - Example code
+   - Test suite
+   - Docker support
+   - Documentation
+
 
 ## Prerequisites
 
