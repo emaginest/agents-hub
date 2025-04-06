@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agents-hub"
+version = "0.1.0"
+description = "Advanced Agent Orchestration Framework"
+readme = "README.md"
+authors = [
+    {name = "Emagine Solutions Technology", email = "info@emaginesolutions.com"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = ["agents", "llm", "ai", "orchestration", "cognitive"]
+dependencies = [
+    "pydantic>=2.0.0",
+    "openai>=1.0.0",
+    "anthropic>=0.5.0",
+    "google-generativeai>=0.3.0",
+    "psycopg2-binary>=2.9.0",
+    "redis>=4.5.0",
+    "sqlalchemy>=2.0.0",
+    "numpy>=1.24.0",
+    "httpx>=0.24.0",
+    "fuzzywuzzy>=0.18.0",
+    "python-Levenshtein>=0.21.1",
+    "beautifulsoup4>=4.9.0",
+    "requests>=2.25.0",
+    "lxml>=4.6.0",
+    "aiohttp>=3.8.0",
+    "PyPDF2>=2.0.0",
+    "python-docx>=0.8.10",
+    "pdfplumber>=0.5.0",
+    "tqdm>=4.60.0",
+    "nltk>=3.6.0",
+    "mcp>=1.6.0",
+    "websockets>=10.0",
+    "langfuse>=2.0.0",
+    "tavily-python>=0.2.0",
+]
+requires-python = ">=3.9"
+
+[project.urls]
+"Homepage" = "https://github.com/emagine-solutions/agents-hub"
+"Bug Tracker" = "https://github.com/emagine-solutions/agents-hub/issues"
+
+[tool.setuptools]
+packages = ["agents_hub"]
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"

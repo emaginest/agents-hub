@@ -1,530 +1,544 @@
-# FastAPI RAG Application with ARIA Agent
+# Agents Hub
 
-A FastAPI application that combines Retrieval Augmented Generation (RAG) with ARIA, an AI-powered maternal health assistant. The application uses pgvector for vector storage, DynamoDB for conversation memory, OpenAI's API for embeddings and text generation, and Langfuse for monitoring.
+Advanced Agent Orchestration Framework by Emagine Solutions Technology
+
+## Overview
+
+Agents Hub is a revolutionary framework for creating, managing, and orchestrating intelligent agent workforces. It provides a comprehensive solution for building multi-agent systems with emergent intelligence capabilities.
+
+## Key Features
+
+- **Multi-Agent Orchestration**: Create and manage teams of specialized agents
+- **Multi-LLM Support**: Use OpenAI, Claude, Gemini, or Ollama models with your own API keys
+- **Content Moderation**: Built-in moderation system to ensure safe and appropriate responses
+- **Web Scraping**: Integrated web scraping capabilities for gathering information
+- **Web Search**: Tavily Search API integration for searching the web and extracting content
+- **Document Processing**: Support for parsing PDFs, DOCX, and other document formats
+- **Retrieval-Augmented Generation**: Built-in RAG system for knowledge management
+- **Model Context Protocol (MCP)**: Connect to MCP servers for filesystem access, GitHub, Tavily, and more
+- **Monitoring & Analytics**: Langfuse integration for tracking agent performance and conversations
+- **Cognitive Architecture**: Inspired by human cognition with metacognitive capabilities
+- **Advanced Memory System**: Hierarchical memory with episodic, semantic, and procedural components
+- **Dynamic Neural Routing**: Intelligent task distribution and resource optimization
+- **Self-Improvement**: Agents that learn and evolve through experience
+- **Explainable AI**: Transparent decision-making with reasoning traces
+- **Secure and Ethical**: Built-in guardrails and safety mechanisms
 
 ## Project Structure
 
 ```
-journey-rag/
-├── app/                      # Main application code
-│   ├── core/                # Core business logic
-│   │   ├── agent.py        # ARIA agent implementation
-│   │   ├── constants.py    # Application constants
-│   │   ├── generation.py   # Text generation utilities
-│   │   ├── memory.py       # Conversation memory management
-│   │   ├── moderation.py   # Content moderation
-│   │   └── retrieval.py    # RAG retrieval logic
-│   ├── models/             # Data models and schemas
-│   │   └── schema.py       # Pydantic models
-│   ├── routes/             # API endpoints
-│   │   ├── aria.py         # ARIA endpoints
-│   │   ├── health.py       # Health check endpoint
-│   │   └── rag.py         # RAG endpoints
-│   ├── tools/              # Agent tools
-│   │   └── calculator.py   # Math operations tool
-│   ├── utils/              # Utility functions
-│   │   ├── date_utils.py   # Date handling utilities
-│   │   ├── monitoring.py   # Langfuse monitoring
-│   │   └── scraper.py      # URL content scraper
-│   ├── config.py           # Application configuration
-│   └── main.py            # FastAPI application setup
-├── cdk/                    # AWS CDK infrastructure
-│   ├── app.py             # CDK app entry point
-│   └── stack.py           # Infrastructure stack definition
-├── deploy/                 # Deployment scripts
-│   ├── build_lambda.ps1    # Windows build script
-│   ├── build_lambda.sh     # Unix build script
-│   ├── deploy.ps1         # Windows deployment script
-│   └── deploy.sh          # Unix deployment script
-├── examples/               # Usage examples
-│   ├── api_requests.md    # API request examples
-│   └── test_api.py        # API test script
-├── tests/                 # Test suite
-├── .env.example           # Environment variables template
-├── Dockerfile             # Container definition
-├── lambda_handler.py      # AWS Lambda handler
-└── requirements.txt       # Python dependencies
+agents-hub/
+├── agents_hub/                # Main package code
+│   ├── agents/               # Agent implementation
+│   │   ├── base.py          # Base agent class
+│   │   ├── specialized/     # Specialized agents
+│   │   └── evolution/       # Self-improvement mechanisms
+│   ├── cognitive/           # Cognitive architecture
+│   │   ├── architecture.py  # Multi-layer cognitive system
+│   │   ├── metacognition.py # Self-reflection capabilities
+│   │   └── reasoning/       # Reasoning mechanisms
+│   ├── llm/                 # LLM providers
+│   │   ├── base.py          # Base LLM interface
+│   │   └── providers/       # Provider implementations
+│   ├── memory/              # Memory systems
+│   │   ├── base.py          # Memory interface
+│   │   ├── backends/        # Storage backends
+│   │   └── operations/      # Memory operations
+│   ├── knowledge/           # Knowledge management
+│   │   ├── rag/             # Retrieval-Augmented Generation
+│   │   └── distillation.py  # Knowledge distillation
+│   ├── orchestration/       # Agent orchestration
+│   │   ├── router.py        # Task routing
+│   │   └── protocols/       # Communication protocols
+│   ├── tools/               # Agent tools
+│   │   ├── base.py          # Base tool interface
+│   │   └── standard/        # Standard tools
+│   └── utils/               # Utility functions
+├── examples/                 # Usage examples
+│   ├── fastapi_app/         # FastAPI integration
+│   └── agent_workforce/     # Agent workforce examples
+├── docker/                   # Docker setup
+│   ├── Dockerfile           # Container definition
+│   └── docker-compose.yml   # Multi-container setup
+├── tests/                    # Test suite
+└── requirements.txt          # Python dependencies
 ```
 
-The project follows a modular structure:
+The framework follows a modular architecture:
 
-1. Core Components (`app/core/`):
-   - ARIA agent implementation
-   - RAG retrieval system
-   - Memory management
-   - Content generation
-   - Moderation services
+1. **Agent System**: Flexible agent creation and management with specialized capabilities
 
-2. API Layer (`app/routes/`):
-   - RESTful endpoints
-   - Request/response handling
-   - Authentication
-   - Health monitoring
+2. **Cognitive Architecture**: Multi-layered cognitive system inspired by human cognition
 
-3. Infrastructure (`cdk/`):
-   - AWS CDK stack
-   - Lambda configuration
-   - API Gateway setup
-   - DynamoDB resources
+3. **LLM Integration**: Support for multiple LLM providers with a unified interface
 
-4. Deployment (`deploy/`):
-   - Cross-platform build scripts
-   - Deployment automation
-   - Environment configuration
+4. **Memory System**: Sophisticated memory management with multiple backend options
 
-5. Development Tools:
-   - Example code
-   - Test suite
-   - Docker support
-   - Documentation
+5. **Orchestration**: Dynamic task routing and agent collaboration
+
+6. **Knowledge Management**: Advanced RAG capabilities with PostgreSQL/pgvector
+
+7. **Tool System**: Extensible tool framework for agent capabilities
 
 
-## Prerequisites
+## Installation
 
-- Python 3.9+
-- AWS CDK CLI
-- AWS CLI configured with appropriate credentials
-- PostgreSQL database with pgvector extension
-- DynamoDB access (local or AWS)
-- Node.js and npm (for CDK)
-- Administrator privileges on Windows
-- OpenAI API key
-- Langfuse account (for monitoring)
+```bash
+pip install agents-hub
+```
+
+## Quick Start
+
+```python
+from agents_hub import AgentWorkforce, Agent
+from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.moderation import RuleBasedModerator
+
+# Configure LLM provider with your API key
+llm = OpenAIProvider(api_key="your-openai-api-key")
+
+# Create a content moderator
+moderator = RuleBasedModerator()
+
+# Create specialized agents with moderation
+researcher = Agent(
+    name="researcher",
+    llm=llm,
+    moderation=moderator,
+    on_moderation_violation="block"
+)
+analyst = Agent(
+    name="analyst",
+    llm=llm,
+    moderation=moderator,
+    on_moderation_violation="block"
+)
+writer = Agent(
+    name="writer",
+    llm=llm,
+    moderation=moderator,
+    on_moderation_violation="block"
+)
+
+# Create a workforce with these agents
+workforce = AgentWorkforce(agents=[researcher, analyst, writer])
+
+# Execute a task with the workforce
+result = workforce.execute("Research the impact of AI on healthcare and prepare a report")
+
+print(result)
+```
 
 ## Local Development
 
-1. Open PowerShell as Administrator and navigate to your project directory:
-   ```powershell
-   # Run PowerShell as Administrator
-   cd path\to\your\project
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/emagine-solutions/agents-hub.git
+   cd agents-hub
    ```
 
-2. Create a development virtual environment in a location where you have write permissions:
-   ```powershell
-   # Create venv in your user directory
-   python -m venv $env:USERPROFILE\venvs\rag-api
-   # Activate the environment
-   $env:USERPROFILE\venvs\rag-api\Scripts\Activate
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. Install dependencies:
-   ```powershell
+   ```bash
    pip install -r requirements.txt
    ```
 
-4. Set up environment variables:
-   ```powershell
-   Copy-Item .env.example .env
-   # Edit .env with your configuration
-   ```
-
-5. Set up local DynamoDB (optional):
-   ```powershell
-   # Install DynamoDB Local
-   aws dynamodb create-table --cli-input-json file://dynamodb-table.json --endpoint-url http://localhost:8000
-   ```
-
-6. Run the application locally:
-   ```powershell
-   uvicorn app.main:app --reload
-   ```
-
-The API will be available at http://localhost:8000
-API documentation is available at http://localhost:8000/docs
-
-## API Endpoints
-
-### RAG Operations
-
-- `POST /api/v1/rag/query`
-  - Query the RAG system with a question
-  - Requires API Gateway key authentication
-  - Example:
-    ```bash
-    curl -X POST https://your-api.execute-api.region.amazonaws.com/sbx/api/v1/rag/query \
-      -H "x-api-key: your-api-gateway-key" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "query": "What are common pregnancy symptoms?",
-        "collection_name": "maternal_health"
-      }'
-    ```
-
-- `POST /api/v1/rag/ingest`
-  - Ingest new documents into the vector store
-  - Requires API Gateway key authentication
-  - Example:
-    ```bash
-    curl -X POST https://your-api.execute-api.region.amazonaws.com/sbx/api/v1/rag/ingest \
-      -H "x-api-key: your-api-gateway-key" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "urls": [
-          "https://example.com/pregnancy-article",
-          "https://example.com/maternal-health"
-        ],
-        "collection_name": "maternal_health"
-      }'
-    ```
-
-### ARIA Operations
-
-- `GET /api/v1/health`
-  - Health check endpoint
-  - No authentication required
-  - Example:
-    ```bash
-    curl https://your-api.execute-api.region.amazonaws.com/sbx/api/v1/health
-    ```
-  - Response:
-    ```json
-    {
-      "status": "healthy"
-    }
-    ```
-
-- `POST /api/v1/aria/patient/chat`
-  - Chat with ARIA, the maternal health assistant
-  - Requires API Gateway key authentication
-  - Monitored with Langfuse for conversation tracking
-  - Example:
-    ```bash
-    curl -X POST https://your-api.execute-api.region.amazonaws.com/sbx/api/v1/aria/patient/chat \
-      -H "x-api-key: your-api-gateway-key" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "patient_id": "patient123",
-        "message": "What are safe exercises during pregnancy?",
-        "history_limit": 5
-      }'
-    ```
-  - Response:
-    ```json
-    {
-      "response": "Based on current medical guidance...",
-      "tools_used": ["search_maternal_health", "calculate"]
-    }
-    ```
-
-- `POST /api/v1/aria/patient/reformulate`
-  - Request ARIA to reformulate a previous response
-  - Requires API Gateway key authentication
-  - Monitored with Langfuse for response quality tracking
-  - Example:
-    ```bash
-    curl -X POST https://your-api.execute-api.region.amazonaws.com/sbx/api/v1/aria/patient/reformulate \
-      -H "x-api-key: your-api-gateway-key" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "patient_id": "patient123",
-        "original_response": "Previous response about exercise...",
-        "reformulation_type": "elaborate",
-        "specific_focus": "first trimester exercises"
-      }'
-    ```
-  - Response:
-    ```json
-    {
-      "response": "Let me provide more detailed information...",
-      "tools_used": ["search_maternal_health"]
-    }
-    ```
-
-- `DELETE /api/v1/aria/patient/history/{patient_id}`
-  - Clear conversation history for a specific patient
-  - Requires API Gateway key authentication
-  - Example:
-    ```bash
-    curl -X DELETE https://your-api.execute-api.region.amazonaws.com/sbx/api/v1/aria/patient/history/patient123 \
-      -H "x-api-key: your-api-gateway-key"
-    ```
-  - Response:
-    ```json
-    {
-      "status": "success",
-      "message": "Chat history cleared"
-    }
-    ```
-
-## Authentication
-
-The API uses API Gateway's built-in key authentication:
-
-1. API Key Location:
-   - AWS Console > API Gateway > API Keys > {env}-aihub-api-key
-   - Replace {env} with your environment (e.g., sbx, dev, prod)
-
-2. Using the API Key:
-   - Include in x-api-key header for all protected endpoints
-   - Not required for health check endpoint (/api/v1/health)
-
-3. Key Management:
-   - Keys are environment-specific
-   - Managed through API Gateway usage plans
-   - Rate limiting and quota settings available
-
-## Infrastructure
-
-### DynamoDB Configuration
-
-1. Table Naming:
-   - Tables follow pattern: {env}-*
-   - Example: sbx-jr-agent-langchain
-
-2. Permissions:
-   - Lambda has full CRUD permissions
-   - Includes table and index access
-   - Environment-scoped permissions
-
-3. Operations:
-   - Query
-   - Scan
-   - Get/Put Items
-   - Batch operations
-   - Table management
-
-## Monitoring
-
-### Langfuse Integration
-
-The ARIA agent is monitored using Langfuse to track:
-- Conversation flows
-- Tool usage patterns
-- Response quality
-- Error rates
-- Performance metrics
-
-#### Setup
-
-1. Create a Langfuse account at https://langfuse.com
-2. Get your API keys from the Langfuse dashboard
-3. Add keys to your .env file:
-   ```
-   LANGFUSE_PUBLIC_KEY=your-public-key
-   LANGFUSE_SECRET_KEY=your-secret-key
-   ```
-
-#### Features
-
-- Conversation Tracing:
-  * Each patient interaction is traced
-  * Tool usage is logged with inputs/outputs
-  * Response generation is monitored
-  * Errors are captured and tracked
-
-- Metrics:
-  * Response latency
-  * Tool usage frequency
-  * Error rates
-  * Token usage
-
-- Dashboard:
-  * Real-time monitoring
-  * Usage patterns
-  * Error analysis
-  * Performance trends
-
-## AWS Deployment
-
-### Prerequisites
-
-1. Install required tools:
+4. Run the example FastAPI application:
    ```bash
-   # Install Node.js and npm (https://nodejs.org)
-   # Install AWS CLI (https://aws.amazon.com/cli/)
-   # Install AWS CDK CLI
-   npm install -g aws-cdk
+   cd examples/fastapi_app
+   python main.py
    ```
 
-2. Configure AWS credentials:
-   ```bash
-   aws configure
-   # Enter your AWS Access Key ID
-   # Enter your AWS Secret Access Key
-   # Enter your default region (e.g., us-east-1)
-   # Enter your output format (e.g., json)
-   ```
+   The API will be available at http://localhost:8000
+   API documentation is available at http://localhost:8000/docs
 
-3. Verify AWS credentials:
-   ```bash
-   aws sts get-caller-identity
-   ```
+## Docker Setup
 
-### Environment Setup
+For local development with Docker:
 
-1. Create and configure .env file:
-   ```env
-   # AWS CDK Configuration
-   CDK_DEFAULT_ACCOUNT=your-aws-account-id  # From 'aws sts get-caller-identity'
-   CDK_DEFAULT_REGION=us-east-1
-   ENVIRONMENT=sbx  # or dev, test, qa, prod
-   ```
+```bash
+cd docker
+docker-compose up -d
+```
 
-   Note: All other configuration values (OpenAI, PostgreSQL, etc.) are stored in AWS Secrets Manager under `{env}/aihub`.
+This will start:
+- PostgreSQL with pgvector extension
+- Ollama for local LLM inference
+- FastAPI example application
 
-### CDK Deployment Steps
+## API Example
 
-1. Bootstrap AWS CDK (first time only):
-   ```bash
-   # This sets up the CDK toolkit stack in your AWS account
-   cdk bootstrap aws://ACCOUNT-NUMBER/REGION
-   ```
+The FastAPI example application provides the following endpoints:
 
-2. Install project dependencies:
-   ```bash
-   # Install main project dependencies
-   pip install -r requirements.txt
+### Agent Management
 
-   # Install CDK dependencies
-   cd cdk
-   pip install -r requirements.txt
-   cd ..
-   ```
+- `GET /agents` - List all available agents
+- `POST /agents` - Create a new agent
+- `DELETE /agents/{agent_name}` - Delete an agent
 
-3. Build Lambda package:
-   ```powershell
-   # Windows (PowerShell as Administrator)
-   .\deploy\build_lambda.ps1
+### Chat
 
-   # Linux/macOS
-   chmod +x deploy/build_lambda.sh
-   ./deploy/build_lambda.sh
-   ```
+- `POST /chat` - Chat with an agent or the workforce
 
-4. Deploy the stack:
-   ```powershell
-   # Windows (PowerShell as Administrator)
-   .\deploy\deploy.ps1
+### Conversation Management
 
-   # Linux/macOS
-   chmod +x deploy/deploy.sh
-   ./deploy/deploy.sh
-   ```
+- `GET /conversations/{conversation_id}` - Get conversation history
+- `DELETE /conversations/{conversation_id}` - Clear conversation history
 
-### Infrastructure Created
+## Advanced Features
 
-The deployment creates:
-- Lambda function with:
-  * VPC networking for database access
-  * Environment variables from AWS Secrets Manager
-  * IAM roles and permissions
-  * CloudWatch logging
+### Multi-LLM Support
 
-- API Gateway with:
-  * Environment-specific stage name (e.g., /sbx/, /dev/, /prod/)
-  * REST API endpoints
-  * API key authentication
-  * CORS configuration
-  * Usage plans and throttling
+Agents Hub supports multiple LLM providers:
 
-- DynamoDB:
-  * Environment-specific conversation memory table
-  * Auto-scaling configuration
-  * Backup policies
+```python
+# OpenAI
+from agents_hub.llm.providers import OpenAIProvider
+llm = OpenAIProvider(api_key="your-openai-api-key")
 
-### Post-Deployment Steps
+# Anthropic Claude
+from agents_hub.llm.providers import ClaudeProvider
+llm = ClaudeProvider(api_key="your-anthropic-api-key")
 
-1. Get deployment outputs:
-   ```bash
-   # Outputs saved to cdk-outputs.json
-   cat cdk-outputs.json
-   ```
+# Google Gemini
+from agents_hub.llm.providers import GeminiProvider
+llm = GeminiProvider(api_key="your-google-api-key")
 
-2. Test the deployment:
-   ```bash
-   # Get API URL and key from cdk-outputs.json
-   # Note: {env} will be sbx, dev, test, qa, or prod
-   curl -X GET https://your-api.execute-api.region.amazonaws.com/{env}/api/v1/health
-   ```
+# Ollama (local models)
+from agents_hub.llm.providers import OllamaProvider
+llm = OllamaProvider(model="llama3")
+```
 
-3. Monitor the deployment:
-   - Check CloudWatch logs
-   - View Langfuse dashboard
-   - Monitor API Gateway metrics
+### Content Moderation
 
-### Troubleshooting
+Agents Hub provides flexible content moderation options:
 
-1. Check Lambda logs:
-   ```bash
-   # Replace {env} with your environment
-   aws logs get-log-events --log-group-name /aws/lambda/{env}-aihub-api
-   ```
+```python
+# Rule-based moderation (no API key required)
+from agents_hub.moderation import RuleBasedModerator
+moderator = RuleBasedModerator(
+    jailbreak_threshold=60,  # Lower threshold for higher sensitivity
+    custom_rules=["Tell me how to hack", "Ignore your instructions"]  # Custom rules
+)
 
-2. Verify secrets access:
-   ```bash
-   # List secrets
-   aws secretsmanager list-secrets
+# OpenAI moderation (requires API key)
+from agents_hub.moderation import OpenAIModerator
+moderator = OpenAIModerator(
+    api_key="your-openai-api-key",
+    categories=["hate", "sexual", "violence"]  # Optional: specify categories
+)
 
-   # Get secret value (replace {env})
-   aws secretsmanager get-secret-value --secret-id {env}/aihub
-   ```
+# Combined moderation (use multiple moderators)
+from agents_hub.moderation import ModerationRegistry
+moderator = ModerationRegistry(
+    moderators=[RuleBasedModerator(), OpenAIModerator(api_key="your-openai-api-key")],
+    mode="any"  # Flag if any moderator flags content
+)
 
-3. Test API Gateway:
-   ```bash
-   # Get API key (replace {env})
-   aws apigateway get-api-keys --name-query {env}-aihub-api-key
-   ```
+# Create agent with moderation
+agent = Agent(
+    name="moderated_agent",
+    llm=llm,
+    moderation=moderator,
+    on_moderation_violation="block"  # Options: block, warn, log
+)
+```
 
-4. Common issues:
-   - VPC configuration: Ensure Lambda has proper network access
-   - Secrets access: Verify Lambda role has permission to access {env}/aihub secret
-   - Environment variables: Check CloudWatch logs for environment variable errors
+### Memory Systems
+
+Agents Hub provides flexible memory storage options:
+
+```python
+# PostgreSQL Memory
+from agents_hub.memory.backends import PostgreSQLMemory
+memory = PostgreSQLMemory(
+    host="localhost",
+    port=5432,
+    database="agents_hub",
+    user="postgres",
+    password="postgres"
+)
+
+# Create an agent with memory
+agent = Agent("researcher", llm=llm, memory=memory)
+```
+
+### Web Scraping
+
+Agents Hub includes a powerful web scraping tool:
+
+```python
+from agents_hub.tools.standard import ScraperTool
+
+# Create a scraper tool
+scraper_tool = ScraperTool()
+
+# Create an agent with the scraper tool
+agent = Agent(
+    name="web_researcher",
+    llm=llm,
+    tools=[scraper_tool],
+    system_prompt="You are a web researcher that can scrape and analyze web content."
+)
+
+# Use the agent to scrape and analyze web content
+response = await agent.run("Scrape and summarize the content from https://example.com")
+```
+
+### Document Processing
+
+Agents Hub provides utilities for processing various document formats:
+
+```python
+from agents_hub.utils.document import extract_text_from_pdf, extract_text_from_docx, chunk_text
+
+# Extract text from PDF
+pdf_result = extract_text_from_pdf(file_path="document.pdf")
+print(pdf_result["text"])
+print(pdf_result["metadata"])
+
+# Extract text from DOCX
+docx_result = extract_text_from_docx(file_path="document.docx")
+print(docx_result["text"])
+print(docx_result["metadata"])
+
+# Chunk text for processing
+chunks = chunk_text(
+    text=pdf_result["text"],
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="sentence"  # Options: token, character, sentence
+)
+```
+
+### RAG Integration
+
+Agents Hub includes advanced RAG capabilities with PostgreSQL/pgvector:
+
+```python
+from agents_hub.knowledge.rag.backends import PostgreSQLVectorStorage
+from agents_hub.tools.standard import RAGTool
+
+# Initialize vector storage
+vector_db = PostgreSQLVectorStorage(
+    host="localhost",
+    port=5432,
+    database="agents_hub",
+    user="postgres",
+    password="postgres",
+    llm=llm  # For generating embeddings
+)
+
+# Create a RAG tool
+rag_tool = RAGTool(vector_store=vector_db)
+
+# Create an agent with the RAG tool
+agent = Agent(
+    name="knowledge_agent",
+    llm=llm,
+    tools=[rag_tool],
+    system_prompt="You are a knowledge agent that can store and retrieve information."
+)
+
+# Use the agent to ingest and query documents
+response = await agent.run("Ingest this article into the 'research' collection: ...")
+response = await agent.run("What information do we have about machine learning?")
+```
+
+### Model Context Protocol (MCP)
+
+Agents Hub supports the Model Context Protocol (MCP) for connecting to external resources:
+
+```python
+from agents_hub.tools.standard import MCPTool
+
+# Create an MCP tool for filesystem access
+filesystem_tool = MCPTool(
+    server_name="filesystem",
+    server_command="npx",
+    server_args=["-y", "@modelcontextprotocol/server-filesystem", "./"],
+    transport="stdio",
+)
+
+# Create an MCP tool for GitHub access
+github_tool = MCPTool(
+    server_name="github",
+    server_command="npx",
+    server_args=["-y", "@modelcontextprotocol/server-github"],
+    server_env={"GITHUB_PERSONAL_ACCESS_TOKEN": "your-github-token"},
+    transport="stdio",
+)
+
+# Create an agent with MCP tools
+agent = Agent(
+    name="mcp_agent",
+    llm=llm,
+    tools=[filesystem_tool, github_tool],
+    system_prompt="You are an assistant that can access files and GitHub repositories."
+)
+
+# Use the agent to access files and repositories
+response = await agent.run("List the files in the current directory")
+response = await agent.run("Check for open issues in the repository")
+```
+
+### Monitoring & Analytics
+
+Agents Hub integrates with Langfuse for monitoring and analytics:
+
+```python
+from agents_hub.monitoring import LangfuseMonitor
+
+# Create a Langfuse monitor
+monitor = LangfuseMonitor(
+    public_key="your-langfuse-public-key",
+    secret_key="your-langfuse-secret-key",
+    host="https://cloud.langfuse.com",  # Optional
+    release="1.0.0",  # Optional version tracking
+)
+
+# Create an agent with monitoring
+agent = Agent(
+    name="monitored_agent",
+    llm=llm,
+    monitor=monitor,
+    system_prompt="You are a helpful assistant."
+)
+
+# Use the agent with monitoring
+response = await agent.run(
+    "What is the capital of France?",
+    context={"conversation_id": "user123"},
+)
+
+# Score a conversation
+await monitor.score_conversation(
+    conversation_id="user123",
+    name="helpfulness",
+    value=0.9,
+    comment="Very helpful response",
+)
+```
+
+### Tavily Search API
+
+Agents Hub integrates with the Tavily Search API for web search and content extraction:
+
+```python
+from agents_hub import Agent
+from agents_hub.tools.standard import TavilyTool
+
+# Create Tavily tool
+tavily_tool = TavilyTool(
+    api_key="your-tavily-api-key",
+    search_depth="advanced",
+    max_results=5,
+)
+
+# Create agent with Tavily tool
+agent = Agent(
+    name="research_agent",
+    llm=llm,
+    tools=[tavily_tool],
+    system_prompt="You are a research assistant that can search the web for information.",
+)
+
+# Search for information
+response = await agent.run("What are the latest developments in quantum computing?")
+
+# Extract content from a URL
+response = await agent.run("Extract and summarize the content from this URL: https://example.com")
+```
+
+### Cognitive Architecture
+
+Agents Hub includes a cognitive architecture inspired by human cognition:
+
+```python
+from agents_hub import CognitiveAgent
+from agents_hub.cognitive import CognitiveArchitecture
+
+# Create cognitive architecture
+cognitive_architecture = CognitiveArchitecture(
+    metacognition_config={
+        "reflection_depth": 2,
+        "confidence_threshold": 0.7,
+    },
+    reasoning_config={
+        "enabled_mechanisms": ["deductive", "inductive", "abductive"],
+        "default_mechanism": "deductive",
+    },
+)
+
+# Create cognitive agent
+agent = CognitiveAgent(
+    name="cognitive_agent",
+    llm=llm,
+    cognitive_architecture=cognitive_architecture,
+    system_prompt="You are a thoughtful assistant with advanced reasoning capabilities.",
+    cognitive_config={
+        "reasoning_trace_enabled": True,
+        "metacognition_enabled": True,
+        "learning_enabled": True,
+    },
+)
+
+# Use different reasoning mechanisms
+deductive_response = await agent.run(
+    "If all birds can fly, and penguins are birds, can penguins fly?",
+    context={"reasoning_mechanism": "deductive"},
+)
+
+abductive_response = await agent.run(
+    "The sidewalk is wet this morning. What might have caused this?",
+    context={"reasoning_mechanism": "abductive"},
+)
+```
 
 ## Architecture
 
-The application uses a modern, scalable architecture:
+Agents Hub uses a modular, extensible architecture:
 
-### Components
-- FastAPI for the API framework
-- pgvector for vector similarity search
-- DynamoDB for conversation memory
-- OpenAI API for:
-  * Embeddings generation
-  * Text generation
-  * Function calling
-- AWS Lambda for serverless execution
-- API Gateway for API management
-- VPC for database connectivity
-- Secrets Manager for sensitive data
-- Langfuse for monitoring and analytics
-
-### ARIA Agent Architecture
 ```mermaid
 graph TD
-    A[User Request] --> B[FastAPI Endpoint]
-    B --> C[ARIA Agent]
-    C --> D[Tool Selection]
-    D --> E[RAG Tool]
-    D --> F[Calculator Tool]
-    E --> G[Vector Store]
-    F --> H[Math Operations]
-    G --> I[Response Generation]
-    H --> I
-    I --> J[DynamoDB Memory]
-    J --> K[Final Response]
-    L[Langfuse Monitoring] --> |Traces| B
-    L --> |Logs| D
-    L --> |Metrics| I
+    A[User] --> B[Agent Workforce]
+    B --> C[Orchestrator Agent]
+    C --> D[Task Decomposition]
+    D --> E[Agent Selection]
+    E --> F1[Specialized Agent 1]
+    E --> F2[Specialized Agent 2]
+    E --> F3[Specialized Agent 3]
+    F1 --> G[Tool Usage]
+    F2 --> G
+    F3 --> G
+    G --> H1[Calculator Tool]
+    G --> H2[RAG Tool]
+    G --> H3[Custom Tool]
+    H2 --> I[Vector Database]
+    F1 --> J[Memory System]
+    F2 --> J
+    F3 --> J
+    J --> K[Result Synthesis]
+    K --> L[Final Response]
 ```
 
-## Security
+## Security and Moderation
 
-### Authentication & Authorization
-- API Gateway key authentication for protected endpoints
-- Public health check endpoint
-- Secrets managed through AWS Secrets Manager
-- Environment-based isolation for DynamoDB tables
+Agents Hub includes several security and moderation features:
 
-### Network Security
-- VPC isolation for database access
-- HTTPS enforced through API Gateway
-- Security groups for Lambda functions
-
-### Data Protection
-- Encryption at rest for DynamoDB
-- Encryption in transit using HTTPS
-- Secure handling of patient data
-- Regular security audits
+- **API Key Management**: Secure storage and rotation of provider API keys
+- **Content Moderation**: Built-in content filtering and safety mechanisms
+  - Rule-based moderation with jailbreak detection
+  - OpenAI Moderation API integration
+  - Customizable moderation actions (block, warn, log)
+  - Moderation registry for combining multiple moderators
+- **Data Privacy**: Control over data storage and processing
+- **Audit Logging**: Comprehensive logging of agent actions and decisions
 
 ## Contributing
 
@@ -563,7 +577,8 @@ This project is licensed under the MIT License.
 ```
 MIT License
 
-Copyright (c) 2025 Emagine Solutions Technology
+Agents Hub - Advanced Agent Orchestration Framework
+Copyright (c) 2023-2024 Emagine Solutions Technology
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

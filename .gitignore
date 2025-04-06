@@ -29,15 +29,8 @@ env.bak/
 venv.bak/
 .python-version
 
-# Node.js / CDK
+# Node.js
 node_modules/
-cdk.out/
-.cdk.staging/
-cdk-outputs.json
-
-# AWS
-.aws-sam/
-deploy/lambda_deployment.zip
 
 # IDE
 .idea/
@@ -67,12 +60,13 @@ secrets.json
 *_key.json
 *_credentials.json
 
-# DynamoDB Local
-.dynamodb/
-dynamodb_local_latest/
+
 
 # Temporary files
 *.tmp
 *.bak
 *.swp
 *~
+
+# Augment files
+.augmentignore
