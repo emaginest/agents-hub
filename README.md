@@ -14,7 +14,7 @@ Agents Hub is a revolutionary framework for creating, managing, and orchestratin
 - **Web Scraping**: Integrated web scraping capabilities for gathering information
 - **Web Search**: Tavily Search API integration for searching the web and extracting content
 - **Document Processing**: Support for parsing PDFs, DOCX, and other document formats
-- **Retrieval-Augmented Generation**: Built-in RAG system for knowledge management
+- **PGVector Tool**: Build custom RAG systems with PostgreSQL's pgvector extension
 - **Model Context Protocol (MCP)**: Connect to MCP servers for filesystem access, GitHub, Tavily, and more
 - **Monitoring & Analytics**: Langfuse integration for tracking agent performance and conversations
 - **Cognitive Architecture**: Inspired by human cognition with metacognitive capabilities
@@ -23,45 +23,78 @@ Agents Hub is a revolutionary framework for creating, managing, and orchestratin
 - **Self-Improvement**: Agents that learn and evolve through experience
 - **Explainable AI**: Transparent decision-making with reasoning traces
 - **Secure and Ethical**: Built-in guardrails and safety mechanisms
+- **Coding Agents**: Specialized agents for software development with AWS CDK integration
+- **Human Approval**: Interactive approval system for critical operations
 
 ## Project Structure
 
 ```
 agents-hub/
-├── agents_hub/                # Main package code
-│   ├── agents/               # Agent implementation
-│   │   ├── base.py          # Base agent class
-│   │   ├── specialized/     # Specialized agents
-│   │   └── evolution/       # Self-improvement mechanisms
-│   ├── cognitive/           # Cognitive architecture
-│   │   ├── architecture.py  # Multi-layer cognitive system
-│   │   ├── metacognition.py # Self-reflection capabilities
-│   │   └── reasoning/       # Reasoning mechanisms
-│   ├── llm/                 # LLM providers
-│   │   ├── base.py          # Base LLM interface
-│   │   └── providers/       # Provider implementations
-│   ├── memory/              # Memory systems
-│   │   ├── base.py          # Memory interface
-│   │   ├── backends/        # Storage backends
-│   │   └── operations/      # Memory operations
-│   ├── knowledge/           # Knowledge management
-│   │   ├── rag/             # Retrieval-Augmented Generation
-│   │   └── distillation.py  # Knowledge distillation
-│   ├── orchestration/       # Agent orchestration
-│   │   ├── router.py        # Task routing
-│   │   └── protocols/       # Communication protocols
-│   ├── tools/               # Agent tools
-│   │   ├── base.py          # Base tool interface
-│   │   └── standard/        # Standard tools
-│   └── utils/               # Utility functions
-├── examples/                 # Usage examples
-│   ├── fastapi_app/         # FastAPI integration
-│   └── agent_workforce/     # Agent workforce examples
-├── docker/                   # Docker setup
-│   ├── Dockerfile           # Container definition
-│   └── docker-compose.yml   # Multi-container setup
-├── tests/                    # Test suite
-└── requirements.txt          # Python dependencies
+├── agents_hub/                      # Main package
+│   ├── agents/                      # Base agent implementations
+│   │   ├── base.py                  # Base Agent class
+│   │   ├── specialized/             # Specialized agents
+│   │   └── evolution/               # Agent evolution capabilities
+│   ├── coding/                      # Coding agents and tools
+│   │   ├── agents/                  # Specialized coding agents
+│   │   └── workforce.py             # CodingWorkforce implementation
+│   ├── cognitive/                   # Cognitive architecture
+│   │   ├── reasoning/               # Reasoning capabilities
+│   │   └── metacognition.py         # Metacognitive capabilities
+│   ├── llm/                         # LLM providers and interfaces
+│   │   ├── base.py                  # Base LLM interface
+│   │   └── providers/               # Provider implementations
+│   ├── memory/                      # Memory systems
+│   │   ├── base.py                  # Base memory interface
+│   │   ├── backends/                # Storage backends
+│   │   └── operations/              # Memory operations
+│   ├── moderation/                  # Content moderation
+│   │   └── filters.py               # Content filters
+│   ├── monitoring/                  # Monitoring and observability
+│   │   └── langfuse.py              # Langfuse integration
+│   ├── orchestration/               # Agent orchestration
+│   │   ├── router.py                # Agent routing
+│   │   └── protocols/               # Communication protocols
+│   ├── rag/                         # Retrieval-Augmented Generation
+│   │   ├── agent.py                 # RAG Agent
+│   │   └── vector_stores/           # Vector store integrations
+│   ├── security/                    # Security features
+│   │   └── ethics/                  # Ethical guidelines
+│   ├── templates/                   # Code templates
+│   │   ├── aws_cdk/                 # AWS CDK templates
+│   │   ├── fastapi/                 # FastAPI templates
+│   │   └── frontend/                # Frontend templates
+│   ├── tools/                       # Tools for agents
+│   │   ├── base.py                  # Base Tool class
+│   │   ├── coding/                  # Coding tools
+│   │   ├── connectors/              # External service connectors
+│   │   └── standard/                # Standard tools
+│   └── utils/                       # Utility functions
+│       ├── approval.py              # Human approval interface
+│       ├── document/                # Document processing
+│       ├── mcp/                     # Model Context Protocol
+│       └── multimodal/              # Multimodal utilities
+├── docs/                            # Documentation
+│   ├── api/                         # API documentation
+│   ├── guides/                      # User guides
+│   └── migration_guides/            # Migration guides
+├── examples/                        # Example applications
+│   ├── agent_workforce/             # Agent workforce examples
+│   ├── coding_workforce/            # Coding workforce examples
+│   ├── cognitive/                   # Cognitive agent examples
+│   ├── moderation/                  # Moderation examples
+│   ├── monitoring/                  # Monitoring examples
+│   ├── rag/                         # RAG examples
+│   └── tools/                       # Tool usage examples
+├── tests/                           # Tests
+│   ├── integration/                 # Integration tests
+│   └── unit/                        # Unit tests
+
+├── .gitignore                       # Git ignore file
+├── LICENSE                          # License file
+├── pyproject.toml                   # Project configuration
+├── README.md                        # Main README
+└── setup.py                         # Setup script
 ```
 
 The framework follows a modular architecture:
@@ -79,6 +112,12 @@ The framework follows a modular architecture:
 6. **Knowledge Management**: Advanced RAG capabilities with PostgreSQL/pgvector
 
 7. **Tool System**: Extensible tool framework for agent capabilities
+
+8. **Coding System**: Specialized agents and tools for software development
+
+9. **Moderation System**: Content filtering and safety mechanisms
+
+10. **Monitoring System**: Performance tracking and analytics
 
 
 ## Installation
@@ -159,12 +198,14 @@ print(result)
 
 ## Docker Setup
 
-For local development with Docker:
+Some examples include Docker support for easy setup and testing. For example, to run the FastAPI example with Docker:
 
 ```bash
-cd docker
+cd examples/fastapi_app
 docker-compose up -d
 ```
+
+See the README.md in each example directory for specific Docker instructions.
 
 This will start:
 - PostgreSQL with pgvector extension
@@ -316,39 +357,77 @@ chunks = chunk_text(
 )
 ```
 
-### RAG Integration
+### RAG (Retrieval-Augmented Generation)
 
-Agents Hub includes advanced RAG capabilities with PostgreSQL/pgvector:
+Agents Hub provides two approaches for building RAG systems:
+
+#### 1. RAGAgent (High-Level Interface)
+
+The RAGAgent provides a complete solution for knowledge management with built-in methods for scraping, storing, and querying content:
 
 ```python
-from agents_hub.knowledge.rag.backends import PostgreSQLVectorStorage
-from agents_hub.tools.standard import RAGTool
+from agents_hub import RAGAgent
 
-# Initialize vector storage
-vector_db = PostgreSQLVectorStorage(
-    host="localhost",
-    port=5432,
-    database="agents_hub",
-    user="postgres",
-    password="postgres",
-    llm=llm  # For generating embeddings
+# Create RAG agent
+rag_agent = RAGAgent(
+    llm=llm,
+    pg_host="localhost",
+    pg_port=5432,
+    pg_database="postgres",
+    pg_user="postgres",
+    pg_password="postgres"
 )
 
-# Create a RAG tool
-rag_tool = RAGTool(vector_store=vector_db)
+# Create a collection
+await rag_agent.create_collection("research")
 
-# Create an agent with the RAG tool
+# Scrape and store content from a URL
+await rag_agent.scrape_and_store(
+    url="https://example.com/article",
+    collection_name="research"
+)
+
+# Answer a question using the RAG approach
+result = await rag_agent.answer_question(
+    question="What is the main topic of the article?",
+    collection_name="research"
+)
+print(result["answer"])
+```
+
+See the [RAG Agent Documentation](docs/rag_agent.md) for more details.
+
+#### 2. PGVector Tool (Low-Level Interface)
+
+For more flexibility, you can use the PGVector tool directly to build custom RAG systems:
+
+```python
+from agents_hub.tools.standard import PGVectorTool
+
+# Create PGVector tool
+pgvector_tool = PGVectorTool(
+    llm=llm,  # For generating embeddings
+    host="localhost",
+    port=5432,
+    database="postgres",
+    user="postgres",
+    password="postgres"
+)
+
+# Create an agent with the PGVector tool
 agent = Agent(
     name="knowledge_agent",
     llm=llm,
-    tools=[rag_tool],
+    tools=[pgvector_tool],
     system_prompt="You are a knowledge agent that can store and retrieve information."
 )
 
-# Use the agent to ingest and query documents
-response = await agent.run("Ingest this article into the 'research' collection: ...")
-response = await agent.run("What information do we have about machine learning?")
+# Use the agent to add and search for documents
+response = await agent.run("Add this article to the 'research' collection: ...")
+response = await agent.run("Search the 'research' collection for information about machine learning.")
 ```
+
+See the [PGVector Tool Documentation](docs/pgvector_tool.md) for more details.
 
 ### Model Context Protocol (MCP)
 

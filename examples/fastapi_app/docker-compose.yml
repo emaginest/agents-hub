@@ -11,7 +11,7 @@ services:
       POSTGRES_DB: agents_hub
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -34,8 +34,8 @@ services:
 
   api:
     build:
-      context: ..
-      dockerfile: docker/Dockerfile
+      context: ../..
+      dockerfile: examples/fastapi_app/Dockerfile
     ports:
       - "8000:8000"
     environment:
@@ -51,7 +51,7 @@ services:
       # - ANTHROPIC_API_KEY=your-anthropic-api-key
       # - GOOGLE_API_KEY=your-google-api-key
     volumes:
-      - ../:/app
+      - ../../:/app
     depends_on:
       postgres:
         condition: service_healthy

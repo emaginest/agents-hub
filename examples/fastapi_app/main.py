@@ -14,10 +14,9 @@ from agents_hub.llm.providers.anthropic import ClaudeProvider
 from agents_hub.llm.providers.google import GeminiProvider
 from agents_hub.llm.providers.ollama import OllamaProvider
 from agents_hub.memory.backends.postgres import PostgreSQLMemory
-from agents_hub.knowledge.rag.backends.postgres import PostgreSQLVectorStorage
 from agents_hub.tools.standard.calculator import CalculatorTool
 from agents_hub.tools.standard.scraper import ScraperTool
-from agents_hub.tools.standard.rag import RAGTool
+from agents_hub.tools.standard.pgvector_tool import PGVectorTool
 from agents_hub.tools.standard.mcp import MCPTool
 from agents_hub.tools.standard.tavily import TavilyTool
 from agents_hub.moderation import RuleBasedModerator, OpenAIModerator, ModerationRegistry
@@ -68,7 +67,6 @@ llm_providers = {}
 agents = {}
 workforce = None
 memory = None
-vector_storage = None
 moderators = {}
 tools = {}
 monitor = None
@@ -78,7 +76,7 @@ cognitive_architecture = None
 @app.on_event("startup")
 async def startup_event():
     """Initialize the application on startup."""
-    global llm_providers, agents, workforce, memory, vector_storage, moderators, tools, monitor, cognitive_architecture
+    global llm_providers, agents, workforce, memory, moderators, tools, monitor, cognitive_architecture
 
     # Initialize LLM providers
     if os.environ.get("OPENAI_API_KEY"):
@@ -121,16 +119,8 @@ async def startup_event():
             table_prefix="agents_hub_",
         )
 
-        # Initialize vector storage with the default LLM provider
+        # Initialize default LLM provider
         default_llm = next(iter(llm_providers.values()))
-        vector_storage = PostgreSQLVectorStorage(
-            host=os.environ["POSTGRES_HOST"],
-            port=int(os.environ.get("POSTGRES_PORT", "5432")),
-            database=os.environ["POSTGRES_DB"],
-            user=os.environ["POSTGRES_USER"],
-            password=os.environ["POSTGRES_PASSWORD"],
-            llm=default_llm,
-        )
 
     # Initialize moderators
     # Rule-based moderator (no API key required)
@@ -176,9 +166,16 @@ async def startup_event():
             max_results=5,
         )
 
-    # Initialize RAG tool if vector storage is available
-    if vector_storage:
-        tools["rag"] = RAGTool(vector_store=vector_storage)
+    # Initialize PGVector tool if PostgreSQL credentials are available
+    if os.environ.get("POSTGRES_HOST"):
+        tools["pgvector"] = PGVectorTool(
+            llm=default_llm,
+            host=os.environ["POSTGRES_HOST"],
+            port=int(os.environ.get("POSTGRES_PORT", "5432")),
+            database=os.environ["POSTGRES_DB"],
+            user=os.environ["POSTGRES_USER"],
+            password=os.environ["POSTGRES_PASSWORD"],
+        )
 
     # Initialize MCP tool for filesystem access
     try:
@@ -229,14 +226,14 @@ async def startup_event():
             monitor=default_monitor,
         )
 
-        # Create a knowledge agent if RAG tool is available
-        if "rag" in tools:
+        # Create a knowledge agent if PGVector tool is available
+        if "pgvector" in tools:
             agents["knowledge"] = Agent(
                 name="knowledge",
                 llm=llm_providers["openai"],
                 memory=memory,
-                tools=[tools["rag"]],
-                system_prompt="You are a knowledge management assistant. Your job is to help store, retrieve, and analyze information. Use the RAG tool to ingest and query documents.",
+                tools=[tools["pgvector"]],
+                system_prompt="You are a knowledge management assistant. Your job is to help store, retrieve, and analyze information. Use the pgvector tool to add documents and search for information.",
                 description="Knowledge assistant that helps manage information",
                 moderation=default_moderator,
                 on_moderation_violation="block",

@@ -28,6 +28,7 @@ dependencies = [
     "psycopg2-binary>=2.9.0",
     "redis>=4.5.0",
     "sqlalchemy>=2.0.0",
+    "pgvector>=0.2.0",
     "numpy>=1.24.0",
     "httpx>=0.24.0",
     "fuzzywuzzy>=0.18.0",
@@ -45,6 +46,9 @@ dependencies = [
     "websockets>=10.0",
     "langfuse>=2.0.0",
     "tavily-python>=0.2.0",
+    "gitpython>=3.1.0",
+    "pytest>=7.0.0",
+    "python-dotenv>=1.0.0",
 ]
 requires-python = ">=3.9"
 
@@ -53,7 +57,7 @@ requires-python = ">=3.9"
 "Bug Tracker" = "https://github.com/emagine-solutions/agents-hub/issues"
 
 [tool.setuptools]
-packages = ["agents_hub"]
+packages = ["agents_hub", "agents_hub.coding", "agents_hub.coding.agents", "agents_hub.tools.coding", "agents_hub.utils", "agents_hub.templates"]
 
 [tool.black]
 line-length = 88

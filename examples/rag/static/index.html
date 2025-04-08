@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG System</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Retrieval-Augmented Generation (RAG) System</h1>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="card-title h5 mb-0">Collections</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <input type="text" id="collection-name" class="form-control" placeholder="Collection name">
+                                <button id="create-collection" class="btn btn-primary">Create</button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <select id="collection-list" class="form-select">
+                                <option value="">Select a collection</option>
+                            </select>
+                            <div class="d-flex justify-content-between mt-2">
+                                <button id="refresh-collections" class="btn btn-secondary btn-sm">Refresh</button>
+                                <button id="delete-collection" class="btn btn-danger btn-sm">Delete</button>
+                            </div>
+                        </div>
+                        <div id="collection-info" class="mt-3">
+                            <p>Documents: <span id="document-count">0</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="card-title h5 mb-0">Scrape URL</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="url" class="form-label">URL</label>
+                            <input type="url" id="url" class="form-control" placeholder="https://example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="scrape-collection" class="form-label">Collection</label>
+                            <select id="scrape-collection" class="form-select">
+                                <option value="">Select a collection</option>
+                            </select>
+                        </div>
+                        <button id="scrape-button" class="btn btn-primary">Scrape and Store</button>
+                        <div id="scrape-status" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="card-title h5 mb-0">Query Knowledge Base</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="question" class="form-label">Question</label>
+                            <textarea id="question" class="form-control" rows="3" placeholder="What would you like to know?"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="query-collection" class="form-label">Collection</label>
+                            <select id="query-collection" class="form-select">
+                                <option value="">Select a collection</option>
+                            </select>
+                        </div>
+                        <button id="query-button" class="btn btn-primary">Ask Question</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title h5 mb-0">Answer</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="answer" class="mb-3">
+                            <p class="text-muted">Ask a question to see the answer here.</p>
+                        </div>
+                        <div id="sources" class="mt-4">
+                            <h3 class="h6">Sources</h3>
+                            <div id="sources-list" class="sources-list">
+                                <p class="text-muted">Sources will appear here.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

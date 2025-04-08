@@ -1,0 +1,5 @@
+# Install agents-hub in development mode
+-e .
+
+# Additional dependencies
+python-dotenv>=1.0.0
