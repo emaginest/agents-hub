@@ -660,7 +660,7 @@ This project is licensed under the MIT License.
 MIT License
 
 Agents Hub - Advanced Agent Orchestration Framework
-Copyright (c) 2023-2024 Emagine Solutions Technology
+Copyright (c) 2025 Emagine Solutions Technology
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
