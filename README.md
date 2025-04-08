@@ -170,9 +170,9 @@ print(result)
 
 ## Local Development
 
-1. Clone the repository:
+1. Fork and clone the repository:
    ```bash
-   git clone https://github.com/emagine-solutions/agents-hub.git
+   git clone https://github.com/your-username/agents-hub.git
    cd agents-hub
    ```
 
@@ -182,14 +182,17 @@ print(result)
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. Install dependencies:
+3. Install the package in development mode:
    ```bash
-   pip install -r requirements.txt
+   pip install -e .
    ```
+   This installs the package in editable mode, allowing you to make changes to the code without reinstalling.
 
-4. Run the example FastAPI application:
+4. Run an example application:
    ```bash
+   # For the FastAPI example
    cd examples/fastapi_app
+   pip install -r requirements.txt  # Install example-specific dependencies
    python main.py
    ```
 
