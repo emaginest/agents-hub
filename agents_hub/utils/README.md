@@ -19,13 +19,6 @@ The document module provides utilities for processing various document formats:
 - **Text Chunking**: Split text into manageable chunks for processing
 - **Markdown Processing**: Parse and generate Markdown content
 
-### Model Context Protocol (MCP)
-
-The MCP module provides utilities for working with the Model Context Protocol:
-- **MCP Client**: Connect to MCP servers
-- **MCP Transport**: Handle communication with MCP servers
-- **MCP Utilities**: Helper functions for MCP operations
-
 ### Multimodal Utilities
 
 The multimodal module provides utilities for working with multimodal content:
@@ -101,47 +94,7 @@ for i, chunk in enumerate(chunks):
     print(f"Chunk {i+1}: {chunk[:100]}...")
 ```
 
-### Model Context Protocol (MCP)
 
-```python
-from agents_hub.utils.mcp import MCPClient
-
-# Create MCP client for filesystem access
-filesystem_client = MCPClient(
-    server_name="filesystem",
-    server_command="npx",
-    server_args=["-y", "@modelcontextprotocol/server-filesystem", "./"],
-    transport="stdio",
-)
-
-# Start the MCP server
-await filesystem_client.start()
-
-# List files in a directory
-files = await filesystem_client.execute({
-    "command": "listFiles",
-    "args": {
-        "path": "."
-    }
-})
-
-print("Files in current directory:")
-for file in files:
-    print(f"- {file['name']} ({file['type']})")
-
-# Read a file
-file_content = await filesystem_client.execute({
-    "command": "readFile",
-    "args": {
-        "path": "README.md"
-    }
-})
-
-print(f"README.md content: {file_content[:100]}...")
-
-# Stop the MCP server
-await filesystem_client.stop()
-```
 
 ### Multimodal Utilities
 
@@ -181,20 +134,20 @@ class SlackApprovalHandler(ApprovalHandler):
     def __init__(self, webhook_url: str, channel: str):
         self.webhook_url = webhook_url
         self.channel = channel
-    
+
     async def request_approval(self, operation_id: str, details: dict, message: str) -> bool:
         # Implement Slack-based approval request
         # This would typically send a message to Slack and wait for a response
         return await self._send_slack_approval_request(message, details)
-    
+
     async def notify(self, message: str, details: dict) -> None:
         # Implement Slack notification
         await self._send_slack_notification(message, details)
-    
+
     async def _send_slack_approval_request(self, message: str, details: dict) -> bool:
         # Implementation details
         pass
-    
+
     async def _send_slack_notification(self, message: str, details: dict) -> None:
         # Implementation details
         pass

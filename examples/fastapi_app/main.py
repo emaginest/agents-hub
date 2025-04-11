@@ -17,9 +17,12 @@ from agents_hub.memory.backends.postgres import PostgreSQLMemory
 from agents_hub.tools.standard.calculator import CalculatorTool
 from agents_hub.tools.standard.scraper import ScraperTool
 from agents_hub.tools.standard.pgvector_tool import PGVectorTool
-from agents_hub.tools.standard.mcp import MCPTool
-from agents_hub.tools.standard.tavily import TavilyTool
-from agents_hub.moderation import RuleBasedModerator, OpenAIModerator, ModerationRegistry
+
+from agents_hub.moderation import (
+    RuleBasedModerator,
+    OpenAIModerator,
+    ModerationRegistry,
+)
 from agents_hub.monitoring import LangfuseMonitor
 from agents_hub.cognitive import CognitiveArchitecture
 
@@ -41,10 +44,16 @@ class AgentRequest(BaseModel):
     name: str = Field(..., description="Agent name")
     description: str = Field(..., description="Agent description")
     system_prompt: str = Field(..., description="System prompt for the agent")
-    llm_provider: str = Field(..., description="LLM provider (openai, claude, gemini, ollama)")
+    llm_provider: str = Field(
+        ..., description="LLM provider (openai, claude, gemini, ollama)"
+    )
     llm_model: str = Field(..., description="LLM model name")
-    enable_moderation: bool = Field(False, description="Whether to enable content moderation")
-    moderation_action: str = Field("block", description="Action to take on moderation violation (block, warn, log)")
+    enable_moderation: bool = Field(
+        False, description="Whether to enable content moderation"
+    )
+    moderation_action: str = Field(
+        "block", description="Action to take on moderation violation (block, warn, log)"
+    )
 
 
 class AgentResponse(BaseModel):
@@ -52,7 +61,9 @@ class AgentResponse(BaseModel):
     description: str = Field(..., description="Agent description")
     llm_provider: str = Field(..., description="LLM provider")
     llm_model: str = Field(..., description="LLM model name")
-    moderation_enabled: bool = Field(False, description="Whether content moderation is enabled")
+    moderation_enabled: bool = Field(
+        False, description="Whether content moderation is enabled"
+    )
 
 
 # Initialize FastAPI app
@@ -104,12 +115,14 @@ async def startup_event():
     )
 
     # Initialize memory if PostgreSQL is configured
-    if all([
-        os.environ.get("POSTGRES_HOST"),
-        os.environ.get("POSTGRES_DB"),
-        os.environ.get("POSTGRES_USER"),
-        os.environ.get("POSTGRES_PASSWORD"),
-    ]):
+    if all(
+        [
+            os.environ.get("POSTGRES_HOST"),
+            os.environ.get("POSTGRES_DB"),
+            os.environ.get("POSTGRES_USER"),
+            os.environ.get("POSTGRES_PASSWORD"),
+        ]
+    ):
         memory = PostgreSQLMemory(
             host=os.environ["POSTGRES_HOST"],
             port=int(os.environ.get("POSTGRES_PORT", "5432")),
@@ -140,10 +153,12 @@ async def startup_event():
         )
 
     # Initialize Langfuse monitoring if credentials are available
-    if all([
-        os.environ.get("LANGFUSE_PUBLIC_KEY"),
-        os.environ.get("LANGFUSE_SECRET_KEY"),
-    ]):
+    if all(
+        [
+            os.environ.get("LANGFUSE_PUBLIC_KEY"),
+            os.environ.get("LANGFUSE_SECRET_KEY"),
+        ]
+    ):
         monitor = LangfuseMonitor(
             public_key=os.environ["LANGFUSE_PUBLIC_KEY"],
             secret_key=os.environ["LANGFUSE_SECRET_KEY"],
@@ -158,13 +173,7 @@ async def startup_event():
     tools["calculator"] = CalculatorTool()
     tools["scraper"] = ScraperTool()
 
-    # Initialize Tavily search tool if API key is available
-    if os.environ.get("TAVILY_API_KEY"):
-        tools["tavily"] = TavilyTool(
-            api_key=os.environ["TAVILY_API_KEY"],
-            search_depth="basic",
-            max_results=5,
-        )
+    # Tavily tool has been removed
 
     # Initialize PGVector tool if PostgreSQL credentials are available
     if os.environ.get("POSTGRES_HOST"):
@@ -177,17 +186,6 @@ async def startup_event():
             password=os.environ["POSTGRES_PASSWORD"],
         )
 
-    # Initialize MCP tool for filesystem access
-    try:
-        tools["filesystem"] = MCPTool(
-            server_name="filesystem",
-            server_command="npx",
-            server_args=["-y", "@modelcontextprotocol/server-filesystem", "./"],
-            transport="stdio",
-        )
-    except Exception as e:
-        print(f"Failed to initialize filesystem MCP tool: {e}")
-
     # Create default agents
     if "openai" in llm_providers:
         # Get the combined moderator if available, otherwise use rule-based
@@ -198,15 +196,13 @@ async def startup_event():
 
         # Create a researcher agent
         researcher_tools = [tools["calculator"], tools["scraper"]]
-        if "tavily" in tools:
-            researcher_tools.append(tools["tavily"])
 
         agents["researcher"] = Agent(
             name="researcher",
             llm=llm_providers["openai"],
             memory=memory,
             tools=researcher_tools,
-            system_prompt="You are a helpful research assistant. Your job is to provide accurate, well-researched information on any topic. Use the web_scraper tool to gather information when needed. If available, use the tavily tool for more comprehensive web searches. Always cite your sources when possible.",
+            system_prompt="You are a helpful research assistant. Your job is to provide accurate, well-researched information on any topic. Use the web_scraper tool to gather information when needed. Always cite your sources when possible.",
             description="Research assistant that provides accurate information on any topic",
             moderation=default_moderator,
             on_moderation_violation="block",
@@ -235,20 +231,6 @@ async def startup_event():
                 tools=[tools["pgvector"]],
                 system_prompt="You are a knowledge management assistant. Your job is to help store, retrieve, and analyze information. Use the pgvector tool to add documents and search for information.",
                 description="Knowledge assistant that helps manage information",
-                moderation=default_moderator,
-                on_moderation_violation="block",
-                monitor=default_monitor,
-            )
-
-        # Create a filesystem agent if MCP filesystem tool is available
-        if "filesystem" in tools:
-            agents["filesystem"] = Agent(
-                name="filesystem",
-                llm=llm_providers["openai"],
-                memory=memory,
-                tools=[tools["filesystem"]],
-                system_prompt="You are a filesystem assistant. Your job is to help users access and manage files. Use the MCP filesystem tool to list and read files.",
-                description="Filesystem assistant that helps access and manage files",
                 moderation=default_moderator,
                 on_moderation_violation="block",
                 monitor=default_monitor,
@@ -320,11 +302,16 @@ async def create_agent(agent_request: AgentRequest):
     """Create a new agent."""
     # Check if agent already exists
     if agent_request.name in agents:
-        raise HTTPException(status_code=400, detail=f"Agent '{agent_request.name}' already exists")
+        raise HTTPException(
+            status_code=400, detail=f"Agent '{agent_request.name}' already exists"
+        )
 
     # Check if LLM provider exists
     if agent_request.llm_provider not in llm_providers:
-        raise HTTPException(status_code=400, detail=f"LLM provider '{agent_request.llm_provider}' not available")
+        raise HTTPException(
+            status_code=400,
+            detail=f"LLM provider '{agent_request.llm_provider}' not available",
+        )
 
     # Get moderator if moderation is enabled
     moderator = None
@@ -332,7 +319,10 @@ async def create_agent(agent_request: AgentRequest):
         # Use combined moderator if available, otherwise use rule-based
         moderator = moderators.get("combined", moderators.get("rule_based"))
         if not moderator:
-            raise HTTPException(status_code=400, detail="Moderation requested but no moderator is available")
+            raise HTTPException(
+                status_code=400,
+                detail="Moderation requested but no moderator is available",
+            )
 
     # Create the agent
     agents[agent_request.name] = Agent(
@@ -369,7 +359,9 @@ async def delete_agent(agent_name: str):
 
     # Don't allow deleting the orchestrator
     if agent_name == "orchestrator":
-        raise HTTPException(status_code=400, detail="Cannot delete the orchestrator agent")
+        raise HTTPException(
+            status_code=400, detail="Cannot delete the orchestrator agent"
+        )
 
     # Delete the agent
     del agents[agent_name]

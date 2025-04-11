@@ -8,8 +8,6 @@ This module provides a collection of tools that agents can use to interact with 
 
 - **ScraperTool**: Scrape and extract content from websites
 - **PGVectorTool**: Store and retrieve vector embeddings in PostgreSQL
-- **TavilyTool**: Search the web and extract content using Tavily API
-- **MCPTool**: Connect to Model Context Protocol servers for filesystem, GitHub, etc.
 - **CalculatorTool**: Perform mathematical calculations
 - **WebSearchTool**: Search the web for information
 - **WebFetchTool**: Fetch and parse web content
@@ -84,12 +82,12 @@ class CustomTool(BaseTool):
                 "required": ["param1"],
             },
         )
-    
+
     async def run(self, parameters: Dict[str, Any], context: Optional[Dict[str, Any]] = None) -> Any:
         # Implement tool functionality
         param1 = parameters.get("param1")
         param2 = parameters.get("param2", 0)
-        
+
         # Process parameters and return result
         return {
             "status": "success",

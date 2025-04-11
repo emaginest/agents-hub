@@ -6,10 +6,24 @@ from typing import Dict, List, Any, Optional, Union
 import re
 import logging
 import json
+import asyncio
 from langfuse import Langfuse
-# The AsyncLangfuseClient has been removed or renamed in newer versions
-# Using the standard Langfuse client which now supports async operations
-from agents_hub.monitoring.base import BaseMonitor, MonitoringEvent, MonitoringLevel, EventData
+from agents_hub.monitoring.base import (
+    BaseMonitor,
+    MonitoringEvent,
+    MonitoringLevel,
+    EventData,
+)
+
+# Flag to indicate if Langfuse is available
+LANGFUSE_AVAILABLE = True
+try:
+    # Test if Langfuse is properly installed and has the expected API
+    test_client = Langfuse(public_key="test", secret_key="test")
+    if not hasattr(test_client, "trace") or not callable(test_client.trace):
+        LANGFUSE_AVAILABLE = False
+except Exception:
+    LANGFUSE_AVAILABLE = False
 
 # Initialize logger
 logger = logging.getLogger(__name__)
@@ -57,6 +71,13 @@ class LangfuseMonitor(BaseMonitor):
             debug=debug,
         )
 
+        # Check if Langfuse is available with the expected API
+        if not LANGFUSE_AVAILABLE:
+            logger.warning(
+                "Langfuse is not available or has an incompatible API. "
+                "Monitoring will be disabled. Please check your Langfuse installation."
+            )
+
         self.release = release
         self.redact_pii = redact_pii
         self.active_traces = {}
@@ -72,6 +93,10 @@ class LangfuseMonitor(BaseMonitor):
         Returns:
             Optional event ID
         """
+        # Skip if Langfuse is not available
+        if not LANGFUSE_AVAILABLE:
+            return None
+
         try:
             conversation_id = event_data.conversation_id
 
@@ -125,12 +150,19 @@ class LangfuseMonitor(BaseMonitor):
         metadata = self._sanitize_metadata(event_data.metadata)
         metadata["agent_name"] = event_data.agent_name
 
-        trace = await self.langfuse.trace.create(
-            id=conversation_id,
-            name="conversation",
-            metadata=metadata,
-            release=self.release,
-        )
+        # Create a trace for the conversation using the new API
+        try:
+            trace_obj = await asyncio.to_thread(
+                self.langfuse.trace,
+                id=conversation_id,
+                name="conversation",
+                metadata=metadata,
+                release=self.release,
+            )
+            trace = trace_obj
+        except Exception as e:
+            logger.exception(f"Error creating trace in Langfuse: {e}")
+            return None
 
         self.active_traces[conversation_id] = trace.id
         return trace.id
@@ -183,13 +215,18 @@ class LangfuseMonitor(BaseMonitor):
         trace_id = self.active_traces[conversation_id]
         message = event_data.data.get("message", "")
 
-        # Create a span for the user message
-        span = await self.langfuse.span.create(
-            trace_id=trace_id,
-            name="user-message",
-            input=self._sanitize_text(message),
-            metadata=self._sanitize_metadata(event_data.metadata),
-        )
+        # Create a span for the user message using the new API
+        try:
+            span = await asyncio.to_thread(
+                self.langfuse.span,
+                trace_id=trace_id,
+                name="user-message",
+                input=self._sanitize_text(message),
+                metadata=self._sanitize_metadata(event_data.metadata),
+            )
+        except Exception as e:
+            logger.exception(f"Error creating span in Langfuse: {e}")
+            return None
 
         return span.id
 
@@ -210,13 +247,18 @@ class LangfuseMonitor(BaseMonitor):
         trace_id = self.active_traces[conversation_id]
         message = event_data.data.get("message", "")
 
-        # Create a span for the assistant message
-        span = await self.langfuse.span.create(
-            trace_id=trace_id,
-            name="assistant-message",
-            output=self._sanitize_text(message),
-            metadata=self._sanitize_metadata(event_data.metadata),
-        )
+        # Create a span for the assistant message using the new API
+        try:
+            span = await asyncio.to_thread(
+                self.langfuse.span,
+                trace_id=trace_id,
+                name="assistant-message",
+                output=self._sanitize_text(message),
+                metadata=self._sanitize_metadata(event_data.metadata),
+            )
+        except Exception as e:
+            logger.exception(f"Error creating span in Langfuse: {e}")
+            return None
 
         return span.id
 
@@ -240,22 +282,30 @@ class LangfuseMonitor(BaseMonitor):
         output_data = event_data.data.get("output", {})
         error = event_data.data.get("error")
 
-        # Create a span for the tool usage
-        span = await self.langfuse.span.create(
-            trace_id=trace_id,
-            name=f"tool-{tool_name}",
-            input=self._sanitize_data(input_data),
-            output=self._sanitize_data(output_data),
-            metadata=self._sanitize_metadata(event_data.metadata),
-        )
-
-        # Update span with error if present
-        if error:
-            await self.langfuse.span.update(
-                id=span.id,
-                status_message=error,
-                level="ERROR",
+        # Create a span for the tool usage using the new API
+        try:
+            span = await asyncio.to_thread(
+                self.langfuse.span,
+                trace_id=trace_id,
+                name=f"tool-{tool_name}",
+                input=self._sanitize_data(input_data),
+                output=self._sanitize_data(output_data),
+                metadata=self._sanitize_metadata(event_data.metadata),
             )
+
+            # Update span with error if present
+            if error and hasattr(span, "update"):
+                try:
+                    await asyncio.to_thread(
+                        span.update,
+                        status_message=error,
+                        level="ERROR",
+                    )
+                except Exception as e:
+                    logger.exception(f"Error updating span in Langfuse: {e}")
+        except Exception as e:
+            logger.exception(f"Error creating span in Langfuse: {e}")
+            return None
 
         return span.id
 
@@ -278,17 +328,22 @@ class LangfuseMonitor(BaseMonitor):
         model = event_data.data.get("model", "unknown")
         messages = event_data.data.get("messages", [])
 
-        # Create a generation for the LLM call
-        generation = await self.langfuse.generation.create(
-            trace_id=trace_id,
-            name=f"llm-{provider}-{model}",
-            model=model,
-            model_parameters={
-                "provider": provider,
-            },
-            input=self._sanitize_data(messages),
-            metadata=self._sanitize_metadata(event_data.metadata),
-        )
+        # Create a generation for the LLM call using the new API
+        try:
+            generation = await asyncio.to_thread(
+                self.langfuse.generation,
+                trace_id=trace_id,
+                name=f"llm-{provider}-{model}",
+                model=model,
+                model_parameters={
+                    "provider": provider,
+                },
+                input=self._sanitize_data(messages),
+                metadata=self._sanitize_metadata(event_data.metadata),
+            )
+        except Exception as e:
+            logger.exception(f"Error creating generation in Langfuse: {e}")
+            return None
 
         # Store the generation ID for later use
         span_key = f"{conversation_id}:llm:{provider}:{model}"
@@ -322,11 +377,32 @@ class LangfuseMonitor(BaseMonitor):
             # Create a new generation if we don't have one
             return await self._track_generic_event(event_data)
 
-        # Update the generation with the result
-        await self.langfuse.generation.update(
-            id=generation_id,
-            output=self._sanitize_data(result),
-        )
+        # In the current Langfuse API, we can't directly update a generation
+        # Instead, we'll create a new span for the result
+        try:
+            # Get the trace ID from the conversation ID
+            trace_id = self.active_traces.get(conversation_id)
+            if not trace_id:
+                logger.warning(
+                    f"No active trace found for conversation {conversation_id}"
+                )
+                return None
+
+            # Create a new span for the result
+            await asyncio.to_thread(
+                self.langfuse.span,
+                trace_id=trace_id,
+                name=f"llm-result-{provider}-{model}",
+                output=self._sanitize_data(result),
+                metadata={
+                    "provider": provider,
+                    "model": model,
+                    "generation_id": generation_id,
+                },
+            )
+        except Exception as e:
+            logger.exception(f"Error creating result span in Langfuse: {e}")
+            return None
 
         # Remove from active spans
         del self.active_spans[span_key]
@@ -350,14 +426,19 @@ class LangfuseMonitor(BaseMonitor):
         trace_id = self.active_traces[conversation_id]
         error = event_data.data.get("error", "Unknown error")
 
-        # Create a span for the error
-        span = await self.langfuse.span.create(
-            trace_id=trace_id,
-            name="error",
-            input=self._sanitize_text(error),
-            metadata=self._sanitize_metadata(event_data.metadata),
-            level="ERROR",
-        )
+        # Create a span for the error using the new API
+        try:
+            span = await asyncio.to_thread(
+                self.langfuse.span,
+                trace_id=trace_id,
+                name="error",
+                input=self._sanitize_text(error),
+                metadata=self._sanitize_metadata(event_data.metadata),
+                level="ERROR",
+            )
+        except Exception as e:
+            logger.exception(f"Error creating span in Langfuse: {e}")
+            return None
 
         return span.id
 
@@ -377,13 +458,18 @@ class LangfuseMonitor(BaseMonitor):
 
         trace_id = self.active_traces[conversation_id]
 
-        # Create a span for the event
-        span = await self.langfuse.span.create(
-            trace_id=trace_id,
-            name=event_data.event_type.value,
-            input=self._sanitize_data(event_data.data),
-            metadata=self._sanitize_metadata(event_data.metadata),
-        )
+        # Create a span for the event using the new API
+        try:
+            span = await asyncio.to_thread(
+                self.langfuse.span,
+                trace_id=trace_id,
+                name=event_data.event_type.value,
+                input=self._sanitize_data(event_data.data),
+                metadata=self._sanitize_metadata(event_data.metadata),
+            )
+        except Exception as e:
+            logger.exception(f"Error creating span in Langfuse: {e}")
+            return None
 
         return span.id
 
@@ -408,13 +494,18 @@ class LangfuseMonitor(BaseMonitor):
 
         trace_id = self.active_traces[conversation_id]
 
-        # Create a score for the conversation
-        await self.langfuse.score.create(
-            trace_id=trace_id,
-            name=name,
-            value=value,
-            comment=comment,
-        )
+        # Create a score for the conversation using the new API
+        try:
+            await asyncio.to_thread(
+                self.langfuse.score,
+                trace_id=trace_id,
+                name=name,
+                value=value,
+                comment=comment,
+            )
+        except Exception as e:
+            logger.exception(f"Error creating score in Langfuse: {e}")
+            return None
 
     def _sanitize_text(self, text: str) -> str:
         """
@@ -432,7 +523,10 @@ class LangfuseMonitor(BaseMonitor):
         # Implement PII redaction logic
         redacted_text = text
         patterns = [
-            (r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b", "[EMAIL]"),  # Email
+            (
+                r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b",
+                "[EMAIL]",
+            ),  # Email
             (r"\b\d{3}[-.]?\d{3}[-.]?\d{4}\b", "[PHONE]"),  # Phone number
             (r"\b\d{3}[-]?\d{2}[-]?\d{4}\b", "[SSN]"),  # SSN
             (r"\b(?:\d[ -]*?){13,16}\b", "[CREDIT_CARD]"),  # Credit card
@@ -465,7 +559,9 @@ class LangfuseMonitor(BaseMonitor):
         else:
             return data
 
-    def _sanitize_metadata(self, metadata: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    def _sanitize_metadata(
+        self, metadata: Optional[Dict[str, Any]]
+    ) -> Optional[Dict[str, Any]]:
         """
         Sanitize metadata by redacting PII if enabled.
 

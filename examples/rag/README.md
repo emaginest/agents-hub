@@ -1,6 +1,6 @@
-# RAG Example with RAGAgent
+# RAG Example with Core Components
 
-This example demonstrates how to build a Retrieval-Augmented Generation (RAG) system using the RAGAgent from the agents-hub framework.
+This example demonstrates how to build a Retrieval-Augmented Generation (RAG) system using the core components of the agents-hub framework.
 
 ## Overview
 
@@ -15,7 +15,9 @@ The RAG system allows you to:
 
 The example consists of the following components:
 
-- **RAGAgent**: A specialized agent from the agents-hub framework that provides high-level RAG functionality
+- **Agent**: A standard agent from the agents-hub framework
+- **PGVectorTool**: Tool for vector storage and retrieval using PostgreSQL with pgvector
+- **ScraperTool**: Tool for scraping content from URLs
 - **FastAPI Application**: API endpoints for scraping, querying, and managing collections
 - **Web Interface**: A simple interface for interacting with the RAG system
 - **PostgreSQL with pgvector**: Vector database for storing and retrieving documents
@@ -171,12 +173,13 @@ OPENAI_MODEL=gpt-4
 
 ## Implementation Details
 
-### RAG Agent (agent.py)
+### Core Components
 
-The `RAGAgent` class provides:
-- Methods for scraping and storing content
-- Methods for querying the knowledge base
-- Methods for managing collections
+The example uses the following core components from agents-hub:
+
+- **Agent**: A standard agent that uses the tools to perform RAG operations
+- **PGVectorTool**: Provides methods for managing collections, storing documents, and searching
+- **ScraperTool**: Provides methods for scraping content from URLs
 
 ### FastAPI Application (app.py)
 

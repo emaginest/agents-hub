@@ -12,10 +12,8 @@ Agents Hub is a revolutionary framework for creating, managing, and orchestratin
 - **Multi-LLM Support**: Use OpenAI, Claude, Gemini, or Ollama models with your own API keys
 - **Content Moderation**: Built-in moderation system to ensure safe and appropriate responses
 - **Web Scraping**: Integrated web scraping capabilities for gathering information
-- **Web Search**: Tavily Search API integration for searching the web and extracting content
 - **Document Processing**: Support for parsing PDFs, DOCX, and other document formats
-- **PGVector Tool**: Build custom RAG systems with PostgreSQL's pgvector extension
-- **Model Context Protocol (MCP)**: Connect to MCP servers for filesystem access, GitHub, Tavily, and more
+- **PGVector Tool**: Build custom RAG systems with PostgreSQL's pgvector extension for retrieval-augmented generation
 - **Monitoring & Analytics**: Langfuse integration for tracking agent performance and conversations
 - **Cognitive Architecture**: Inspired by human cognition with metacognitive capabilities
 - **Advanced Memory System**: Hierarchical memory with episodic, semantic, and procedural components
@@ -55,8 +53,7 @@ agents-hub/
 │   ├── orchestration/               # Agent orchestration
 │   │   ├── router.py                # Agent routing
 │   │   └── protocols/               # Communication protocols
-│   ├── rag/                         # Retrieval-Augmented Generation
-│   │   ├── agent.py                 # RAG Agent
+│   ├── rag/                         # Retrieval-Augmented Generation utilities
 │   │   └── vector_stores/           # Vector store integrations
 │   ├── security/                    # Security features
 │   │   └── ethics/                  # Ethical guidelines
@@ -72,7 +69,6 @@ agents-hub/
 │   └── utils/                       # Utility functions
 │       ├── approval.py              # Human approval interface
 │       ├── document/                # Document processing
-│       ├── mcp/                     # Model Context Protocol
 │       └── multimodal/              # Multimodal utilities
 ├── docs/                            # Documentation
 │   ├── api/                         # API documentation
@@ -507,35 +503,7 @@ await monitor.score_conversation(
 )
 ```
 
-### Tavily Search API
 
-Agents Hub integrates with the Tavily Search API for web search and content extraction:
-
-```python
-from agents_hub import Agent
-from agents_hub.tools.standard import TavilyTool
-
-# Create Tavily tool
-tavily_tool = TavilyTool(
-    api_key="your-tavily-api-key",
-    search_depth="advanced",
-    max_results=5,
-)
-
-# Create agent with Tavily tool
-agent = Agent(
-    name="research_agent",
-    llm=llm,
-    tools=[tavily_tool],
-    system_prompt="You are a research assistant that can search the web for information.",
-)
-
-# Search for information
-response = await agent.run("What are the latest developments in quantum computing?")
-
-# Extract content from a URL
-response = await agent.run("Extract and summarize the content from this URL: https://example.com")
-```
 
 ### Cognitive Architecture
 
