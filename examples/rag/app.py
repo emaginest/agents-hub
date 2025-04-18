@@ -23,7 +23,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from agents_hub.llm.providers import OpenAIProvider
 from agents_hub import Agent
-from agents_hub.tools.standard import PGVectorTool, ScraperTool
+from agents_hub.vector_stores import PGVector
+from agents_hub.tools.standard import ScraperTool
 
 # Load environment variables
 load_dotenv()
@@ -63,7 +64,7 @@ llm = OpenAIProvider(
 )
 
 # Initialize tools
-pgvector_tool = PGVectorTool(
+pgvector_tool = PGVector(
     llm=llm,
     host=os.environ.get("POSTGRES_HOST", "localhost"),
     port=int(os.environ.get("POSTGRES_PORT", "5432")),

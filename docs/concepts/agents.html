@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agents - Agents Hub</title>
+    <meta name="description" content="Learn about the different types of agents in Agents Hub and their capabilities.">
+    <meta name="keywords" content="AI, agents, LLM, agent types, capabilities">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="architecture.html">Core Architecture</a></li>
+                        <li class="active"><a href="agents.html">Agents</a></li>
+                        <li><a href="cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="memory.html">Memory System</a></li>
+                        <li><a href="orchestration.html">Orchestration</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="llm.html">LLM Integration</a></li>
+                        <li><a href="moderation.html">Moderation</a></li>
+                        <li><a href="monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Agents</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Explore the different types of agents in Agents Hub, their capabilities, and how to
+                configure them for various use cases.</p>
+
+            <h2 id="what-is-agent">What is an Agent?</h2>
+            <p>In Agents Hub, an agent is an autonomous entity powered by a language model (LLM) that can:</p>
+
+            <ul>
+                <li>Process natural language inputs</li>
+                <li>Generate contextually relevant responses</li>
+                <li>Use tools to interact with external systems</li>
+                <li>Maintain memory of past interactions</li>
+                <li>Follow instructions defined in a system prompt</li>
+                <li>Collaborate with other agents in a workforce</li>
+            </ul>
+
+            <p>Agents are the core building blocks of the Agents Hub framework. They encapsulate the intelligence,
+                capabilities, and behaviors needed to perform tasks and interact with users and other agents.</p>
+
+            <h2 id="agent-types">Agent Types</h2>
+            <p>Agents Hub provides several types of agents with different capabilities:</p>
+
+            <h3 id="basic-agent">Basic Agent</h3>
+            <p>The standard agent implementation that provides core functionality:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+
+agent = Agent(
+    name="assistant",
+    llm=OpenAIProvider(api_key="your-api-key"),
+    system_prompt="You are a helpful assistant."
+)
+
+response = await agent.run("What is the capital of France?")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>Basic agents are suitable for straightforward tasks like answering questions, providing information, or
+                performing simple actions using tools.</p>
+
+            <h3 id="cognitive-agent">Cognitive Agent</h3>
+            <p>An enhanced agent with advanced cognitive capabilities:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub import CognitiveAgent
+from agents_hub.llm.providers import ClaudeProvider
+from agents_hub.cognitive import CognitiveArchitecture
+
+cognitive_agent = CognitiveAgent(
+    name="cognitive_assistant",
+    llm=ClaudeProvider(api_key="your-api-key"),
+    cognitive_architecture=CognitiveArchitecture(
+        metacognition_enabled=True,
+        reasoning_mechanisms=["deductive", "inductive", "abductive"]
+    ),
+    system_prompt="You are an assistant with advanced reasoning capabilities."
+)
+
+response = await cognitive_agent.run("What are the ethical implications of AI in healthcare?")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>Cognitive agents are ideal for complex tasks that require sophisticated reasoning, self-reflection, and
+                learning. They excel at:</p>
+            <ul>
+                <li>Solving complex problems</li>
+                <li>Analyzing nuanced situations</li>
+                <li>Providing well-reasoned explanations</li>
+                <li>Adapting to new information</li>
+                <li>Handling uncertainty and ambiguity</li>
+            </ul>
+
+            <p>For more details on cognitive agents, see the <a href="cognitive.html">Cognitive Architecture</a>
+                section.</p>
+
+            <h3 id="specialized-agents">Specialized Agents</h3>
+            <p>You can create specialized agents for specific roles by configuring their system prompts, tools, and
+                other properties:</p>
+            <div class="code-block">
+                <pre><code># Research agent
+research_agent = Agent(
+    name="researcher",
+    llm=llm,
+    tools=[WebSearchTool(), DocumentReaderTool()],
+    system_prompt="""You are a research assistant specialized in finding and analyzing information.
+    Your goal is to provide accurate, well-sourced information on any topic.
+    Always cite your sources and be transparent about the limitations of your knowledge."""
+)
+
+# Customer support agent
+support_agent = Agent(
+    name="support",
+    llm=llm,
+    tools=[KnowledgeBaseTool(), TicketCreationTool()],
+    system_prompt="""You are a customer support representative for Acme Inc.
+    Your goal is to help customers resolve their issues efficiently and professionally.
+    If you cannot resolve an issue, create a support ticket for further assistance."""
+)
+
+# Code assistant
+code_agent = Agent(
+    name="coder",
+    llm=llm,
+    tools=[CodeAnalysisTool(), GitTool()],
+    system_prompt="""You are a coding assistant specialized in Python development.
+    Your goal is to help developers write clean, efficient, and well-documented code.
+    Always explain your code suggestions and consider best practices."""
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="agent-configuration">Agent Configuration</h2>
+            <p>Agents can be configured with various components and settings:</p>
+
+            <h3 id="llm-providers">LLM Providers</h3>
+            <p>Agents can use different LLM providers:</p>
+            <div class="code-block">
+                <pre><code># OpenAI
+from agents_hub.llm.providers import OpenAIProvider
+openai_agent = Agent(
+    name="openai_agent",
+    llm=OpenAIProvider(
+        api_key="your-openai-api-key",
+        model="gpt-4"
+    )
+)
+
+# Claude
+from agents_hub.llm.providers import ClaudeProvider
+claude_agent = Agent(
+    name="claude_agent",
+    llm=ClaudeProvider(
+        api_key="your-claude-api-key",
+        model="claude-3-opus-20240229"
+    )
+)
+
+# Google
+from agents_hub.llm.providers import GeminiProvider
+gemini_agent = Agent(
+    name="gemini_agent",
+    llm=GeminiProvider(
+        api_key="your-gemini-api-key",
+        model="gemini-pro"
+    )
+)
+
+# Ollama (local)
+from agents_hub.llm.providers import OllamaProvider
+ollama_agent = Agent(
+    name="ollama_agent",
+    llm=OllamaProvider(
+        host="http://localhost:11434",
+        model="llama3"
+    )
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="memory">Memory</h3>
+            <p>Agents can use different memory systems:</p>
+            <div class="code-block">
+                <pre><code># In-memory (default)
+from agents_hub.memory import InMemoryMemory
+agent_with_memory = Agent(
+    name="agent_with_memory",
+    llm=llm,
+    memory=InMemoryMemory()
+)
+
+# PostgreSQL with vector search
+from agents_hub.memory import PostgreSQLMemory
+agent_with_postgres = Agent(
+    name="agent_with_postgres",
+    llm=llm,
+    memory=PostgreSQLMemory(
+        connection_string="postgresql://user:password@localhost:5432/agents_hub",
+        table_name="agent_memory",
+        embedding_model="text-embedding-ada-002"
+    )
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="tools">Tools</h3>
+            <p>Agents can use various tools to extend their capabilities:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import (
+    WebSearchTool,
+    CalculatorTool,
+    WeatherTool,
+    WikipediaTool
+)
+
+agent_with_tools = Agent(
+    name="agent_with_tools",
+    llm=llm,
+    tools=[
+        WebSearchTool(api_key="your-search-api-key"),
+        CalculatorTool(),
+        WeatherTool(api_key="your-weather-api-key"),
+        WikipediaTool()
+    ]
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="moderation">Moderation</h3>
+            <p>Agents can use moderation to ensure safe and appropriate responses:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.moderation import ContentModerator
+
+agent_with_moderation = Agent(
+    name="agent_with_moderation",
+    llm=llm,
+    moderator=ContentModerator(
+        api_key="your-moderation-api-key",
+        content_policy={
+            "profanity": "block",
+            "hate_speech": "block",
+            "sexual_content": "block",
+            "violence": "warn"
+        }
+    )
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="monitoring">Monitoring</h3>
+            <p>Agents can be monitored for performance and behavior:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.monitoring import LangfuseMonitor
+
+agent_with_monitoring = Agent(
+    name="agent_with_monitoring",
+    llm=llm,
+    monitor=LangfuseMonitor(
+        api_key="your-langfuse-api-key",
+        public_key="your-langfuse-public-key"
+    )
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="agent-lifecycle">Agent Lifecycle</h2>
+            <p>Agents in Agents Hub follow a lifecycle that includes:</p>
+
+            <h3 id="initialization">Initialization</h3>
+            <p>When an agent is created, it initializes its components (LLM provider, memory, tools, etc.) and prepares
+                for interaction.</p>
+
+            <h3 id="processing">Processing</h3>
+            <p>When the <code>run()</code> method is called, the agent processes the input through several steps:</p>
+            <ol>
+                <li>Retrieve relevant context from memory</li>
+                <li>Prepare the prompt with system instructions, context, and user input</li>
+                <li>Send the prompt to the LLM provider</li>
+                <li>Parse the response and execute any tool calls</li>
+                <li>Apply moderation if configured</li>
+                <li>Store the interaction in memory</li>
+                <li>Return the final response</li>
+            </ol>
+
+            <h3 id="tool-execution">Tool Execution</h3>
+            <p>When an agent uses tools, it follows this process:</p>
+            <ol>
+                <li>The LLM identifies the need for a tool and specifies the tool name and parameters</li>
+                <li>The agent finds the appropriate tool in its tool set</li>
+                <li>The agent executes the tool with the provided parameters</li>
+                <li>The tool result is returned to the agent</li>
+                <li>The agent incorporates the tool result into its response</li>
+            </ol>
+
+            <h3 id="memory-management">Memory Management</h3>
+            <p>Agents manage their memory by:</p>
+            <ol>
+                <li>Storing user inputs and agent responses</li>
+                <li>Retrieving relevant past interactions when processing new inputs</li>
+                <li>Optionally performing semantic search to find related information</li>
+            </ol>
+
+            <h2 id="best-practices">Best Practices</h2>
+            <p>Here are some best practices for working with agents:</p>
+
+            <h3 id="system-prompts">System Prompts</h3>
+            <p>Design effective system prompts that:</p>
+            <ul>
+                <li>Clearly define the agent's role and purpose</li>
+                <li>Specify the tone and style of communication</li>
+                <li>Provide guidelines for handling different types of requests</li>
+                <li>Include any domain-specific knowledge or instructions</li>
+                <li>Set boundaries for what the agent should and shouldn't do</li>
+            </ul>
+
+            <h3 id="tool-selection">Tool Selection</h3>
+            <p>Choose appropriate tools based on the agent's purpose:</p>
+            <ul>
+                <li>Only include tools that the agent needs for its specific role</li>
+                <li>Provide clear descriptions for each tool to help the LLM understand when to use them</li>
+                <li>Consider the security implications of each tool</li>
+            </ul>
+
+            <h3 id="llm-selection">LLM Selection</h3>
+            <p>Choose the right LLM for your use case:</p>
+            <ul>
+                <li>For complex reasoning tasks, use more powerful models like GPT-4 or Claude 3 Opus</li>
+                <li>For simpler tasks, more efficient models like GPT-3.5-Turbo or Claude 3 Sonnet may be sufficient
+                </li>
+                <li>Consider latency, cost, and capability requirements</li>
+            </ul>
+
+            <h3 id="agent-specialization">Agent Specialization</h3>
+            <p>For complex applications, use specialized agents rather than a single do-everything agent:</p>
+            <ul>
+                <li>Create agents with specific roles and expertise</li>
+                <li>Use an agent workforce to coordinate multiple specialized agents</li>
+                <li>Design clear interfaces for agent communication</li>
+            </ul>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>Agents are the core building blocks of the Agents Hub framework. By understanding the different types of
+                agents, their capabilities, and how to configure them, you can build sophisticated agent-based
+                applications tailored to your specific needs.</p>
+
+            <p>In the next sections, we'll explore the cognitive architecture, memory system, and other components that
+                power these agents in more detail.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

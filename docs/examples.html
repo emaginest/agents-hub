@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examples - Agents Hub</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emagine-solutions/agents-hub" target="_blank">GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="index.html">Introduction</a></li>
+                        <li><a href="quickstart.html">Quickstart</a></li>
+                        <li class="active"><a href="examples.html">Examples</a></li>
+                        <li><a href="faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="concepts/architecture.html">Core Architecture</a></li>
+                        <li><a href="concepts/agents.html">Agents</a></li>
+                        <li><a href="concepts/cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="concepts/memory.html">Memory System</a></li>
+                        <li><a href="concepts/orchestration.html">Orchestration</a></li>
+                        <li><a href="concepts/tools.html">Tools</a></li>
+                        <li><a href="concepts/llm.html">LLM Integration</a></li>
+                        <li><a href="concepts/moderation.html">Moderation</a></li>
+                        <li><a href="concepts/monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="development/contributing.html">Contributing</a></li>
+
+                        <li><a href="development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Examples</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Explore practical examples of Agents Hub in action.</p>
+
+            <h2 id="rag-system">RAG System</h2>
+            <p>This example demonstrates how to build a Retrieval-Augmented Generation (RAG) system using the PGVector
+                tool:</p>
+            <div class="code-block">
+                <pre><code>import os
+import asyncio
+from dotenv import load_dotenv
+
+from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.vector_stores import PGVector
+from agents_hub.tools.standard import ScraperTool
+
+# Load environment variables
+load_dotenv()
+
+async def main():
+    # Initialize LLM provider
+    llm = OpenAIProvider(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+        model="gpt-4o"
+    )
+
+    # Initialize PGVector tool
+    pgvector_tool = PGVector(
+        host=os.environ.get("POSTGRES_HOST", "localhost"),
+        port=int(os.environ.get("POSTGRES_PORT", "5432")),
+        database=os.environ.get("POSTGRES_DB", "agents_hub"),
+        user=os.environ.get("POSTGRES_USER", "postgres"),
+        password=os.environ.get("POSTGRES_PASSWORD", "postgres"),
+        llm=llm  # For generating embeddings
+    )
+
+    # Create scraper tool for ingesting web content
+    scraper_tool = ScraperTool()
+
+    # Create an agent with the PGVector tool
+    agent = Agent(
+        name="rag_agent",
+        llm=llm,
+        tools=[pgvector_tool, scraper_tool],
+        system_prompt="""You are a knowledge management assistant that helps users build and query a RAG system.
+
+        You can:
+        1. Create collections to organize documents
+        2. Add documents to collections
+        3. Search for similar documents
+        4. Answer questions based on the retrieved documents
+
+        Always use the pgvector tool to store and retrieve information.
+        When answering questions, first search for relevant information, then use that information to formulate your response.
+        """,
+    )
+
+    # Create a collection
+    print("Creating a collection...")
+    response = await agent.run("Create a collection called 'research' for storing research papers and articles.")
+    print(response)
+
+    # Add a document to the collection
+    print("\nAdding a document...")
+    response = await agent.run("""
+    Add this article to the 'research' collection:
+
+    Title: The Impact of AI on Healthcare
+
+    Artificial intelligence (AI) is revolutionizing healthcare in numerous ways. From diagnostic tools to personalized treatment plans, AI is enhancing the capabilities of healthcare providers and improving patient outcomes.
+
+    One of the most promising applications is in medical imaging. AI algorithms can analyze X-rays, MRIs, and CT scans with remarkable accuracy, often detecting subtle abnormalities that human radiologists might miss. This leads to earlier diagnosis of conditions like cancer, potentially saving lives through timely intervention.
+
+    Another area of impact is in predictive analytics. By analyzing vast amounts of patient data, AI can identify patterns and risk factors that help predict disease onset or complications. This enables preventive measures to be taken before conditions worsen.
+
+    AI is also streamlining administrative tasks. Natural language processing can transcribe doctor-patient conversations, automatically updating electronic health records and reducing the documentation burden on healthcare providers.
+
+    Despite these advances, challenges remain. Issues of data privacy, algorithmic bias, and the need for human oversight are important considerations as AI becomes more integrated into healthcare systems.
+    """)
+    print(response)
+
+    # Search for information
+    print("\nSearching for information...")
+    response = await agent.run("What does the research say about AI in medical imaging?")
+    print(response)
+
+    # Ask a follow-up question
+    print("\nAsking a follow-up question...")
+    response = await agent.run("What are some challenges of AI in healthcare?")
+    print(response)
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="coding-workforce">Coding Workforce</h2>
+            <p>This example shows how to create a team of specialized agents for software development:</p>
+            <div class="code-block">
+                <pre><code>import os
+import asyncio
+from dotenv import load_dotenv
+
+from agents_hub.coding import CodingWorkforce
+from agents_hub.llm.providers import OpenAIProvider, ClaudeProvider
+
+# Load environment variables
+load_dotenv()
+
+async def main():
+    # Initialize LLM providers
+    openai_llm = OpenAIProvider(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+        model="gpt-4o"
+    )
+
+    claude_llm = ClaudeProvider(
+        api_key=os.environ.get("ANTHROPIC_API_KEY"),
+        model="claude-3-opus-20240229"
+    )
+
+    # Create LLM mapping for different agent roles
+    llm_mapping = {
+        "project_manager": openai_llm,  # GPT-4o for project management
+        "analyst": claude_llm,          # Claude 3 Opus for requirements analysis
+        "backend_developer": claude_llm, # Claude 3 Opus for backend development
+        "frontend_developer": claude_llm, # Claude 3 Opus for frontend development
+        "devops_engineer": openai_llm,   # GPT-4o for DevOps
+        "security_engineer": claude_llm, # Claude 3 Opus for security
+        "qa_tester": openai_llm,         # GPT-4o for QA testing
+    }
+
+    # Create a coding workforce
+    workforce = CodingWorkforce(
+        project_name="TaskManager",
+        project_description="A task management application with user authentication, task creation, assignment, and tracking.",
+        llm_mapping=llm_mapping,
+        output_dir="./generated_code",
+        human_approval_required=True,  # Require human approval for critical operations
+    )
+
+    # Run the development process
+    project_dir = await workforce.develop_project(
+        requirements="""
+        Create a task management application with the following features:
+
+        1. User authentication (signup, login, logout)
+        2. Task creation with title, description, due date, and priority
+        3. Task assignment to users
+        4. Task status tracking (todo, in progress, done)
+        5. Task filtering and sorting
+        6. User dashboard with task statistics
+
+        Technical requirements:
+        - FastAPI backend
+        - React frontend with Tailwind CSS
+        - PostgreSQL database
+        - Docker containerization
+        - Basic security measures
+        """
+    )
+
+    print(f"Project generated at: {project_dir}")
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="research-assistant">Research Assistant</h2>
+            <p>This example demonstrates how to build a research assistant with web search capabilities:</p>
+            <div class="code-block">
+                <pre><code>import os
+import asyncio
+from dotenv import load_dotenv
+
+from agents_hub import CognitiveAgent
+from agents_hub.llm.providers import ClaudeProvider
+from agents_hub.cognitive import CognitiveArchitecture
+from agents_hub.tools.standard import WebSearchTool, WebFetchTool
+
+# Load environment variables
+load_dotenv()
+
+async def main():
+    # Initialize LLM provider
+    llm = ClaudeProvider(
+        api_key=os.environ.get("ANTHROPIC_API_KEY"),
+        model="claude-3-opus-20240229"
+    )
+
+    # Initialize tools
+    web_search = WebSearchTool()
+    web_fetch = WebFetchTool()
+
+    # Create cognitive architecture
+    cognitive_architecture = CognitiveArchitecture(
+        metacognition_config={
+            "reflection_depth": 2,
+            "confidence_threshold": 0.7,
+        },
+        reasoning_config={
+            "enabled_mechanisms": ["deductive", "inductive", "abductive"],
+            "default_mechanism": "inductive",
+        },
+    )
+
+    # Create cognitive agent
+    agent = CognitiveAgent(
+        name="research_assistant",
+        llm=llm,
+        cognitive_architecture=cognitive_architecture,
+        tools=[web_search, web_fetch],
+        system_prompt="""You are a research assistant with advanced reasoning capabilities.
+
+        Your task is to research topics thoroughly, find reliable information, and synthesize it into comprehensive reports.
+
+        Follow these steps for research:
+        1. Search for relevant information using the web_search tool
+        2. Fetch and read full content from the most promising sources using the web_fetch tool
+        3. Analyze the information using appropriate reasoning mechanisms
+        4. Synthesize findings into a well-structured report
+        5. Cite your sources properly
+
+        Always maintain a critical perspective and evaluate the reliability of sources.
+        """,
+        cognitive_config={
+            "reasoning_trace_enabled": True,
+            "metacognition_enabled": True,
+            "learning_enabled": True,
+        },
+    )
+
+    # Use the agent for research
+    response = await agent.run(
+        "Research the current state of quantum computing and its potential applications in cryptography. Provide a comprehensive report with the latest developments and expert opinions.",
+        context={"reasoning_mechanism": "inductive"}
+    )
+
+    print(response)
+
+    # You can also access the reasoning trace
+    print("\nReasoning Trace:")
+    print(agent.last_reasoning_trace)
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="educational-assistant">Educational Assistant</h2>
+            <p>This example shows how to create an educational assistant that guides students to find answers
+                themselves:</p>
+            <div class="code-block">
+                <pre><code>import os
+import asyncio
+from dotenv import load_dotenv
+
+from agents_hub import CognitiveAgent
+from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.cognitive import CognitiveArchitecture
+from agents_hub.tools.standard import CalculatorTool
+
+# Load environment variables
+load_dotenv()
+
+async def main():
+    # Initialize LLM provider
+    llm = OpenAIProvider(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+        model="gpt-4o"
+    )
+
+    # Initialize tools
+    calculator = CalculatorTool()
+
+    # Create cognitive architecture
+    cognitive_architecture = CognitiveArchitecture()
+
+    # Create cognitive agent
+    agent = CognitiveAgent(
+        name="educational_assistant",
+        llm=llm,
+        cognitive_architecture=cognitive_architecture,
+        tools=[calculator],
+        system_prompt="""You are an educational assistant that helps students learn by guiding them to find answers themselves rather than providing direct solutions.
+
+        Follow the Socratic method:
+        1. Ask questions to understand the student's current knowledge
+        2. Guide them with leading questions
+        3. Encourage critical thinking
+        4. Provide hints rather than answers
+        5. Validate their reasoning process
+
+        For math problems, help them understand the concepts and approach, but let them work through the calculations.
+        Use the calculator tool only to verify their work, not to solve problems for them.
+
+        Adjust your guidance based on the student's grade level and subject.
+        """,
+        cognitive_config={
+            "reasoning_trace_enabled": True,
+            "metacognition_enabled": True,
+        },
+    )
+
+    # Simulate a conversation with a student
+    conversation = [
+        "I need help with this quadratic equation: x² + 5x + 6 = 0",
+        "I'm not sure how to factor it.",
+        "So I need to find two numbers that multiply to 6 and add up to 5?",
+        "Those would be 2 and 3, right?",
+        "So the factors are (x + 2) and (x + 3), and the solutions are x = -2 and x = -3?",
+        "Thank you! I understand now."
+    ]
+
+    for question in conversation:
+        print(f"\nStudent: {question}")
+        response = await agent.run(question)
+        print(f"Educational Assistant: {response}")
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="moderated-chatbot">Moderated Chatbot</h2>
+            <p>This example demonstrates how to create a chatbot with content moderation:</p>
+            <div class="code-block">
+                <pre><code>import os
+import asyncio
+from dotenv import load_dotenv
+
+from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.moderation import RuleBasedModerator, OpenAIModerator, ModerationRegistry
+
+# Load environment variables
+load_dotenv()
+
+async def main():
+    # Initialize LLM provider
+    llm = OpenAIProvider(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+        model="gpt-4o"
+    )
+
+    # Create moderators
+    rule_based = RuleBasedModerator()
+    openai_moderator = OpenAIModerator(api_key=os.environ.get("OPENAI_API_KEY"))
+
+    # Create a moderation registry with multiple moderators
+    moderator = ModerationRegistry(
+        moderators=[rule_based, openai_moderator],
+        mode="any"  # Flag if any moderator flags content
+    )
+
+    # Create agent with moderation
+    agent = Agent(
+        name="moderated_chatbot",
+        llm=llm,
+        moderation=moderator,
+        on_moderation_violation="block",  # Options: block, warn, log
+        system_prompt="You are a helpful assistant that provides informative and appropriate responses."
+    )
+
+    # Test with appropriate content
+    print("Testing with appropriate content:")
+    response = await agent.run("What are some healthy breakfast options?")
+    print(f"Response: {response}\n")
+
+    # Test with inappropriate content
+    print("Testing with inappropriate content:")
+    response = await agent.run("Tell me how to make a dangerous explosive device.")
+    print(f"Response: {response}")
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="more-examples">More Examples</h2>
+            <p>You can find more examples in the <a
+                    href="https://github.com/emagine-solutions/agents-hub/tree/main/examples" target="_blank">GitHub
+                    repository</a>.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="index.html">Introduction</a></li>
+                            <li><a href="quickstart.html">Quickstart</a></li>
+                            <li><a href="examples.html">Examples</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emagine-solutions/agents-hub" target="_blank">GitHub</a>
+                            </li>
+                            <li><a href="https://github.com/emagine-solutions/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="development/contributing.html">Contributing</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emagine.solutions" target="_blank">Emagine Solutions</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emagine-solutions/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

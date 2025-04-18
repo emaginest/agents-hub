@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory System - Agents Hub</title>
+    <meta name="description" content="Learn about the memory system in Agents Hub that enables agents to store and retrieve information.">
+    <meta name="keywords" content="AI, agents, LLM, memory, storage, retrieval, vector database">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i> PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="architecture.html">Core Architecture</a></li>
+                        <li><a href="agents.html">Agents</a></li>
+                        <li><a href="cognitive.html">Cognitive Architecture</a></li>
+                        <li class="active"><a href="memory.html">Memory System</a></li>
+                        <li><a href="orchestration.html">Orchestration</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="llm.html">LLM Integration</a></li>
+                        <li><a href="moderation.html">Moderation</a></li>
+                        <li><a href="monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Memory System</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Explore the memory system in Agents Hub that enables agents to store, retrieve, and search through past interactions and knowledge.</p>
+
+            <h2 id="introduction">Introduction to Memory Systems</h2>
+            <p>The memory system in Agents Hub provides agents with the ability to remember past interactions, store knowledge, and retrieve relevant information when needed. This is crucial for:</p>
+            
+            <ul>
+                <li>Maintaining context in conversations</li>
+                <li>Learning from past experiences</li>
+                <li>Building knowledge over time</li>
+                <li>Providing consistent responses</li>
+                <li>Personalizing interactions based on user history</li>
+            </ul>
+
+            <p>Agents Hub offers a flexible memory system with multiple backend options, from simple in-memory storage to sophisticated vector databases for semantic search.</p>
+
+            <h2 id="memory-types">Memory Types</h2>
+            <p>The memory system in Agents Hub supports several types of memory:</p>
+
+            <h3 id="conversation-memory">Conversation Memory</h3>
+            <p>Stores the history of interactions between the agent and users:</p>
+            <ul>
+                <li>User messages</li>
+                <li>Agent responses</li>
+                <li>Timestamps</li>
+                <li>Metadata (user IDs, session information, etc.)</li>
+            </ul>
+
+            <h3 id="semantic-memory">Semantic Memory</h3>
+            <p>Stores knowledge and information in a structured way:</p>
+            <ul>
+                <li>Facts and concepts</li>
+                <li>Relationships between entities</li>
+                <li>Domain-specific knowledge</li>
+                <li>Learned information</li>
+            </ul>
+
+            <h3 id="episodic-memory">Episodic Memory</h3>
+            <p>Stores specific experiences and events:</p>
+            <ul>
+                <li>Detailed records of significant interactions</li>
+                <li>Context and circumstances of events</li>
+                <li>Emotional or evaluative components</li>
+                <li>Temporal sequences</li>
+            </ul>
+
+            <h2 id="memory-backends">Memory Backends</h2>
+            <p>Agents Hub supports multiple memory backends to suit different needs:</p>
+
+            <h3 id="in-memory">In-Memory</h3>
+            <p>A simple, lightweight memory backend that stores data in RAM:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.memory import InMemoryMemory
+
+memory = InMemoryMemory()
+
+agent = Agent(
+    name="assistant",
+    llm=llm,
+    memory=memory
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p><strong>Advantages:</strong></p>
+            <ul>
+                <li>Simple to set up and use</li>
+                <li>No external dependencies</li>
+                <li>Fast access times</li>
+            </ul>
+
+            <p><strong>Limitations:</strong></p>
+            <ul>
+                <li>Data is lost when the process ends</li>
+                <li>Limited by available RAM</li>
+                <li>No persistence across sessions</li>
+                <li>Limited search capabilities</li>
+            </ul>
+
+            <h3 id="postgresql">PostgreSQL with pgvector</h3>
+            <p>A robust, persistent memory backend with vector search capabilities:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.memory import PostgreSQLMemory
+
+memory = PostgreSQLMemory(
+    connection_string="postgresql://user:password@localhost:5432/agents_hub",
+    table_name="agent_memory",
+    embedding_model="text-embedding-ada-002"
+)
+
+agent = Agent(
+    name="assistant",
+    llm=llm,
+    memory=memory
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p><strong>Advantages:</strong></p>
+            <ul>
+                <li>Persistent storage across sessions</li>
+                <li>Scalable to large amounts of data</li>
+                <li>Powerful semantic search with vector embeddings</li>
+                <li>Rich querying capabilities</li>
+                <li>Transactional safety</li>
+            </ul>
+
+            <p><strong>Limitations:</strong></p>
+            <ul>
+                <li>Requires PostgreSQL with pgvector extension</li>
+                <li>More complex setup</li>
+                <li>Slightly higher latency than in-memory storage</li>
+            </ul>
+
+            <h3 id="custom-backends">Custom Memory Backends</h3>
+            <p>You can create custom memory backends by implementing the BaseMemory interface:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.memory.base import BaseMemory
+from typing import List, Dict, Any
+
+class CustomMemory(BaseMemory):
+    def __init__(self, connection_string):
+        self.connection_string = connection_string
+        self.client = self._initialize_client()
+        
+    def _initialize_client(self):
+        # Initialize connection to your custom storage
+        pass
+        
+    async def add(self, message: Dict[str, Any]) -> None:
+        # Store a message in your custom storage
+        await self.client.store(message)
+        
+    async def get_recent(self, n: int = 10) -> List[Dict[str, Any]]:
+        # Retrieve recent messages
+        return await self.client.get_recent(n)
+        
+    async def search(self, query: str, n: int = 5) -> List[Dict[str, Any]]:
+        # Search for relevant messages
+        return await self.client.search(query, n)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>This allows you to integrate with any storage system, such as:</p>
+            <ul>
+                <li>Redis</li>
+                <li>MongoDB</li>
+                <li>Pinecone</li>
+                <li>Weaviate</li>
+                <li>Chroma</li>
+                <li>Custom proprietary systems</li>
+            </ul>
+
+            <h2 id="memory-operations">Memory Operations</h2>
+            <p>The memory system supports several key operations:</p>
+
+            <h3 id="adding-memories">Adding Memories</h3>
+            <p>Storing new information in memory:</p>
+            <div class="code-block">
+                <pre><code># Automatically added during agent.run()
+response = await agent.run("Hello, how are you?")
+
+# Manually adding a memory
+await agent.memory.add({
+    "role": "user",
+    "content": "Remember that my favorite color is blue.",
+    "timestamp": "2025-04-14T12:34:56Z"
+})</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="retrieving-memories">Retrieving Memories</h3>
+            <p>Accessing stored memories:</p>
+            <div class="code-block">
+                <pre><code># Get recent memories
+recent_memories = await agent.memory.get_recent(10)
+
+# Get all memories
+all_memories = await agent.memory.get_all()
+
+# Get memories by time range
+time_range_memories = await agent.memory.get_by_time_range(
+    start_time="2025-04-01T00:00:00Z",
+    end_time="2025-04-14T23:59:59Z"
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="searching-memories">Searching Memories</h3>
+            <p>Finding relevant memories based on content:</p>
+            <div class="code-block">
+                <pre><code># Semantic search (with vector backends)
+relevant_memories = await agent.memory.search(
+    query="What's my favorite color?",
+    n=5  # Number of results to return
+)
+
+# Keyword search
+keyword_results = await agent.memory.keyword_search(
+    keywords=["favorite", "color"],
+    n=5
+)
+
+# Hybrid search (combining semantic and keyword)
+hybrid_results = await agent.memory.hybrid_search(
+    query="What's my favorite color?",
+    keywords=["favorite", "color"],
+    semantic_weight=0.7,  # 70% semantic, 30% keyword
+    n=5
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="filtering-memories">Filtering Memories</h3>
+            <p>Retrieving memories based on metadata:</p>
+            <div class="code-block">
+                <pre><code># Filter by role
+user_messages = await agent.memory.filter(
+    filters={"role": "user"},
+    n=10
+)
+
+# Filter by multiple criteria
+filtered_memories = await agent.memory.filter(
+    filters={
+        "role": "user",
+        "metadata.session_id": "abc123",
+        "metadata.sentiment": "positive"
+    },
+    n=10
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="memory-configuration">Memory Configuration</h2>
+            <p>You can configure various aspects of the memory system:</p>
+
+            <h3 id="context-window-management">Context Window Management</h3>
+            <p>Control how much memory is included in the context window:</p>
+            <div class="code-block">
+                <pre><code>memory = PostgreSQLMemory(
+    connection_string="postgresql://user:password@localhost:5432/agents_hub",
+    table_name="agent_memory",
+    embedding_model="text-embedding-ada-002",
+    context_window_config={
+        "max_tokens": 4000,  # Maximum tokens to include in context
+        "recency_bias": 0.7,  # Bias toward recent messages (0-1)
+        "relevance_threshold": 0.8,  # Minimum relevance score for semantic search
+        "strategy": "hybrid"  # Can be "recency", "relevance", or "hybrid"
+    }
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="embedding-configuration">Embedding Configuration</h3>
+            <p>Configure the embedding model and parameters for vector search:</p>
+            <div class="code-block">
+                <pre><code>memory = PostgreSQLMemory(
+    connection_string="postgresql://user:password@localhost:5432/agents_hub",
+    table_name="agent_memory",
+    embedding_config={
+        "model": "text-embedding-ada-002",
+        "dimensions": 1536,
+        "batch_size": 100,  # Number of items to embed in a batch
+        "cache_enabled": True,  # Cache embeddings to avoid recomputation
+        "provider": "openai"  # Can be "openai", "cohere", "huggingface", etc.
+    }
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="memory-summarization">Memory Summarization</h3>
+            <p>Enable automatic summarization of older memories to manage context window size:</p>
+            <div class="code-block">
+                <pre><code>memory = PostgreSQLMemory(
+    connection_string="postgresql://user:password@localhost:5432/agents_hub",
+    table_name="agent_memory",
+    summarization_config={
+        "enabled": True,
+        "trigger_count": 50,  # Summarize after this many messages
+        "max_age": "1d",  # Summarize messages older than 1 day
+        "strategy": "llm",  # Use LLM for summarization
+        "preserve_key_info": True  # Ensure important information is preserved
+    }
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="memory-patterns">Memory Patterns</h2>
+            <p>Here are some common patterns for using the memory system effectively:</p>
+
+            <h3 id="conversation-context">Conversation Context</h3>
+            <p>Using memory to maintain conversation context:</p>
+            <div class="code-block">
+                <pre><code># The agent automatically uses memory for context
+agent = Agent(
+    name="assistant",
+    llm=llm,
+    memory=PostgreSQLMemory(connection_string="...")
+)
+
+# First interaction
+response1 = await agent.run("My name is Alice.")
+# Response: "Hello Alice, nice to meet you. How can I help you today?"
+
+# Second interaction (agent remembers the name)
+response2 = await agent.run("What's my name?")
+# Response: "Your name is Alice, as you mentioned earlier."</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="knowledge-building">Knowledge Building</h3>
+            <p>Using memory to build knowledge over time:</p>
+            <div class="code-block">
+                <pre><code># The agent stores facts in memory
+await agent.run("The capital of France is Paris.")
+await agent.run("The Eiffel Tower is 330 meters tall.")
+await agent.run("The Louvre Museum houses the Mona Lisa.")
+
+# Later, the agent can retrieve this knowledge
+response = await agent.run("Tell me some facts about France.")
+# Response includes the stored facts about Paris, Eiffel Tower, and the Louvre</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="personalization">Personalization</h3>
+            <p>Using memory for personalized interactions:</p>
+            <div class="code-block">
+                <pre><code># The agent learns user preferences
+await agent.run("I prefer concise responses.")
+await agent.run("I'm interested in astronomy.")
+await agent.run("I'm a beginner in programming.")
+
+# Later, the agent adapts based on these preferences
+response = await agent.run("Tell me about black holes.")
+# Response is concise and tailored for a beginner interested in astronomy</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="best-practices">Best Practices</h2>
+            <p>Here are some best practices for working with the memory system:</p>
+
+            <h3 id="memory-backend-selection">Memory Backend Selection</h3>
+            <ul>
+                <li>Use <strong>InMemoryMemory</strong> for simple applications, testing, or short-lived sessions</li>
+                <li>Use <strong>PostgreSQLMemory</strong> for production applications, long-lived agents, or when semantic search is needed</li>
+                <li>Implement custom memory backends for specific requirements or integration with existing systems</li>
+            </ul>
+
+            <h3 id="context-management">Context Management</h3>
+            <ul>
+                <li>Be mindful of context window limits of your LLM</li>
+                <li>Use summarization for long-running conversations</li>
+                <li>Balance recency and relevance in context selection</li>
+                <li>Include metadata to help with filtering and retrieval</li>
+            </ul>
+
+            <h3 id="security-privacy">Security and Privacy</h3>
+            <ul>
+                <li>Implement appropriate access controls for your memory backend</li>
+                <li>Consider encryption for sensitive data</li>
+                <li>Implement data retention policies</li>
+                <li>Provide mechanisms for users to request data deletion</li>
+                <li>Be transparent about what data is stored and how it's used</li>
+            </ul>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>The memory system in Agents Hub provides a flexible, powerful foundation for building agents that can remember past interactions, learn from experience, and provide contextually relevant responses. By choosing the right memory backend and configuration for your use case, you can create agents with the appropriate balance of capabilities, performance, and resource usage.</p>
+
+            <p>For practical examples of using the memory system, see the <a href="../tutorials/cognitive-agents.html">Cognitive Agents tutorial</a> and the <a href="../tutorials/rag-systems.html">Building RAG Systems tutorial</a>.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions" target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE" target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building RAG Systems - Agents Hub</title>
+    <meta name="description" content="Learn how to build Retrieval-Augmented Generation systems with Agents Hub.">
+    <meta name="keywords" content="AI, agents, LLM, RAG, retrieval, augmented, generation, vector database">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="cognitive-agents.html">Cognitive Agents</a></li>
+                        <li class="active"><a href="rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="../concepts/architecture.html">Core Architecture</a></li>
+                        <li><a href="../concepts/agents.html">Agents</a></li>
+                        <li><a href="../concepts/cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="../concepts/memory.html">Memory System</a></li>
+                        <li><a href="../concepts/orchestration.html">Orchestration</a></li>
+                        <li><a href="../concepts/tools.html">Tools</a></li>
+                        <li><a href="../concepts/llm.html">LLM Integration</a></li>
+                        <li><a href="../concepts/moderation.html">Moderation</a></li>
+                        <li><a href="../concepts/monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Building RAG Systems</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Learn how to build Retrieval-Augmented Generation (RAG) systems with Agents Hub to create
+                agents that can access and reason over your own data.</p>
+
+            <h2 id="introduction">Introduction to RAG</h2>
+            <p>Retrieval-Augmented Generation (RAG) is a powerful approach that combines the strengths of
+                retrieval-based systems with generative AI. RAG systems allow agents to:</p>
+
+            <ul>
+                <li>Access and search through large document collections</li>
+                <li>Ground their responses in specific documents or data sources</li>
+                <li>Provide citations and references for their answers</li>
+                <li>Reduce hallucinations by relying on retrieved information</li>
+                <li>Work with proprietary or domain-specific information not in the LLM's training data</li>
+            </ul>
+
+            <p>In this tutorial, you'll learn how to build RAG systems using Agents Hub and PostgreSQL with pgvector.
+            </p>
+
+            <h2 id="prerequisites">Prerequisites</h2>
+            <p>Before starting this tutorial, you should:</p>
+            <ul>
+                <li>Have Agents Hub installed (<code>pip install agents-hub</code>)</li>
+                <li>Have PostgreSQL with pgvector extension installed</li>
+                <li>Be familiar with creating basic agents (see the <a href="../quickstart.html">Quickstart</a> guide)
+                </li>
+                <li>Have API keys for the LLM providers you want to use</li>
+                <li>Have some documents or data you want to make available to your agents</li>
+            </ul>
+
+            <div class="info-box">
+                <p><strong>Note:</strong> If you don't have PostgreSQL with pgvector set up, you can use Docker to
+                    quickly get started. See the <a href="#postgresql-setup">PostgreSQL Setup</a> section below.</p>
+            </div>
+
+            <h2 id="postgresql-setup">PostgreSQL Setup with pgvector</h2>
+            <p>If you don't already have PostgreSQL with pgvector, you can use Docker to set it up quickly:</p>
+
+            <div class="code-block">
+                <pre><code># Create a docker-compose.yml file
+version: '3.8'
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: agents_hub
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>Start the PostgreSQL container:</p>
+
+            <div class="code-block">
+                <pre><code>docker-compose up -d</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="creating-rag-tool">Creating a RAG Tool</h2>
+            <p>Agents Hub provides the PGVector tool that makes it easy to build RAG systems. Let's start by creating a
+                basic RAG setup:</p>
+
+            <div class="code-block">
+                <pre><code>from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.vector_stores import PGVector
+
+# Initialize LLM provider
+llm = OpenAIProvider(api_key="your-api-key")
+
+# Create PGVector tool
+pgvector = PGVector(
+    llm=llm,  # For generating embeddings
+    host="localhost",
+    port=5432,
+    database="agents_hub",
+    user="postgres",
+    password="postgres"
+)
+
+# Create agent with PGVector tool
+agent = Agent(
+    name="rag_agent",
+    llm=llm,
+    tools=[pgvector],
+    system_prompt="You are an assistant with access to a knowledge base. Use the PGVector tool to retrieve relevant information before answering questions."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="ingesting-documents">Ingesting Documents</h2>
+            <p>Before you can use your RAG system, you need to ingest documents into the vector database. Agents Hub
+                provides utilities for processing documents and adding them to the vector store:</p>
+
+            <div class="code-block">
+                <pre><code>from agents_hub.utils.document import extract_text_from_pdf, extract_text_from_docx, chunk_text
+from agents_hub.tools.standard import ScraperTool
+
+# Create a collection for your documents
+await pgvector.run({
+    "operation": "create_collection",
+    "collection_name": "documents"
+})
+
+# Process a text document
+text_document = "This is a sample document about artificial intelligence..."
+text_chunks = chunk_text(
+    text=text_document,
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="sentence"
+)
+
+# Add text chunks to the collection
+for i, chunk in enumerate(text_chunks):
+    await pgvector.run({
+        "operation": "add_document",
+        "collection_name": "documents",
+        "document": chunk,
+        "metadata": {"source": "manual", "chunk": i, "topic": "AI"}
+    })
+
+# Process a PDF document
+pdf_result = extract_text_from_pdf("data/report.pdf")
+pdf_chunks = chunk_text(
+    text=pdf_result["text"],
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="recursive"
+)
+
+# Add PDF chunks to the collection
+for i, chunk in enumerate(pdf_chunks):
+    await pgvector.run({
+        "operation": "add_document",
+        "collection_name": "documents",
+        "document": chunk,
+        "metadata": {"source": pdf_result["metadata"], "chunk": i}
+    })
+
+# Use the scraper tool to get web content
+scraper = ScraperTool()
+web_content = await scraper.run({"url": "https://example.com/article"})
+
+# Process and add web content
+web_chunks = chunk_text(
+    text=web_content["text"],
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="sentence"
+)
+
+# Add web chunks to the collection
+for i, chunk in enumerate(web_chunks):
+    await pgvector.run({
+        "operation": "add_document",
+        "collection_name": "documents",
+        "document": chunk,
+        "metadata": {"source": "web", "url": "https://example.com/article", "chunk": i}
+    })</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="chunking-strategies">Chunking Strategies</h3>
+            <p>The way you chunk your documents can significantly impact the performance of your RAG system. Agents Hub
+                provides several chunking strategies:</p>
+
+            <div class="code-block">
+                <pre><code>from agents_hub.utils.document import chunk_text
+
+# Token-based chunking
+token_chunks = chunk_text(
+    text=document_text,
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="token"
+)
+
+# Character-based chunking
+char_chunks = chunk_text(
+    text=document_text,
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="character"
+)
+
+# Sentence-based chunking
+sentence_chunks = chunk_text(
+    text=document_text,
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="sentence"
+)
+
+# Use the chunks with PGVector
+pgvector = PGVector(
+    llm=llm,
+    host="localhost",
+    port=5432,
+    database="agents_hub",
+    user="postgres",
+    password="postgres"
+)
+
+# Add chunks to a collection
+for chunk in sentence_chunks:
+    await pgvector.run({
+        "operation": "add_document",
+        "collection_name": "documents",
+        "document": chunk,
+        "metadata": {"source": "document.pdf"}
+    })</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="recursive-chunking">Recursive Character Chunking</h3>
+            <p>For more advanced document splitting, Agents Hub also provides a recursive character text splitter that
+                can intelligently split documents based on a hierarchy of separators:</p>
+
+            <div class="code-block">
+                <pre><code>from agents_hub.utils.document import chunk_text
+
+# Use recursive character chunking with default separators
+# Default separators: ["\n\n", "\n", ". ", " ", ""]
+chunks = chunk_text(
+    text=document_text,
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="recursive"
+)
+
+# Use recursive character chunking with custom separators
+custom_separators = ["## ", "\n\n", "\n", ". ", " "]
+chunks = chunk_text(
+    text=document_text,
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="recursive",
+    separators=custom_separators
+)
+
+# The recursive splitter will:
+# 1. Try to split on the first separator (e.g., "## " for markdown headers)
+# 2. If chunks are still too large, try the next separator
+# 3. Continue until chunks are within the desired size
+# 4. Maintain proper overlap between chunks</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="using-rag-agent">Using the RAG System</h2>
+            <p>Once you've ingested your documents, you can use your RAG system to search for information and answer
+                questions:</p>
+
+            <div class="code-block">
+                <pre><code># Search for relevant documents
+search_results = await pgvector.run({
+    "operation": "search",
+    "collection_name": "documents",
+    "query": "What does the report say about climate change impacts?",
+    "limit": 5
+})
+
+# Print the search results
+for i, result in enumerate(search_results["results"]):
+    print(f"Result {i+1} (similarity: {result['similarity']:.4f})")
+    print(f"Text: {result['document'][:100]}...")
+    print(f"Metadata: {result['metadata']}\n")
+
+# Use the agent with PGVector to answer questions
+response = await agent.run("What does the report say about climate change impacts?")
+print(response)
+
+# The agent will automatically:
+# 1. Use the PGVector tool to search for relevant information
+# 2. Retrieve the most relevant document chunks
+# 3. Use those chunks to generate a response
+# 4. Include citations to the source documents</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="advanced-rag">Advanced RAG Techniques</h2>
+            <p>Agents Hub supports several advanced RAG techniques to improve the quality of responses:</p>
+
+            <h3 id="hybrid-search">Advanced Search Techniques</h3>
+            <p>You can implement more advanced search techniques with the PGVector tool:</p>
+
+            <div class="code-block">
+                <pre><code># Hybrid search (combining vector search with keyword search)
+# This would require custom SQL implementation with PGVector
+
+# Example of searching with metadata filters
+search_results = await pgvector.run({
+    "operation": "search",
+    "collection_name": "documents",
+    "query": "climate change impacts",
+    "limit": 5,
+    "parameters": {
+        "metadata_filters": {
+            "source": "research",
+            "date": {"$gte": "2024-01-01"}  # Documents from 2024 or later
+        }
+    }
+})</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="reranking">Custom Reranking</h3>
+            <p>You can implement custom reranking logic to improve retrieval quality:</p>
+
+            <div class="code-block">
+                <pre><code># Implement a simple reranking approach
+# 1. Get more results than needed
+search_results = await pgvector.run({
+    "operation": "search",
+    "collection_name": "documents",
+    "query": "climate change impacts",
+    "limit": 20  # Get more results than needed
+})
+
+# 2. Implement custom reranking logic
+def rerank_results(results, query):
+    """Simple reranking based on keyword matching"""
+    # Count keyword matches in each result
+    keywords = query.lower().split()
+    reranked = []
+
+    for result in results:
+        text = result["document"].lower()
+        # Count keyword occurrences
+        keyword_score = sum(text.count(keyword) for keyword in keywords)
+        # Combine with vector similarity
+        combined_score = (0.7 * result["similarity"]) + (0.3 * keyword_score / len(keywords))
+        reranked.append({**result, "combined_score": combined_score})
+
+    # Sort by combined score
+    return sorted(reranked, key=lambda x: x["combined_score"], reverse=True)
+
+# 3. Apply reranking
+reranked_results = rerank_results(search_results["results"], "climate change impacts")
+
+# 4. Take top results after reranking
+top_results = reranked_results[:5]</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="multi-step-retrieval">Multi-Step Retrieval</h3>
+            <p>Implement multi-step retrieval for complex questions:</p>
+
+            <div class="code-block">
+                <pre><code># Multi-step retrieval process
+# 1. First search for general context
+initial_results = await pgvector.run({
+    "operation": "search",
+    "collection_name": "documents",
+    "query": "renewable energy technologies",
+    "limit": 3
+})
+
+# 2. Extract key entities or concepts from initial results
+key_concepts = ["solar power", "wind energy", "energy storage"]
+
+# 3. Perform focused searches for each concept
+detailed_results = {}
+for concept in key_concepts:
+    concept_results = await pgvector.run({
+        "operation": "search",
+        "collection_name": "documents",
+        "query": concept,
+        "limit": 2
+    })
+    detailed_results[concept] = concept_results["results"]
+
+# 4. Combine and synthesize the information using the agent
+response = await agent.run(
+    "Analyze the latest developments in renewable energy technologies, focusing on solar power, wind energy, and energy storage."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="cognitive-rag">Combining RAG with Cognitive Agents</h2>
+            <p>For the most powerful RAG system, combine PGVector with cognitive agents:</p>
+
+            <div class="code-block">
+                <pre><code>from agents_hub import CognitiveAgent
+from agents_hub.llm.providers import ClaudeProvider
+from agents_hub.cognitive import CognitiveArchitecture
+from agents_hub.vector_stores import PGVector
+
+# Initialize LLM provider
+llm = ClaudeProvider(api_key="your-api-key")
+
+# Create PGVector tool
+pgvector = PGVector(
+    llm=llm,
+    host="localhost",
+    port=5432,
+    database="agents_hub",
+    user="postgres",
+    password="postgres"
+)
+
+# Create cognitive architecture
+cognitive_architecture = CognitiveArchitecture(
+    metacognition_enabled=True,
+    reasoning_mechanisms=["deductive", "inductive", "abductive"]
+)
+
+# Create cognitive agent with PGVector
+cognitive_agent = CognitiveAgent(
+    name="cognitive_rag_agent",
+    llm=llm,
+    cognitive_architecture=cognitive_architecture,
+    tools=[pgvector],
+    system_prompt="""You are an advanced research assistant with access to a knowledge base.
+    When answering questions:
+    1. Use the PGVector tool to retrieve relevant information
+    2. Critically evaluate the retrieved information
+    3. Synthesize information from multiple sources
+    4. Acknowledge limitations in the available information
+    5. Provide citations for your claims"""
+)
+
+# Use the cognitive agent
+response = await cognitive_agent.run(
+    "Based on the available research, what are the most promising approaches to carbon capture technology?"
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="best-practices">Best Practices for RAG Systems</h2>
+            <p>Here are some best practices for building effective RAG systems:</p>
+
+            <h3 id="document-preparation">Document Preparation</h3>
+            <ul>
+                <li>Clean and preprocess documents to remove noise (headers, footers, etc.)</li>
+                <li>Add rich metadata to documents for better filtering</li>
+                <li>Experiment with different chunking strategies for your specific use case</li>
+                <li>Consider document structure when chunking (e.g., keep sections together)</li>
+                <li>For structured documents like Markdown or technical documentation, use the recursive character
+                    splitter with custom separators that match your document structure</li>
+                <li>Adjust chunk size and overlap based on the complexity and density of your documents</li>
+            </ul>
+
+            <h3 id="retrieval-optimization">Retrieval Optimization</h3>
+            <ul>
+                <li>Use hybrid search to combine the strengths of semantic and keyword search</li>
+                <li>Implement reranking for better precision</li>
+                <li>Adjust the number of retrieved chunks based on the complexity of the question</li>
+                <li>Use metadata filtering to narrow down the search space</li>
+            </ul>
+
+            <h3 id="prompt-engineering">Prompt Engineering</h3>
+            <ul>
+                <li>Design system prompts that encourage critical evaluation of retrieved information</li>
+                <li>Instruct the agent to cite sources and acknowledge limitations</li>
+                <li>For complex questions, consider multi-step retrieval (retrieve, analyze, retrieve again)</li>
+                <li>Include instructions for handling contradictory information from different sources</li>
+            </ul>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>RAG systems are a powerful way to enhance agents with domain-specific knowledge and reduce
+                hallucinations. By combining Agents Hub's RAG tools with cognitive agents and advanced retrieval
+                techniques, you can build sophisticated systems that provide accurate, grounded responses based on your
+                own data.</p>
+
+            <p>For more examples of RAG systems in action, check out the <a href="../examples.html">Examples</a> page.
+            </p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

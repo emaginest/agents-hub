@@ -118,7 +118,16 @@ chunks = chunk_text(
     text=long_document,
     chunk_size=1000,
     chunk_overlap=200,
-    chunk_method="sentence"  # Options: token, character, sentence
+    chunk_method="sentence"  # Options: token, character, sentence, recursive
+)
+
+# Recursive character chunking with custom separators
+chunks = chunk_text(
+    text=long_document,
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="recursive",
+    separators=["## ", "\n\n", "\n", ". ", " "]  # Custom separators in order of priority
 )
 
 # Add chunks to collection

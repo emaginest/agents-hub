@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Agents - Agents Hub</title>
+    <meta name="description" content="Learn how to build advanced cognitive agents with metacognition capabilities.">
+    <meta name="keywords" content="AI, agents, LLM, cognitive agents, metacognition, reasoning">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i> PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="agent-workforce.html">Building Agent Workforces</a></li>
+                        <li class="active"><a href="cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="../concepts/architecture.html">Core Architecture</a></li>
+                        <li><a href="../concepts/agents.html">Agents</a></li>
+                        <li><a href="../concepts/cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="../concepts/memory.html">Memory System</a></li>
+                        <li><a href="../concepts/orchestration.html">Orchestration</a></li>
+                        <li><a href="../concepts/tools.html">Tools</a></li>
+                        <li><a href="../concepts/llm.html">LLM Integration</a></li>
+                        <li><a href="../concepts/moderation.html">Moderation</a></li>
+                        <li><a href="../concepts/monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Building Cognitive Agents</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Learn how to create advanced cognitive agents with metacognition capabilities, multiple reasoning mechanisms, and learning abilities.</p>
+
+            <h2 id="introduction">Introduction to Cognitive Agents</h2>
+            <p>Cognitive agents are an advanced type of agent in Agents Hub that go beyond simple prompt-response interactions. They incorporate a multi-layered cognitive architecture inspired by human cognition, enabling them to:</p>
+            
+            <ul>
+                <li>Reflect on their own thinking process (metacognition)</li>
+                <li>Employ multiple reasoning strategies</li>
+                <li>Learn from past interactions</li>
+                <li>Manage their own cognitive resources</li>
+                <li>Adapt to different tasks and contexts</li>
+            </ul>
+
+            <p>In this tutorial, you'll learn how to create and configure cognitive agents for complex tasks that require sophisticated reasoning.</p>
+
+            <h2 id="prerequisites">Prerequisites</h2>
+            <p>Before starting this tutorial, you should:</p>
+            <ul>
+                <li>Have Agents Hub installed (<code>pip install agents-hub</code>)</li>
+                <li>Be familiar with creating basic agents (see the <a href="../quickstart.html">Quickstart</a> guide)</li>
+                <li>Have API keys for the LLM providers you want to use (Claude or GPT-4 recommended for cognitive agents)</li>
+            </ul>
+
+            <h2 id="creating-cognitive-agent">Creating a Cognitive Agent</h2>
+            <p>Let's start by creating a basic cognitive agent:</p>
+
+            <div class="code-block">
+                <pre><code>from agents_hub import CognitiveAgent
+from agents_hub.llm.providers import ClaudeProvider
+from agents_hub.cognitive import CognitiveArchitecture
+
+# Initialize LLM provider
+llm = ClaudeProvider(api_key="your-api-key")
+
+# Create cognitive architecture
+cognitive_architecture = CognitiveArchitecture(
+    metacognition_enabled=True,
+    reasoning_mechanisms=["deductive", "inductive", "abductive"],
+    learning_enabled=True
+)
+
+# Create cognitive agent
+agent = CognitiveAgent(
+    name="cognitive_assistant",
+    llm=llm,
+    cognitive_architecture=cognitive_architecture,
+    system_prompt="You are a cognitive assistant with advanced reasoning capabilities."
+)
+
+# Use the agent
+response = await agent.run("What are the potential implications of quantum computing on cryptography?")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="cognitive-architecture">Configuring the Cognitive Architecture</h2>
+            <p>The cognitive architecture is the core component that gives cognitive agents their advanced capabilities. You can configure various aspects of the cognitive architecture:</p>
+
+            <h3 id="metacognition">Metacognition</h3>
+            <p>Metacognition allows the agent to reflect on its own thinking process, monitor its confidence, and adjust its approach when needed:</p>
+
+            <div class="code-block">
+                <pre><code>cognitive_architecture = CognitiveArchitecture(
+    metacognition_config={
+        "reflection_depth": 2,  # How many levels of reflection to perform
+        "confidence_threshold": 0.7,  # Threshold for triggering deeper reflection
+        "self_correction_enabled": True  # Whether the agent can correct itself
+    }
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="reasoning">Reasoning Mechanisms</h3>
+            <p>Cognitive agents can use multiple reasoning strategies:</p>
+
+            <div class="code-block">
+                <pre><code>cognitive_architecture = CognitiveArchitecture(
+    reasoning_config={
+        "mechanisms": ["deductive", "inductive", "abductive"],
+        "strategy_selection": "adaptive",  # Can be "fixed" or "adaptive"
+        "chain_of_thought": True  # Enable step-by-step reasoning
+    }
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="learning">Learning Capabilities</h3>
+            <p>Cognitive agents can learn from past interactions:</p>
+
+            <div class="code-block">
+                <pre><code>cognitive_architecture = CognitiveArchitecture(
+    learning_config={
+        "episodic_memory_enabled": True,  # Remember specific interactions
+        "semantic_memory_enabled": True,  # Build knowledge structures
+        "learning_rate": 0.5  # How quickly to incorporate new information
+    }
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="advanced-example">Advanced Example: Research Assistant</h2>
+            <p>Let's create a more advanced cognitive agent that acts as a research assistant:</p>
+
+            <div class="code-block">
+                <pre><code>from agents_hub import CognitiveAgent
+from agents_hub.llm.providers import ClaudeProvider
+from agents_hub.cognitive import CognitiveArchitecture
+from agents_hub.tools.standard import WebSearchTool, CalculatorTool
+from agents_hub.memory import PostgreSQLMemory
+
+# Initialize tools
+web_search = WebSearchTool()
+calculator = CalculatorTool()
+
+# Initialize memory
+memory = PostgreSQLMemory(
+    connection_string="postgresql://user:password@localhost:5432/agents_hub",
+    table_name="research_agent_memory"
+)
+
+# Create cognitive architecture
+cognitive_architecture = CognitiveArchitecture(
+    metacognition_config={
+        "reflection_depth": 2,
+        "confidence_threshold": 0.7,
+        "self_correction_enabled": True
+    },
+    reasoning_config={
+        "mechanisms": ["deductive", "inductive", "abductive"],
+        "strategy_selection": "adaptive",
+        "chain_of_thought": True
+    },
+    learning_config={
+        "episodic_memory_enabled": True,
+        "semantic_memory_enabled": True,
+        "learning_rate": 0.5
+    }
+)
+
+# Create cognitive agent
+research_agent = CognitiveAgent(
+    name="research_assistant",
+    llm=ClaudeProvider(api_key="your-api-key"),
+    cognitive_architecture=cognitive_architecture,
+    tools=[web_search, calculator],
+    memory=memory,
+    system_prompt="""You are an advanced research assistant with cognitive capabilities.
+    You can search the web, perform calculations, and reason through complex problems.
+    When analyzing research questions:
+    1. Break down complex questions into smaller components
+    2. Consider multiple perspectives and approaches
+    3. Evaluate the reliability of information sources
+    4. Synthesize information into coherent insights
+    5. Acknowledge limitations and uncertainties in your analysis"""
+)
+
+# Use the agent
+response = await research_agent.run(
+    "Analyze the potential impact of machine learning on healthcare diagnostics over the next decade. 
+    Consider technological, ethical, and economic factors."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="accessing-cognitive-traces">Accessing Cognitive Traces</h2>
+            <p>One of the powerful features of cognitive agents is the ability to access their reasoning traces:</p>
+
+            <div class="code-block">
+                <pre><code># Run the agent
+response = await agent.run("What are the ethical implications of AI in healthcare?")
+
+# Access the reasoning trace
+reasoning_trace = agent.last_reasoning_trace
+
+# Print the metacognitive reflections
+print("Metacognitive reflections:")
+for reflection in reasoning_trace.metacognition.reflections:
+    print(f"- {reflection}")
+
+# Print the reasoning steps
+print("\nReasoning steps:")
+for step in reasoning_trace.reasoning.steps:
+    print(f"- {step}")
+
+# Print confidence assessment
+print(f"\nConfidence: {reasoning_trace.metacognition.confidence}")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="best-practices">Best Practices for Cognitive Agents</h2>
+            <p>Here are some best practices for working with cognitive agents:</p>
+
+            <h3 id="llm-selection">LLM Selection</h3>
+            <p>Cognitive agents require powerful LLMs to fully leverage their capabilities:</p>
+            <ul>
+                <li><strong>Recommended:</strong> Claude 3 Opus, GPT-4</li>
+                <li><strong>Acceptable:</strong> Claude 3 Sonnet, GPT-3.5-Turbo</li>
+                <li><strong>Not recommended:</strong> Smaller models with limited reasoning capabilities</li>
+            </ul>
+
+            <h3 id="system-prompts">System Prompts</h3>
+            <p>Design system prompts that encourage metacognition and careful reasoning:</p>
+            <ul>
+                <li>Explicitly instruct the agent to reflect on its thinking</li>
+                <li>Encourage consideration of multiple perspectives</li>
+                <li>Ask the agent to evaluate its confidence</li>
+                <li>Prompt the agent to identify potential biases or limitations</li>
+            </ul>
+
+            <h3 id="resource-management">Resource Management</h3>
+            <p>Cognitive agents can be more resource-intensive:</p>
+            <ul>
+                <li>Be mindful of token usage, as metacognition increases prompt size</li>
+                <li>Consider using a tiered approach: start with simpler agents and escalate to cognitive agents for complex tasks</li>
+                <li>Use appropriate caching strategies to avoid redundant computations</li>
+            </ul>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>Cognitive agents represent a significant advancement in agent capabilities, enabling more sophisticated reasoning, self-reflection, and learning. By properly configuring the cognitive architecture and providing appropriate system prompts, you can create agents that approach problems with human-like cognitive strategies.</p>
+
+            <p>For more examples of cognitive agents in action, check out the <a href="../examples.html">Examples</a> page.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions" target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE" target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

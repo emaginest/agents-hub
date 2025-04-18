@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Architecture - Agents Hub</title>
+    <meta name="description"
+        content="Understand the core architecture of Agents Hub, an advanced agent orchestration framework.">
+    <meta name="keywords" content="AI, agents, LLM, architecture, framework, design">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li class="active"><a href="architecture.html">Core Architecture</a></li>
+                        <li><a href="agents.html">Agents</a></li>
+                        <li><a href="cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="memory.html">Memory System</a></li>
+                        <li><a href="orchestration.html">Orchestration</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="llm.html">LLM Integration</a></li>
+                        <li><a href="moderation.html">Moderation</a></li>
+                        <li><a href="monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Core Architecture</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Understand the modular architecture that powers Agents Hub and how its components work
+                together to create a flexible, powerful agent orchestration framework.</p>
+
+            <h2 id="overview">Architectural Overview</h2>
+            <p>Agents Hub is built on a modular, extensible architecture designed to support a wide range of agent-based
+                applications. The architecture follows these key principles:</p>
+
+            <ul>
+                <li><strong>Modularity:</strong> Components are designed to be interchangeable and independently
+                    upgradable</li>
+                <li><strong>Extensibility:</strong> The framework can be extended with custom components</li>
+                <li><strong>Provider-agnostic:</strong> Support for multiple LLM providers</li>
+                <li><strong>Cognitive-first:</strong> Advanced cognitive capabilities are central to the design</li>
+                <li><strong>Multi-agent:</strong> Built to support complex agent workforces</li>
+            </ul>
+
+            <h2 id="core-components">Core Components</h2>
+            <p>The Agents Hub architecture consists of several core components that work together:</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Agent Core</h3>
+                    <p>The foundational component that manages the agent lifecycle, handles interactions, and
+                        coordinates other components.</p>
+                </div>
+                <div class="card">
+                    <h3>LLM Providers</h3>
+                    <p>Adapters for different language model providers (OpenAI, Claude, etc.) that handle API
+                        communication and response parsing.</p>
+                </div>
+                <div class="card">
+                    <h3>Cognitive Architecture</h3>
+                    <p>Advanced reasoning capabilities including metacognition, multiple reasoning strategies, and
+                        learning mechanisms.</p>
+                </div>
+                <div class="card">
+                    <h3>Memory System</h3>
+                    <p>Storage and retrieval mechanisms for conversation history, knowledge, and agent state.</p>
+                </div>
+                <div class="card">
+                    <h3>Tool System</h3>
+                    <p>Framework for defining, managing, and executing tools that extend agent capabilities.</p>
+                </div>
+                <div class="card">
+                    <h3>Orchestration</h3>
+                    <p>Mechanisms for coordinating multiple agents in a workforce, including communication and task
+                        delegation.</p>
+                </div>
+                <div class="card">
+                    <h3>Moderation</h3>
+                    <p>Content filtering and safety mechanisms to ensure appropriate agent behavior.</p>
+                </div>
+                <div class="card">
+                    <h3>Monitoring</h3>
+                    <p>Observability and analytics for tracking agent performance and behavior.</p>
+                </div>
+            </div>
+
+            <h2 id="component-interactions">Component Interactions</h2>
+            <p>The components in Agents Hub interact through well-defined interfaces:</p>
+
+            <div class="code-block">
+                <pre><code>┌─────────────────────────────────────────────────────────────┐
+│                        Agent Workforce                        │
+└───────────────────────────────┬─────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────┐
+│                          Agent Core                          │
+├─────────────┬─────────────┬─────────────┬─────────────┬─────┘
+│             │             │             │             │
+▼             ▼             ▼             ▼             ▼
+┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────────┐
+│   LLM   │ │Cognitive│ │ Memory  │ │  Tool   │ │ Moderation  │
+│Providers│ │   Arch  │ │ System  │ │ System  │ │& Monitoring │
+└─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────────┘</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>When an agent processes a request, the typical flow is:</p>
+            <ol>
+                <li>The Agent Core receives the input and initializes the processing pipeline</li>
+                <li>The Memory System is queried for relevant context from past interactions</li>
+                <li>The Cognitive Architecture determines the reasoning approach</li>
+                <li>The Tool System identifies and executes any required tools</li>
+                <li>The LLM Provider generates a response based on the context, reasoning, and tool outputs</li>
+                <li>The Moderation system checks the response for policy compliance</li>
+                <li>The Monitoring system logs the interaction</li>
+                <li>The Agent Core returns the final response</li>
+            </ol>
+
+            <h2 id="agent-types">Agent Types</h2>
+            <p>Agents Hub provides several agent types built on this architecture:</p>
+
+            <h3 id="basic-agent">Basic Agent</h3>
+            <p>The standard agent implementation that provides core functionality:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+
+agent = Agent(
+    name="assistant",
+    llm=OpenAIProvider(api_key="your-api-key"),
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="cognitive-agent">Cognitive Agent</h3>
+            <p>An enhanced agent with advanced cognitive capabilities:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub import CognitiveAgent
+from agents_hub.cognitive import CognitiveArchitecture
+
+cognitive_agent = CognitiveAgent(
+    name="cognitive_assistant",
+    llm=llm,
+    cognitive_architecture=CognitiveArchitecture(),
+    system_prompt="You are an assistant with advanced reasoning capabilities."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="agent-workforce">Agent Workforce</h3>
+            <p>A team of specialized agents working together:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub import AgentWorkforce, Agent
+
+# Create specialized agents
+researcher = Agent(name="researcher", llm=llm, system_prompt="You research information.")
+writer = Agent(name="writer", llm=llm, system_prompt="You write content.")
+editor = Agent(name="editor", llm=llm, system_prompt="You edit and improve content.")
+
+# Create a workforce
+workforce = AgentWorkforce(
+    agents=[researcher, writer, editor],
+    orchestrator_agent=researcher
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="extensibility">Extensibility</h2>
+            <p>One of the key strengths of Agents Hub's architecture is its extensibility. You can extend the framework
+                in several ways:</p>
+
+            <h3 id="custom-llm-providers">Custom LLM Providers</h3>
+            <p>Create adapters for new LLM providers:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.base import BaseLLMProvider
+
+class CustomLLMProvider(BaseLLMProvider):
+    def __init__(self, api_key):
+        self.api_key = api_key
+
+    async def generate(self, prompt, **kwargs):
+        # Implement API call to your custom LLM provider
+        response = await self._call_api(prompt, **kwargs)
+        return response
+
+    async def _call_api(self, prompt, **kwargs):
+        # Implement the actual API call
+        pass</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="custom-tools">Custom Tools</h3>
+            <p>Create new tools to extend agent capabilities:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.base import BaseTool
+from pydantic import BaseModel, Field
+
+class WeatherInput(BaseModel):
+    location: str = Field(..., description="The city and state, e.g. San Francisco, CA")
+
+class WeatherTool(BaseTool):
+    name = "get_weather"
+    description = "Get the current weather in a given location"
+    input_schema = WeatherInput
+
+    async def _execute(self, location: str) -> str:
+        # Implement weather API call
+        weather_data = await self._fetch_weather(location)
+        return f"The weather in {location} is {weather_data['condition']} with a temperature of {weather_data['temperature']}°F."
+
+    async def _fetch_weather(self, location):
+        # Implement the actual API call
+        pass</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="custom-memory">Custom Memory Systems</h3>
+            <p>Create custom memory backends:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.memory.base import BaseMemory
+from typing import List, Dict, Any
+
+class CustomMemory(BaseMemory):
+    def __init__(self, connection_string):
+        self.connection_string = connection_string
+        self.client = self._initialize_client()
+
+    def _initialize_client(self):
+        # Initialize connection to your custom storage
+        pass
+
+    async def add(self, message: Dict[str, Any]) -> None:
+        # Store a message in your custom storage
+        await self.client.store(message)
+
+    async def get_recent(self, n: int = 10) -> List[Dict[str, Any]]:
+        # Retrieve recent messages
+        return await self.client.get_recent(n)
+
+    async def search(self, query: str, n: int = 5) -> List[Dict[str, Any]]:
+        # Search for relevant messages
+        return await self.client.search(query, n)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="design-patterns">Design Patterns</h2>
+            <p>Agents Hub uses several design patterns to create a flexible, maintainable architecture:</p>
+
+            <h3 id="dependency-injection">Dependency Injection</h3>
+            <p>Components are injected into agents rather than created internally, allowing for easy substitution and
+                testing:</p>
+            <div class="code-block">
+                <pre><code># Dependency injection example
+agent = Agent(
+    name="assistant",
+    llm=OpenAIProvider(api_key="your-api-key"),
+    memory=PostgreSQLMemory(connection_string="..."),
+    tools=[WebSearchTool(), CalculatorTool()],
+    moderator=ContentModerator(api_key="...")
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="strategy-pattern">Strategy Pattern</h3>
+            <p>Different strategies can be selected for various components:</p>
+            <div class="code-block">
+                <pre><code># Different memory strategies
+in_memory = InMemoryMemory()
+postgres_memory = PostgreSQLMemory(connection_string="...")
+
+# Different LLM provider strategies
+openai_llm = OpenAIProvider(api_key="...")
+claude_llm = ClaudeProvider(api_key="...")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="observer-pattern">Observer Pattern</h3>
+            <p>Monitoring components observe agent behavior without affecting core functionality:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.monitoring import LangfuseMonitor
+
+# Add monitoring without changing agent behavior
+monitor = LangfuseMonitor(
+    api_key="your-langfuse-api-key",
+    public_key="your-langfuse-public-key"
+)
+
+agent = Agent(
+    name="assistant",
+    llm=llm,
+    monitor=monitor
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>The modular architecture of Agents Hub provides a flexible, extensible foundation for building
+                sophisticated agent systems. By understanding how these components work together, you can leverage the
+                full power of the framework and extend it to meet your specific needs.</p>
+
+            <p>In the following sections, we'll explore each component in more detail.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

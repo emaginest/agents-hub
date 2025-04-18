@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools - Agents Hub</title>
+    <meta name="description" content="Learn about the tools system in Agents Hub that extends agent capabilities.">
+    <meta name="keywords" content="AI, agents, LLM, tools, capabilities, extensions">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i> PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="architecture.html">Core Architecture</a></li>
+                        <li><a href="agents.html">Agents</a></li>
+                        <li><a href="cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="memory.html">Memory System</a></li>
+                        <li><a href="orchestration.html">Orchestration</a></li>
+                        <li class="active"><a href="tools.html">Tools</a></li>
+                        <li><a href="llm.html">LLM Integration</a></li>
+                        <li><a href="moderation.html">Moderation</a></li>
+                        <li><a href="monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Tools</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Learn about the tools system in Agents Hub that extends agent capabilities, allowing them to interact with external systems, access information, and perform actions in the real world.</p>
+
+            <h2 id="introduction">Introduction to Tools</h2>
+            <p>Tools in Agents Hub are modular components that extend agent capabilities beyond simple text generation. They enable agents to:</p>
+            
+            <ul>
+                <li>Access external information (web search, databases, APIs)</li>
+                <li>Perform calculations and data processing</li>
+                <li>Interact with external systems (email, calendar, etc.)</li>
+                <li>Execute code and analyze results</li>
+                <li>Access and manipulate files and documents</li>
+                <li>Interact with vector databases for retrieval-augmented generation (RAG)</li>
+            </ul>
+
+            <p>The tools system is designed to be extensible, allowing you to create custom tools for specific use cases or integrate with existing systems.</p>
+
+            <h2 id="tool-architecture">Tool Architecture</h2>
+            <p>The tools system in Agents Hub follows a consistent architecture:</p>
+
+            <h3 id="base-tool">BaseTool</h3>
+            <p>All tools inherit from the BaseTool class, which provides the core functionality:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.base import BaseTool
+from pydantic import BaseModel, Field
+
+class CalculatorInput(BaseModel):
+    expression: str = Field(..., description="The mathematical expression to evaluate")
+
+class CalculatorTool(BaseTool):
+    name = "calculator"
+    description = "Evaluate mathematical expressions"
+    input_schema = CalculatorInput
+    
+    async def _execute(self, expression: str) -> str:
+        try:
+            result = eval(expression)
+            return f"The result of {expression} is {result}"
+        except Exception as e:
+            return f"Error evaluating expression: {str(e)}"</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>Key components of a tool:</p>
+            <ul>
+                <li><strong>name:</strong> A unique identifier for the tool</li>
+                <li><strong>description:</strong> A description of what the tool does (used by the LLM to decide when to use it)</li>
+                <li><strong>input_schema:</strong> A Pydantic model defining the expected input parameters</li>
+                <li><strong>_execute:</strong> The method that implements the tool's functionality</li>
+            </ul>
+
+            <h3 id="tool-execution">Tool Execution Flow</h3>
+            <p>When an agent uses a tool, the following process occurs:</p>
+            <ol>
+                <li>The LLM identifies the need for a tool and specifies the tool name and parameters</li>
+                <li>The agent finds the appropriate tool in its tool set</li>
+                <li>The agent validates the input parameters against the tool's input schema</li>
+                <li>The agent executes the tool with the validated parameters</li>
+                <li>The tool performs its operation and returns a result</li>
+                <li>The agent incorporates the tool result into its response</li>
+            </ol>
+
+            <h2 id="standard-tools">Standard Tools</h2>
+            <p>Agents Hub provides a set of standard tools for common tasks:</p>
+
+            <h3 id="web-search">Web Search Tool</h3>
+            <p>Search the web for information:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import WebSearchTool
+
+search_tool = WebSearchTool(api_key="your-search-api-key")
+
+agent = Agent(
+    name="research_assistant",
+    llm=llm,
+    tools=[search_tool]
+)
+
+# The agent can now search the web
+response = await agent.run("What are the latest developments in quantum computing?")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="calculator">Calculator Tool</h3>
+            <p>Perform mathematical calculations:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import CalculatorTool
+
+calculator_tool = CalculatorTool()
+
+agent = Agent(
+    name="math_assistant",
+    llm=llm,
+    tools=[calculator_tool]
+)
+
+# The agent can now perform calculations
+response = await agent.run("What is the square root of 144 plus 50?")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="weather">Weather Tool</h3>
+            <p>Get weather information for a location:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import WeatherTool
+
+weather_tool = WeatherTool(api_key="your-weather-api-key")
+
+agent = Agent(
+    name="travel_assistant",
+    llm=llm,
+    tools=[weather_tool]
+)
+
+# The agent can now check weather conditions
+response = await agent.run("What's the weather like in San Francisco today?")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="wikipedia">Wikipedia Tool</h3>
+            <p>Search and retrieve information from Wikipedia:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import WikipediaTool
+
+wikipedia_tool = WikipediaTool()
+
+agent = Agent(
+    name="knowledge_assistant",
+    llm=llm,
+    tools=[wikipedia_tool]
+)
+
+# The agent can now access Wikipedia
+response = await agent.run("Tell me about the history of artificial intelligence.")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="specialized-tools">Specialized Tools</h2>
+            <p>Agents Hub also provides specialized tools for specific use cases:</p>
+
+            <h3 id="pgvector-rag">PGVector RAG Tool</h3>
+            <p>Implement retrieval-augmented generation with PostgreSQL and pgvector:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.rag import PGVectorRAGTool
+
+rag_tool = PGVectorRAGTool(
+    connection_string="postgresql://user:password@localhost:5432/agents_hub",
+    collection_name="documents",
+    embedding_model="text-embedding-ada-002"
+)
+
+agent = Agent(
+    name="document_assistant",
+    llm=llm,
+    tools=[rag_tool],
+    system_prompt="You are an assistant with access to a document database. Use the RAG tool to retrieve relevant information before answering questions."
+)
+
+# The agent can now search through documents
+response = await agent.run("What does our company policy say about remote work?")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="code-execution">Code Execution Tool</h3>
+            <p>Execute code in various languages:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.code import CodeExecutionTool
+
+code_tool = CodeExecutionTool(
+    supported_languages=["python", "javascript", "bash"],
+    sandbox_config={
+        "timeout": 10,  # Maximum execution time in seconds
+        "memory_limit": "100MB",  # Maximum memory usage
+        "network_access": False  # Whether the code can access the network
+    }
+)
+
+agent = Agent(
+    name="coding_assistant",
+    llm=llm,
+    tools=[code_tool]
+)
+
+# The agent can now execute code
+response = await agent.run("Write a Python function to calculate the Fibonacci sequence and show the first 10 numbers.")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="file-operations">File Operations Tool</h3>
+            <p>Read, write, and manipulate files:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.file import FileOperationsTool
+
+file_tool = FileOperationsTool(
+    base_directory="/path/to/allowed/directory",
+    allowed_operations=["read", "write", "list"],
+    allowed_extensions=[".txt", ".csv", ".json", ".md"]
+)
+
+agent = Agent(
+    name="file_assistant",
+    llm=llm,
+    tools=[file_tool]
+)
+
+# The agent can now work with files
+response = await agent.run("Read the data.csv file and summarize its contents.")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="creating-custom-tools">Creating Custom Tools</h2>
+            <p>You can create custom tools to extend agent capabilities for your specific use case:</p>
+
+            <h3 id="basic-custom-tool">Basic Custom Tool</h3>
+            <p>Create a simple custom tool:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.base import BaseTool
+from pydantic import BaseModel, Field
+
+class TranslationInput(BaseModel):
+    text: str = Field(..., description="The text to translate")
+    source_language: str = Field(..., description="The source language code (e.g., 'en', 'fr')")
+    target_language: str = Field(..., description="The target language code (e.g., 'es', 'de')")
+
+class TranslationTool(BaseTool):
+    name = "translator"
+    description = "Translate text from one language to another"
+    input_schema = TranslationInput
+    
+    def __init__(self, api_key):
+        super().__init__()
+        self.api_key = api_key
+        self.client = self._initialize_client()
+    
+    def _initialize_client(self):
+        # Initialize your translation API client
+        # This is just a placeholder
+        return {"api_key": self.api_key}
+    
+    async def _execute(self, text: str, source_language: str, target_language: str) -> str:
+        # Implement the actual translation logic
+        # This is just a placeholder
+        translated_text = f"[Translated from {source_language} to {target_language}]: {text}"
+        return translated_text</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="api-integration-tool">API Integration Tool</h3>
+            <p>Create a tool that integrates with an external API:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.base import BaseTool
+from pydantic import BaseModel, Field
+import aiohttp
+
+class StockPriceInput(BaseModel):
+    symbol: str = Field(..., description="The stock symbol (e.g., 'AAPL', 'MSFT')")
+
+class StockPriceTool(BaseTool):
+    name = "stock_price"
+    description = "Get the current price of a stock"
+    input_schema = StockPriceInput
+    
+    def __init__(self, api_key):
+        super().__init__()
+        self.api_key = api_key
+        self.base_url = "https://api.example.com/stocks"
+    
+    async def _execute(self, symbol: str) -> str:
+        url = f"{self.base_url}/{symbol}"
+        headers = {"Authorization": f"Bearer {self.api_key}"}
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    price = data.get("price")
+                    return f"The current price of {symbol} is ${price}"
+                else:
+                    return f"Error retrieving stock price: {response.status}"</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="database-tool">Database Tool</h3>
+            <p>Create a tool that interacts with a database:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.base import BaseTool
+from pydantic import BaseModel, Field
+import asyncpg
+
+class QueryInput(BaseModel):
+    query_type: str = Field(..., description="The type of query to perform (e.g., 'customer', 'order', 'product')")
+    parameters: dict = Field(..., description="Parameters for the query")
+
+class DatabaseQueryTool(BaseTool):
+    name = "database_query"
+    description = "Query the company database for information"
+    input_schema = QueryInput
+    
+    def __init__(self, connection_string):
+        super().__init__()
+        self.connection_string = connection_string
+        self.pool = None
+    
+    async def initialize(self):
+        self.pool = await asyncpg.create_pool(self.connection_string)
+    
+    async def _execute(self, query_type: str, parameters: dict) -> str:
+        if not self.pool:
+            await self.initialize()
+        
+        # Predefined safe queries
+        queries = {
+            "customer": "SELECT name, email, signup_date FROM customers WHERE customer_id = $1",
+            "order": "SELECT order_id, order_date, status FROM orders WHERE customer_id = $1 ORDER BY order_date DESC LIMIT $2",
+            "product": "SELECT name, price, category FROM products WHERE category = $1"
+        }
+        
+        if query_type not in queries:
+            return f"Invalid query type: {query_type}"
+        
+        query = queries[query_type]
+        
+        try:
+            if query_type == "customer":
+                async with self.pool.acquire() as conn:
+                    row = await conn.fetchrow(query, parameters.get("customer_id"))
+                    if row:
+                        return f"Customer: {row['name']}, Email: {row['email']}, Signup Date: {row['signup_date']}"
+                    else:
+                        return "Customer not found"
+            
+            elif query_type == "order":
+                async with self.pool.acquire() as conn:
+                    rows = await conn.fetch(query, parameters.get("customer_id"), parameters.get("limit", 5))
+                    if rows:
+                        result = "Orders:\n"
+                        for row in rows:
+                            result += f"- Order {row['order_id']}: {row['status']} (Ordered on {row['order_date']})\n"
+                        return result
+                    else:
+                        return "No orders found"
+            
+            elif query_type == "product":
+                async with self.pool.acquire() as conn:
+                    rows = await conn.fetch(query, parameters.get("category"))
+                    if rows:
+                        result = f"Products in {parameters.get('category')}:\n"
+                        for row in rows:
+                            result += f"- {row['name']}: ${row['price']}\n"
+                        return result
+                    else:
+                        return "No products found"
+        
+        except Exception as e:
+            return f"Error executing query: {str(e)}"</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="tool-security">Tool Security</h2>
+            <p>When creating and using tools, it's important to consider security implications:</p>
+
+            <h3 id="input-validation">Input Validation</h3>
+            <p>Always validate tool inputs to prevent injection attacks and other security issues:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.base import BaseTool
+from pydantic import BaseModel, Field, validator
+
+class SQLQueryInput(BaseModel):
+    query: str = Field(..., description="The SQL query to execute")
+    
+    @validator("query")
+    def validate_query(cls, v):
+        # Disallow potentially dangerous operations
+        dangerous_keywords = ["DROP", "DELETE", "UPDATE", "INSERT", "ALTER", "TRUNCATE"]
+        for keyword in dangerous_keywords:
+            if keyword in v.upper():
+                raise ValueError(f"Dangerous SQL operation not allowed: {keyword}")
+        return v</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="permission-management">Permission Management</h3>
+            <p>Implement permission controls for tools:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.base import BaseTool
+from agents_hub.security import PermissionManager
+
+class SensitiveOperationTool(BaseTool):
+    name = "sensitive_operation"
+    description = "Perform a sensitive operation"
+    
+    def __init__(self, permission_manager):
+        super().__init__()
+        self.permission_manager = permission_manager
+    
+    async def _execute(self, **kwargs) -> str:
+        # Check permissions before executing
+        user_id = kwargs.get("user_id")
+        operation = kwargs.get("operation")
+        
+        if not await self.permission_manager.has_permission(user_id, f"sensitive_operation:{operation}"):
+            return "Permission denied: You do not have access to this operation"
+        
+        # Proceed with the operation if permitted
+        return await self._perform_operation(operation)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="rate-limiting">Rate Limiting</h3>
+            <p>Implement rate limiting to prevent abuse:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.base import BaseTool
+from agents_hub.security import RateLimiter
+
+class APITool(BaseTool):
+    name = "api_tool"
+    description = "Access an external API"
+    
+    def __init__(self, api_key, rate_limiter):
+        super().__init__()
+        self.api_key = api_key
+        self.rate_limiter = rate_limiter
+    
+    async def _execute(self, **kwargs) -> str:
+        # Check rate limits before executing
+        user_id = kwargs.get("user_id")
+        
+        if not await self.rate_limiter.allow_request(user_id, self.name):
+            return "Rate limit exceeded: Please try again later"
+        
+        # Proceed with the API call if within rate limits
+        return await self._call_api(**kwargs)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="best-practices">Best Practices</h2>
+            <p>Here are some best practices for working with tools:</p>
+
+            <h3 id="tool-design">Tool Design</h3>
+            <ul>
+                <li>Keep tools focused on a single responsibility</li>
+                <li>Provide clear, descriptive names and descriptions</li>
+                <li>Design input schemas with clear parameter names and descriptions</li>
+                <li>Return informative error messages when things go wrong</li>
+                <li>Include examples in tool descriptions when possible</li>
+            </ul>
+
+            <h3 id="tool-selection">Tool Selection</h3>
+            <ul>
+                <li>Only provide agents with the tools they need for their specific role</li>
+                <li>Consider the security implications of each tool</li>
+                <li>Group related tools together for better organization</li>
+                <li>Consider the computational and resource requirements of tools</li>
+            </ul>
+
+            <h3 id="error-handling">Error Handling</h3>
+            <ul>
+                <li>Implement robust error handling in tools</li>
+                <li>Return user-friendly error messages</li>
+                <li>Log detailed error information for debugging</li>
+                <li>Gracefully handle timeouts and external service failures</li>
+            </ul>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>The tools system in Agents Hub provides a powerful way to extend agent capabilities beyond simple text generation. By understanding how to use built-in tools and create custom tools, you can build agents that can interact with external systems, access information, and perform actions in the real world.</p>
+
+            <p>For practical examples of using tools, see the <a href="../tutorials/rag-systems.html">Building RAG Systems tutorial</a> and the <a href="../examples.html">Examples</a> page.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions" target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE" target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

@@ -16,7 +16,11 @@ The ApprovalInterface class provides mechanisms for requesting human approval fo
 The document module provides utilities for processing various document formats:
 - **PDF Processing**: Extract text and metadata from PDF files
 - **DOCX Processing**: Extract text and metadata from Word documents
-- **Text Chunking**: Split text into manageable chunks for processing
+- **Text Chunking**: Split text into manageable chunks for processing with multiple strategies:
+  - Token-based chunking: Split by approximate token count
+  - Character-based chunking: Split by character count
+  - Sentence-based chunking: Split by sentences while respecting size limits
+  - Recursive character chunking: Intelligently split using a hierarchy of separators
 - **Markdown Processing**: Parse and generate Markdown content
 
 ### Multimodal Utilities
@@ -87,7 +91,16 @@ chunks = chunk_text(
     text=pdf_result["text"],
     chunk_size=1000,
     chunk_overlap=200,
-    chunk_method="sentence"  # Options: token, character, sentence
+    chunk_method="sentence"  # Options: token, character, sentence, recursive
+)
+
+# Recursive character chunking with custom separators
+chunks = chunk_text(
+    text=pdf_result["text"],
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="recursive",
+    separators=["## ", "\n\n", "\n", ". ", " "]  # Custom separators in order of priority
 )
 
 for i, chunk in enumerate(chunks):

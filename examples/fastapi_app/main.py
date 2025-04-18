@@ -16,7 +16,7 @@ from agents_hub.llm.providers.ollama import OllamaProvider
 from agents_hub.memory.backends.postgres import PostgreSQLMemory
 from agents_hub.tools.standard.calculator import CalculatorTool
 from agents_hub.tools.standard.scraper import ScraperTool
-from agents_hub.tools.standard.pgvector_tool import PGVectorTool
+from agents_hub.vector_stores import PGVector
 
 from agents_hub.moderation import (
     RuleBasedModerator,
@@ -177,7 +177,7 @@ async def startup_event():
 
     # Initialize PGVector tool if PostgreSQL credentials are available
     if os.environ.get("POSTGRES_HOST"):
-        tools["pgvector"] = PGVectorTool(
+        tools["pgvector"] = PGVector(
             llm=default_llm,
             host=os.environ["POSTGRES_HOST"],
             port=int(os.environ.get("POSTGRES_PORT", "5432")),

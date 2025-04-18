@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Agents Hub</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+            padding: var(--spacing-xl);
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+            line-height: 1;
+            position: relative;
+        }
+
+        .error-code::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            margin: var(--spacing-lg) 0;
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .error-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+
+            .error-title {
+                font-size: 1.5rem;
+            }
+
+            .error-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Page Not Found</h2>
+        <p class="error-message">The page you're looking for doesn't exist or has been moved. Our agents are searching
+            for it, but they haven't found it yet.</p>
+        <div class="error-actions">
+            <a href="index.html" class="btn"><i class="fas fa-home"></i> Go to Homepage</a>
+            <a href="https://github.com/emaginest/agents-hub/issues" target="_blank" class="btn btn-outline"><i
+                    class="fas fa-bug"></i> Report an Issue</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="index.html">Introduction</a></li>
+                            <li><a href="quickstart.html">Quickstart</a></li>
+                            <li><a href="examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fix relative paths for 404 page
+        document.addEventListener('DOMContentLoaded', function () {
+            const baseUrl = window.location.pathname.split('/').slice(0, -1).join('/');
+            if (!baseUrl.endsWith('/')) {
+                const links = document.querySelectorAll('a:not([href^="http"]):not([href^="#"]):not([href^="mailto:"])');
+                links.forEach(link => {
+                    if (link.getAttribute('href').startsWith('/')) {
+                        link.href = baseUrl + link.getAttribute('href');
+                    } else {
+                        link.href = baseUrl + '/' + link.getAttribute('href');
+                    }
+                });
+
+                const images = document.querySelectorAll('img');
+                images.forEach(img => {
+                    if (img.getAttribute('src').startsWith('img/')) {
+                        img.src = baseUrl + '/' + img.getAttribute('src');
+                    }
+                });
+
+                const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+                stylesheets.forEach(stylesheet => {
+                    if (stylesheet.getAttribute('href').startsWith('css/')) {
+                        stylesheet.href = baseUrl + '/' + stylesheet.getAttribute('href');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

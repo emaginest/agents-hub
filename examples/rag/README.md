@@ -16,7 +16,7 @@ The RAG system allows you to:
 The example consists of the following components:
 
 - **Agent**: A standard agent from the agents-hub framework
-- **PGVectorTool**: Tool for vector storage and retrieval using PostgreSQL with pgvector
+- **PGVector**: Tool for vector storage and retrieval using PostgreSQL with pgvector
 - **ScraperTool**: Tool for scraping content from URLs
 - **FastAPI Application**: API endpoints for scraping, querying, and managing collections
 - **Web Interface**: A simple interface for interacting with the RAG system
@@ -178,7 +178,7 @@ OPENAI_MODEL=gpt-4
 The example uses the following core components from agents-hub:
 
 - **Agent**: A standard agent that uses the tools to perform RAG operations
-- **PGVectorTool**: Provides methods for managing collections, storing documents, and searching
+- **PGVector**: Provides methods for managing collections, storing documents, and searching
 - **ScraperTool**: Provides methods for scraping content from URLs
 
 ### FastAPI Application (app.py)

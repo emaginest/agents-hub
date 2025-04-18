@@ -38,7 +38,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cleaned up temporary and generated files
 - Fixed import statements to reflect the new structure
 
-## [0.1.0] - 2023-12-15
+## [0.1.1] - 2025-04-17
+
+### Added
+- InMemoryMemory implementation for simple in-memory storage
+- New memory_example demonstrating long-term memory with PostgreSQL
+- Docker support for local memory testing with PostgreSQL
+- Interactive memory commands (stats, history, search) in memory example
+- Support for continuing conversations across sessions with conversation IDs
+
+### Changed
+- Updated memory module to expose both PostgreSQL and InMemory backends
+- Improved memory interface with consistent method signatures
+- Enhanced documentation for memory systems
+
+### Fixed
+- Fixed context handling in Agent.run() method for conversation IDs
+- Added optional python-Levenshtein dependency to address fuzzywuzzy warning
+
+## [0.1.0] - 2025-04-03
 
 ### Added
 - Initial release of the Agents Hub framework

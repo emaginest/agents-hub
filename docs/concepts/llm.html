@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Integration - Agents Hub</title>
+    <meta name="description" content="Learn about LLM integration in Agents Hub and how to work with different language model providers.">
+    <meta name="keywords" content="AI, agents, LLM, integration, OpenAI, Claude, Gemini, Ollama">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i> PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="architecture.html">Core Architecture</a></li>
+                        <li><a href="agents.html">Agents</a></li>
+                        <li><a href="cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="memory.html">Memory System</a></li>
+                        <li><a href="orchestration.html">Orchestration</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li class="active"><a href="llm.html">LLM Integration</a></li>
+                        <li><a href="moderation.html">Moderation</a></li>
+                        <li><a href="monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>LLM Integration</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Learn about LLM integration in Agents Hub, which provides a unified interface for working with different language model providers and models.</p>
+
+            <h2 id="introduction">Introduction to LLM Integration</h2>
+            <p>Agents Hub is designed to be provider-agnostic, allowing you to use different language model providers and models based on your needs. The LLM integration system provides:</p>
+            
+            <ul>
+                <li>A unified interface for different LLM providers</li>
+                <li>Support for multiple popular LLM providers (OpenAI, Claude, Google, etc.)</li>
+                <li>Local model support through Ollama</li>
+                <li>Configurable parameters for each provider</li>
+                <li>Extensibility for adding custom providers</li>
+            </ul>
+
+            <p>This flexibility allows you to choose the best LLM for each agent based on capabilities, cost, and other factors.</p>
+
+            <h2 id="supported-providers">Supported Providers</h2>
+            <p>Agents Hub supports several LLM providers out of the box:</p>
+
+            <h3 id="openai">OpenAI</h3>
+            <p>Integration with OpenAI's GPT models:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.providers import OpenAIProvider
+
+openai_llm = OpenAIProvider(
+    api_key="your-openai-api-key",
+    model="gpt-4",  # Can also be "gpt-3.5-turbo" or other OpenAI models
+    temperature=0.7,
+    max_tokens=1000,
+    top_p=1.0,
+    frequency_penalty=0.0,
+    presence_penalty=0.0
+)
+
+agent = Agent(
+    name="openai_agent",
+    llm=openai_llm,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="claude">Claude (Anthropic)</h3>
+            <p>Integration with Anthropic's Claude models:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.providers import ClaudeProvider
+
+claude_llm = ClaudeProvider(
+    api_key="your-claude-api-key",
+    model="claude-3-opus-20240229",  # Can also be "claude-3-sonnet-20240229" or other Claude models
+    temperature=0.7,
+    max_tokens=1000,
+    top_p=1.0,
+    top_k=50
+)
+
+agent = Agent(
+    name="claude_agent",
+    llm=claude_llm,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="gemini">Gemini (Google)</h3>
+            <p>Integration with Google's Gemini models:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.providers import GeminiProvider
+
+gemini_llm = GeminiProvider(
+    api_key="your-gemini-api-key",
+    model="gemini-pro",  # Can also be "gemini-ultra" or other Gemini models
+    temperature=0.7,
+    max_tokens=1000,
+    top_p=1.0,
+    top_k=40
+)
+
+agent = Agent(
+    name="gemini_agent",
+    llm=gemini_llm,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="ollama">Ollama (Local Models)</h3>
+            <p>Integration with locally hosted models through Ollama:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.providers import OllamaProvider
+
+ollama_llm = OllamaProvider(
+    host="http://localhost:11434",
+    model="llama3",  # Can also be "mistral", "phi", or other models supported by Ollama
+    temperature=0.7,
+    max_tokens=1000,
+    top_p=1.0,
+    repeat_penalty=1.1
+)
+
+agent = Agent(
+    name="ollama_agent",
+    llm=ollama_llm,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="provider-architecture">Provider Architecture</h2>
+            <p>The LLM integration system in Agents Hub follows a consistent architecture:</p>
+
+            <h3 id="base-provider">BaseLLMProvider</h3>
+            <p>All providers inherit from the BaseLLMProvider class, which provides the core interface:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.base import BaseLLMProvider
+
+class CustomLLMProvider(BaseLLMProvider):
+    def __init__(self, api_key, model="default-model", **kwargs):
+        self.api_key = api_key
+        self.model = model
+        self.additional_params = kwargs
+        self.client = self._initialize_client()
+        
+    def _initialize_client(self):
+        # Initialize the client for your LLM provider
+        # This is just a placeholder
+        return {"api_key": self.api_key}
+    
+    async def generate(self, prompt, **kwargs):
+        # Implement the actual API call to your LLM provider
+        # This is just a placeholder
+        response = await self._call_api(prompt, **kwargs)
+        return response
+    
+    async def _call_api(self, prompt, **kwargs):
+        # Implement the specific API call logic
+        # This is just a placeholder
+        return f"Response to: {prompt}"</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="provider-interface">Provider Interface</h3>
+            <p>Each provider implements the following key methods:</p>
+            <ul>
+                <li><strong>__init__:</strong> Initialize the provider with API keys and configuration</li>
+                <li><strong>_initialize_client:</strong> Set up the client for the specific provider</li>
+                <li><strong>generate:</strong> Generate a response for a given prompt</li>
+                <li><strong>_call_api:</strong> Make the actual API call to the provider</li>
+            </ul>
+
+            <h2 id="provider-configuration">Provider Configuration</h2>
+            <p>You can configure various parameters for each provider:</p>
+
+            <h3 id="common-parameters">Common Parameters</h3>
+            <p>Most providers support these common parameters:</p>
+            <ul>
+                <li><strong>temperature:</strong> Controls randomness (0.0 to 1.0)</li>
+                <li><strong>max_tokens:</strong> Maximum number of tokens to generate</li>
+                <li><strong>top_p:</strong> Nucleus sampling parameter (0.0 to 1.0)</li>
+                <li><strong>timeout:</strong> API call timeout in seconds</li>
+            </ul>
+
+            <h3 id="provider-specific">Provider-Specific Parameters</h3>
+            <p>Each provider may have additional specific parameters:</p>
+            <div class="code-block">
+                <pre><code># OpenAI-specific parameters
+openai_llm = OpenAIProvider(
+    api_key="your-openai-api-key",
+    model="gpt-4",
+    frequency_penalty=0.5,  # OpenAI-specific
+    presence_penalty=0.5,   # OpenAI-specific
+    logit_bias={50256: -100}  # OpenAI-specific
+)
+
+# Claude-specific parameters
+claude_llm = ClaudeProvider(
+    api_key="your-claude-api-key",
+    model="claude-3-opus-20240229",
+    top_k=50,  # Claude-specific
+    stop_sequences=["User:"]  # Claude-specific
+)
+
+# Gemini-specific parameters
+gemini_llm = GeminiProvider(
+    api_key="your-gemini-api-key",
+    model="gemini-pro",
+    candidate_count=1,  # Gemini-specific
+    safety_settings={  # Gemini-specific
+        "harassment": "block_medium_and_above",
+        "hate_speech": "block_medium_and_above"
+    }
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="advanced-features">Advanced Features</h2>
+            <p>The LLM integration system provides several advanced features:</p>
+
+            <h3 id="fallback-providers">Fallback Providers</h3>
+            <p>Configure fallback providers in case the primary provider fails:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.providers import OpenAIProvider, ClaudeProvider
+from agents_hub.llm.fallback import FallbackLLMProvider
+
+# Create primary and fallback providers
+primary = OpenAIProvider(api_key="your-openai-api-key", model="gpt-4")
+fallback1 = ClaudeProvider(api_key="your-claude-api-key", model="claude-3-sonnet-20240229")
+fallback2 = OpenAIProvider(api_key="your-openai-api-key", model="gpt-3.5-turbo")
+
+# Create a fallback provider chain
+fallback_llm = FallbackLLMProvider(
+    providers=[primary, fallback1, fallback2],
+    max_retries=3,
+    retry_delay=1.0  # Delay between retries in seconds
+)
+
+agent = Agent(
+    name="reliable_agent",
+    llm=fallback_llm,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="caching">Response Caching</h3>
+            <p>Cache LLM responses to reduce API calls and costs:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.llm.cache import LLMCache
+
+# Create a provider with caching
+llm = OpenAIProvider(
+    api_key="your-openai-api-key",
+    model="gpt-4",
+    cache=LLMCache(
+        cache_type="redis",  # Can be "memory", "redis", or "file"
+        connection_string="redis://localhost:6379/0",
+        ttl=3600  # Cache expiration time in seconds
+    )
+)
+
+agent = Agent(
+    name="cached_agent",
+    llm=llm,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="rate-limiting">Rate Limiting</h3>
+            <p>Implement rate limiting to stay within API limits:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.llm.rate_limiter import RateLimiter
+
+# Create a provider with rate limiting
+llm = OpenAIProvider(
+    api_key="your-openai-api-key",
+    model="gpt-4",
+    rate_limiter=RateLimiter(
+        requests_per_minute=60,
+        tokens_per_minute=90000,
+        max_parallel_requests=5
+    )
+)
+
+agent = Agent(
+    name="rate_limited_agent",
+    llm=llm,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="model-routing">Model Routing</h3>
+            <p>Route requests to different models based on criteria:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.providers import OpenAIProvider, ClaudeProvider
+from agents_hub.llm.router import ModelRouter
+
+# Create providers for different models
+gpt4 = OpenAIProvider(api_key="your-openai-api-key", model="gpt-4")
+gpt35 = OpenAIProvider(api_key="your-openai-api-key", model="gpt-3.5-turbo")
+claude = ClaudeProvider(api_key="your-claude-api-key", model="claude-3-opus-20240229")
+
+# Create a router
+router = ModelRouter(
+    default_provider=gpt35,
+    routing_rules=[
+        {
+            "condition": lambda prompt: len(prompt) > 1000 or "complex" in prompt.lower(),
+            "provider": gpt4
+        },
+        {
+            "condition": lambda prompt: "creative" in prompt.lower() or "story" in prompt.lower(),
+            "provider": claude
+        }
+    ]
+)
+
+agent = Agent(
+    name="smart_routing_agent",
+    llm=router,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="creating-custom-providers">Creating Custom Providers</h2>
+            <p>You can create custom providers for LLMs not directly supported by Agents Hub:</p>
+
+            <h3 id="basic-custom-provider">Basic Custom Provider</h3>
+            <p>Create a simple custom provider:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.base import BaseLLMProvider
+import aiohttp
+
+class CustomLLMProvider(BaseLLMProvider):
+    def __init__(self, api_key, model="default-model", **kwargs):
+        self.api_key = api_key
+        self.model = model
+        self.base_url = "https://api.customllm.com/v1/completions"
+        self.additional_params = kwargs
+    
+    async def generate(self, prompt, **kwargs):
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        data = {
+            "model": self.model,
+            "prompt": prompt,
+            "max_tokens": kwargs.get("max_tokens", 1000),
+            "temperature": kwargs.get("temperature", 0.7),
+            **self.additional_params
+        }
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.base_url, headers=headers, json=data) as response:
+                if response.status == 200:
+                    result = await response.json()
+                    return result["choices"][0]["text"]
+                else:
+                    error_data = await response.text()
+                    raise Exception(f"API call failed with status {response.status}: {error_data}")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="streaming-provider">Streaming Provider</h3>
+            <p>Create a provider that supports streaming responses:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.base import BaseLLMProvider
+import aiohttp
+import asyncio
+
+class StreamingLLMProvider(BaseLLMProvider):
+    def __init__(self, api_key, model="default-model", **kwargs):
+        self.api_key = api_key
+        self.model = model
+        self.base_url = "https://api.streamingllm.com/v1/completions"
+        self.additional_params = kwargs
+    
+    async def generate(self, prompt, **kwargs):
+        # Non-streaming version
+        return await self._generate_complete(prompt, **kwargs)
+    
+    async def generate_streaming(self, prompt, callback, **kwargs):
+        # Streaming version with callback
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        data = {
+            "model": self.model,
+            "prompt": prompt,
+            "max_tokens": kwargs.get("max_tokens", 1000),
+            "temperature": kwargs.get("temperature", 0.7),
+            "stream": True,
+            **self.additional_params
+        }
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.base_url, headers=headers, json=data) as response:
+                if response.status == 200:
+                    full_response = ""
+                    async for line in response.content:
+                        if line:
+                            chunk = line.decode('utf-8').strip()
+                            if chunk.startswith("data: "):
+                                chunk = chunk[6:]  # Remove "data: " prefix
+                                if chunk != "[DONE]":
+                                    try:
+                                        chunk_data = json.loads(chunk)
+                                        content = chunk_data["choices"][0]["text"]
+                                        full_response += content
+                                        await callback(content)
+                                    except Exception as e:
+                                        print(f"Error processing chunk: {e}")
+                    return full_response
+                else:
+                    error_data = await response.text()
+                    raise Exception(f"API call failed with status {response.status}: {error_data}")
+    
+    async def _generate_complete(self, prompt, **kwargs):
+        # Implementation for non-streaming version
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        data = {
+            "model": self.model,
+            "prompt": prompt,
+            "max_tokens": kwargs.get("max_tokens", 1000),
+            "temperature": kwargs.get("temperature", 0.7),
+            "stream": False,
+            **self.additional_params
+        }
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.base_url, headers=headers, json=data) as response:
+                if response.status == 200:
+                    result = await response.json()
+                    return result["choices"][0]["text"]
+                else:
+                    error_data = await response.text()
+                    raise Exception(f"API call failed with status {response.status}: {error_data}")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="best-practices">Best Practices</h2>
+            <p>Here are some best practices for working with LLM providers:</p>
+
+            <h3 id="model-selection">Model Selection</h3>
+            <ul>
+                <li>Choose models based on the specific requirements of each agent</li>
+                <li>Use more powerful models (GPT-4, Claude 3 Opus) for complex reasoning tasks</li>
+                <li>Use more efficient models (GPT-3.5-Turbo, Claude 3 Sonnet) for simpler tasks</li>
+                <li>Consider using local models through Ollama for privacy-sensitive applications</li>
+                <li>Test different models to find the best balance of performance and cost</li>
+            </ul>
+
+            <h3 id="parameter-tuning">Parameter Tuning</h3>
+            <ul>
+                <li>Adjust temperature based on the desired creativity vs. determinism</li>
+                <li>Set appropriate max_tokens to avoid truncated responses</li>
+                <li>Use lower temperature (0.0-0.3) for factual, deterministic tasks</li>
+                <li>Use higher temperature (0.7-1.0) for creative, varied outputs</li>
+                <li>Experiment with top_p and other parameters to optimize results</li>
+            </ul>
+
+            <h3 id="error-handling">Error Handling</h3>
+            <ul>
+                <li>Implement robust error handling for API failures</li>
+                <li>Use fallback providers for critical applications</li>
+                <li>Implement exponential backoff for retries</li>
+                <li>Monitor API usage to avoid hitting rate limits</li>
+                <li>Log detailed error information for debugging</li>
+            </ul>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>The LLM integration system in Agents Hub provides a flexible, provider-agnostic way to work with different language models. By understanding the available providers, configuration options, and advanced features, you can choose the right LLM for each agent and optimize performance, cost, and reliability.</p>
+
+            <p>For practical examples of using different LLM providers, see the <a href="../tutorials/agent-workforce.html">Building Agent Workforces tutorial</a> and the <a href="../examples.html">Examples</a> page.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions" target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE" target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

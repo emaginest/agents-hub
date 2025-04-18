@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orchestration - Agents Hub</title>
+    <meta name="description" content="Learn about orchestration in Agents Hub for coordinating multiple agents in a workforce.">
+    <meta name="keywords" content="AI, agents, LLM, orchestration, workforce, multi-agent">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i> PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="architecture.html">Core Architecture</a></li>
+                        <li><a href="agents.html">Agents</a></li>
+                        <li><a href="cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="memory.html">Memory System</a></li>
+                        <li class="active"><a href="orchestration.html">Orchestration</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="llm.html">LLM Integration</a></li>
+                        <li><a href="moderation.html">Moderation</a></li>
+                        <li><a href="monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Orchestration</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Learn about orchestration in Agents Hub, which enables coordinating multiple specialized agents in a workforce to tackle complex tasks collaboratively.</p>
+
+            <h2 id="introduction">Introduction to Orchestration</h2>
+            <p>Orchestration in Agents Hub refers to the coordination and management of multiple agents working together as a workforce. This approach enables:</p>
+            
+            <ul>
+                <li>Division of labor among specialized agents</li>
+                <li>Parallel processing of subtasks</li>
+                <li>Delegation of tasks based on agent capabilities</li>
+                <li>Coordination of agent interactions and information sharing</li>
+                <li>Synthesis of individual agent outputs into cohesive results</li>
+            </ul>
+
+            <p>By orchestrating multiple agents, you can tackle more complex tasks than any single agent could handle alone, while leveraging the specific strengths of different agent types and LLM models.</p>
+
+            <h2 id="agent-workforce">Agent Workforce</h2>
+            <p>The primary orchestration mechanism in Agents Hub is the AgentWorkforce, which manages a team of specialized agents:</p>
+
+            <div class="code-block">
+                <pre><code>from agents_hub import AgentWorkforce, Agent
+from agents_hub.llm.providers import OpenAIProvider, ClaudeProvider
+
+# Create LLM providers
+openai_llm = OpenAIProvider(api_key="your-openai-api-key")
+claude_llm = ClaudeProvider(api_key="your-claude-api-key")
+
+# Create specialized agents
+researcher = Agent(
+    name="researcher",
+    llm=claude_llm,
+    system_prompt="You are a research specialist who finds and analyzes information."
+)
+
+writer = Agent(
+    name="writer",
+    llm=openai_llm,
+    system_prompt="You are a content writer who creates engaging, well-structured content."
+)
+
+editor = Agent(
+    name="editor",
+    llm=claude_llm,
+    system_prompt="You are an editor who improves and refines content for clarity and accuracy."
+)
+
+# Create a workforce with these agents
+workforce = AgentWorkforce(
+    name="content_creation_team",
+    agents=[researcher, writer, editor],
+    orchestrator_agent=researcher  # The agent that will coordinate the workflow
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="orchestration-patterns">Orchestration Patterns</h2>
+            <p>Agents Hub supports several orchestration patterns for different use cases:</p>
+
+            <h3 id="sequential-workflow">Sequential Workflow</h3>
+            <p>Agents work in a predefined sequence, with each agent building on the output of the previous one:</p>
+            <div class="code-block">
+                <pre><code>workflow = AgentWorkforce(
+    name="content_creation_workflow",
+    agents=[researcher, writer, editor],
+    workflow_pattern="sequential",
+    workflow_config={
+        "sequence": ["researcher", "writer", "editor"]
+    }
+)
+
+result = await workflow.run("Create an article about renewable energy trends in 2025.")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>In this pattern:</p>
+            <ol>
+                <li>The researcher agent gathers information about renewable energy trends</li>
+                <li>The writer agent creates an article based on the researcher's findings</li>
+                <li>The editor agent refines and improves the article</li>
+            </ol>
+
+            <h3 id="orchestrator-delegated">Orchestrator-Delegated Workflow</h3>
+            <p>An orchestrator agent dynamically delegates tasks to specialized agents:</p>
+            <div class="code-block">
+                <pre><code>workflow = AgentWorkforce(
+    name="research_team",
+    agents=[
+        project_manager,  # Orchestrator
+        data_analyst,
+        market_researcher,
+        technical_expert,
+        report_writer
+    ],
+    workflow_pattern="orchestrator_delegated",
+    orchestrator_agent=project_manager
+)
+
+result = await workflow.run("Analyze the market potential for AI-powered healthcare diagnostics.")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>In this pattern:</p>
+            <ol>
+                <li>The project manager (orchestrator) analyzes the task and creates a plan</li>
+                <li>The orchestrator delegates subtasks to appropriate specialized agents</li>
+                <li>Specialized agents complete their assigned subtasks</li>
+                <li>The orchestrator integrates the results and produces a final output</li>
+            </ol>
+
+            <h3 id="collaborative">Collaborative Workflow</h3>
+            <p>Agents work together with peer-to-peer communication:</p>
+            <div class="code-block">
+                <pre><code>workflow = AgentWorkforce(
+    name="design_team",
+    agents=[
+        product_manager,
+        ux_designer,
+        ui_designer,
+        developer
+    ],
+    workflow_pattern="collaborative",
+    workflow_config={
+        "communication_channels": "all_to_all",
+        "consensus_required": True
+    }
+)
+
+result = await workflow.run("Design a mobile app interface for a fitness tracking application.")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>In this pattern:</p>
+            <ol>
+                <li>All agents have access to the initial task</li>
+                <li>Agents can communicate with each other directly</li>
+                <li>Agents work on different aspects of the task in parallel</li>
+                <li>Agents collaborate to resolve conflicts and reach consensus</li>
+                <li>The final output represents the collective work of all agents</li>
+            </ol>
+
+            <h3 id="hierarchical">Hierarchical Workflow</h3>
+            <p>Agents are organized in a hierarchical structure with multiple levels of delegation:</p>
+            <div class="code-block">
+                <pre><code>workflow = AgentWorkforce(
+    name="software_development_team",
+    agents=[
+        project_lead,  # Top-level orchestrator
+        frontend_lead, backend_lead, qa_lead,  # Mid-level orchestrators
+        ui_developer, ux_developer,  # Report to frontend_lead
+        api_developer, database_developer,  # Report to backend_lead
+        test_automation_engineer, manual_tester  # Report to qa_lead
+    ],
+    workflow_pattern="hierarchical",
+    workflow_config={
+        "hierarchy": {
+            "project_lead": ["frontend_lead", "backend_lead", "qa_lead"],
+            "frontend_lead": ["ui_developer", "ux_developer"],
+            "backend_lead": ["api_developer", "database_developer"],
+            "qa_lead": ["test_automation_engineer", "manual_tester"]
+        }
+    }
+)
+
+result = await workflow.run("Develop a web application for inventory management.")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>In this pattern:</p>
+            <ol>
+                <li>The top-level orchestrator breaks down the task into major components</li>
+                <li>Mid-level orchestrators further break down their assigned components</li>
+                <li>Specialized agents work on specific subtasks</li>
+                <li>Results flow back up the hierarchy, with integration at each level</li>
+                <li>The top-level orchestrator produces the final integrated result</li>
+            </ol>
+
+            <h2 id="communication-protocols">Communication Protocols</h2>
+            <p>Agents Hub provides several communication protocols for agent interaction:</p>
+
+            <h3 id="direct-messaging">Direct Messaging</h3>
+            <p>Agents can send messages directly to specific agents:</p>
+            <div class="code-block">
+                <pre><code># Within an agent's processing
+message = {
+    "to": "writer",
+    "content": "Here's the research data I've gathered on renewable energy trends.",
+    "data": research_results
+}
+
+await self.send_message(message)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="broadcast-messaging">Broadcast Messaging</h3>
+            <p>Agents can broadcast messages to all agents in the workforce:</p>
+            <div class="code-block">
+                <pre><code># Within an agent's processing
+message = {
+    "to": "all",
+    "content": "I've updated our project timeline. Please review and adjust your schedules accordingly.",
+    "data": updated_timeline
+}
+
+await self.broadcast_message(message)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="group-messaging">Group Messaging</h3>
+            <p>Agents can send messages to a group of agents:</p>
+            <div class="code-block">
+                <pre><code># Within an agent's processing
+message = {
+    "to": ["frontend_lead", "backend_lead"],
+    "content": "We need to coordinate the API integration between frontend and backend.",
+    "data": api_specifications
+}
+
+await self.send_group_message(message)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="task-management">Task Management</h2>
+            <p>Orchestration in Agents Hub includes sophisticated task management capabilities:</p>
+
+            <h3 id="task-delegation">Task Delegation</h3>
+            <p>Orchestrator agents can delegate tasks to specialized agents:</p>
+            <div class="code-block">
+                <pre><code># Within the orchestrator agent's processing
+task = {
+    "agent": "data_analyst",
+    "task": "Analyze the market data and identify key trends",
+    "data": market_data,
+    "deadline": "2 hours",
+    "priority": "high"
+}
+
+result = await self.delegate_task(task)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="task-tracking">Task Tracking</h3>
+            <p>The workforce keeps track of all tasks and their status:</p>
+            <div class="code-block">
+                <pre><code># Get all tasks in the workforce
+all_tasks = workforce.get_all_tasks()
+
+# Get tasks by status
+pending_tasks = workforce.get_tasks_by_status("pending")
+completed_tasks = workforce.get_tasks_by_status("completed")
+
+# Get tasks by agent
+analyst_tasks = workforce.get_tasks_by_agent("data_analyst")
+
+# Get task details
+task_details = workforce.get_task_details(task_id)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="task-dependencies">Task Dependencies</h3>
+            <p>Tasks can have dependencies on other tasks:</p>
+            <div class="code-block">
+                <pre><code># Create tasks with dependencies
+task1 = workforce.create_task(
+    agent="researcher",
+    description="Gather market data",
+    priority="high"
+)
+
+task2 = workforce.create_task(
+    agent="data_analyst",
+    description="Analyze market data",
+    priority="medium",
+    dependencies=[task1.id]  # This task depends on task1
+)
+
+task3 = workforce.create_task(
+    agent="report_writer",
+    description="Write market analysis report",
+    priority="medium",
+    dependencies=[task2.id]  # This task depends on task2
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="conflict-resolution">Conflict Resolution</h2>
+            <p>Agents Hub provides mechanisms for resolving conflicts between agents:</p>
+
+            <h3 id="voting">Voting</h3>
+            <p>Agents can vote on decisions:</p>
+            <div class="code-block">
+                <pre><code># Initiate a vote
+vote_result = await workforce.conduct_vote(
+    question="Should we use React or Angular for the frontend?",
+    options=["React", "Angular"],
+    voting_agents=["frontend_lead", "ui_developer", "ux_developer", "project_lead"],
+    weights={
+        "frontend_lead": 2,  # Frontend lead's vote counts twice
+        "project_lead": 2    # Project lead's vote counts twice
+    }
+)
+
+# Get the winning option
+winning_option = vote_result["winner"]</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="arbitration">Arbitration</h3>
+            <p>A designated arbitrator can resolve conflicts:</p>
+            <div class="code-block">
+                <pre><code># Set up arbitration
+arbitration_result = await workforce.arbitrate(
+    conflict="Disagreement on database architecture",
+    positions={
+        "database_developer": "We should use a NoSQL database for flexibility.",
+        "backend_lead": "We should use a relational database for data integrity."
+    },
+    arbitrator="project_lead",
+    context={
+        "project_requirements": project_requirements,
+        "technical_constraints": technical_constraints
+    }
+)
+
+# Get the arbitrator's decision
+decision = arbitration_result["decision"]
+rationale = arbitration_result["rationale"]</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="consensus-building">Consensus Building</h3>
+            <p>Agents can work together to reach consensus:</p>
+            <div class="code-block">
+                <pre><code># Initiate consensus building
+consensus_result = await workforce.build_consensus(
+    topic="Project timeline",
+    initial_positions={
+        "project_lead": "We should aim for a 3-month timeline.",
+        "frontend_lead": "The frontend will take at least 2 months.",
+        "backend_lead": "The backend will take at least 2.5 months.",
+        "qa_lead": "We need at least 1 month for testing."
+    },
+    max_rounds=3,
+    consensus_threshold=0.8  # 80% agreement required
+)
+
+# Get the consensus outcome
+consensus = consensus_result["consensus"]
+agreement_level = consensus_result["agreement_level"]</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="monitoring-orchestration">Monitoring Orchestration</h2>
+            <p>Agents Hub provides tools for monitoring workforce activities:</p>
+
+            <h3 id="workflow-visualization">Workflow Visualization</h3>
+            <p>Visualize the workflow and task dependencies:</p>
+            <div class="code-block">
+                <pre><code># Generate a workflow diagram
+diagram = workforce.generate_workflow_diagram()
+
+# Save the diagram to a file
+diagram.save("workflow_diagram.png")
+
+# Generate a task dependency graph
+dependency_graph = workforce.generate_dependency_graph()
+dependency_graph.save("dependency_graph.png")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="performance-metrics">Performance Metrics</h3>
+            <p>Track performance metrics for the workforce:</p>
+            <div class="code-block">
+                <pre><code># Get workforce metrics
+metrics = workforce.get_metrics()
+
+# Access specific metrics
+task_completion_rate = metrics["task_completion_rate"]
+average_task_duration = metrics["average_task_duration"]
+agent_utilization = metrics["agent_utilization"]
+
+# Get metrics for a specific agent
+agent_metrics = workforce.get_agent_metrics("data_analyst")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="activity-logs">Activity Logs</h3>
+            <p>Access detailed logs of workforce activities:</p>
+            <div class="code-block">
+                <pre><code># Get all activity logs
+logs = workforce.get_activity_logs()
+
+# Filter logs by agent
+researcher_logs = workforce.get_activity_logs(agent="researcher")
+
+# Filter logs by activity type
+delegation_logs = workforce.get_activity_logs(activity_type="task_delegation")
+communication_logs = workforce.get_activity_logs(activity_type="communication")
+
+# Filter logs by time range
+recent_logs = workforce.get_activity_logs(
+    start_time="2025-04-13T00:00:00Z",
+    end_time="2025-04-14T23:59:59Z"
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="best-practices">Best Practices</h2>
+            <p>Here are some best practices for effective orchestration:</p>
+
+            <h3 id="agent-specialization">Agent Specialization</h3>
+            <ul>
+                <li>Create agents with clear, focused roles and responsibilities</li>
+                <li>Use appropriate LLM models for each agent's specific tasks</li>
+                <li>Design system prompts that emphasize each agent's specialty</li>
+                <li>Provide agents with the specific tools they need for their role</li>
+            </ul>
+
+            <h3 id="workflow-design">Workflow Design</h3>
+            <ul>
+                <li>Choose the appropriate orchestration pattern for your use case</li>
+                <li>Break complex tasks into manageable subtasks</li>
+                <li>Define clear interfaces between agents</li>
+                <li>Establish clear decision-making processes</li>
+                <li>Plan for error handling and conflict resolution</li>
+            </ul>
+
+            <h3 id="communication-efficiency">Communication Efficiency</h3>
+            <ul>
+                <li>Minimize unnecessary communication between agents</li>
+                <li>Structure messages with clear formats and expectations</li>
+                <li>Include relevant context in messages</li>
+                <li>Use appropriate communication channels for different types of information</li>
+            </ul>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>Orchestration in Agents Hub enables the creation of sophisticated multi-agent systems that can tackle complex tasks through collaboration and specialization. By understanding the different orchestration patterns, communication protocols, and task management capabilities, you can design effective agent workforces tailored to your specific use cases.</p>
+
+            <p>For practical examples of agent orchestration, see the <a href="../tutorials/agent-workforce.html">Building Agent Workforces tutorial</a>.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions" target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE" target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

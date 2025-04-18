@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agents-hub"
-version = "0.1.0"
+version = "0.1.1"
 description = "Advanced Agent Orchestration Framework"
 readme = "README.md"
 authors = [
@@ -42,13 +42,14 @@ dependencies = [
     "pdfplumber>=0.5.0",
     "tqdm>=4.60.0",
     "nltk>=3.6.0",
-    "mcp>=1.6.0",
-    "websockets>=10.0",
     "langfuse>=2.0.0",
     "tavily-python>=0.2.0",
     "gitpython>=3.1.0",
     "pytest>=7.0.0",
     "python-dotenv>=1.0.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.22.0",
+    "jinja2>=3.1.2",
 ]
 requires-python = ">=3.9"
 
@@ -57,7 +58,44 @@ requires-python = ">=3.9"
 "Bug Tracker" = "https://github.com/emagine-solutions/agents-hub/issues"
 
 [tool.setuptools]
-packages = ["agents_hub", "agents_hub.coding", "agents_hub.coding.agents", "agents_hub.tools.coding", "agents_hub.utils", "agents_hub.templates"]
+packages = [
+    "agents_hub",
+    "agents_hub.agents",
+    "agents_hub.agents.evolution",
+    "agents_hub.agents.specialized",
+    "agents_hub.coding",
+    "agents_hub.coding.agents",
+    "agents_hub.cognitive",
+    "agents_hub.cognitive.reasoning",
+    "agents_hub.config",
+    "agents_hub.explainability",
+    "agents_hub.knowledge",
+    "agents_hub.llm",
+    "agents_hub.llm.providers",
+    "agents_hub.memory",
+    "agents_hub.memory.backends",
+    "agents_hub.memory.operations",
+    "agents_hub.moderation",
+    "agents_hub.monitoring",
+    "agents_hub.orchestration",
+    "agents_hub.orchestration.protocols",
+    "agents_hub.rag",
+    "agents_hub.rag.vector_stores",
+    "agents_hub.security",
+    "agents_hub.security.ethics",
+    "agents_hub.templates",
+    "agents_hub.templates.aws_cdk",
+    "agents_hub.templates.fastapi",
+    "agents_hub.templates.frontend",
+    "agents_hub.tools",
+    "agents_hub.tools.coding",
+    "agents_hub.tools.connectors",
+    "agents_hub.tools.standard",
+    "agents_hub.utils",
+    "agents_hub.utils.document",
+    "agents_hub.utils.multimodal",
+    "agents_hub.vector_stores"
+]
 
 [tool.black]
 line-length = 88

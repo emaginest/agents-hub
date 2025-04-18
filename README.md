@@ -352,7 +352,16 @@ chunks = chunk_text(
     text=pdf_result["text"],
     chunk_size=1000,
     chunk_overlap=200,
-    chunk_method="sentence"  # Options: token, character, sentence
+    chunk_method="sentence"  # Options: token, character, sentence, recursive
+)
+
+# Recursive character chunking with custom separators
+chunks = chunk_text(
+    text=pdf_result["text"],
+    chunk_size=1000,
+    chunk_overlap=200,
+    chunk_method="recursive",
+    separators=["## ", "\n\n", "\n", ". ", " "]  # Custom separators in order of priority
 )
 ```
 
@@ -401,10 +410,10 @@ See the [RAG Agent Documentation](docs/rag_agent.md) for more details.
 For more flexibility, you can use the PGVector tool directly to build custom RAG systems:
 
 ```python
-from agents_hub.tools.standard import PGVectorTool
+from agents_hub.vector_stores import PGVector
 
 # Create PGVector tool
-pgvector_tool = PGVectorTool(
+pgvector_tool = PGVector(
     llm=llm,  # For generating embeddings
     host="localhost",
     port=5432,

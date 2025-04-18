@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Agents Hub</title>
+
+    <meta name="description" content="Privacy policy for the Agents Hub framework.">
+    <meta name="keywords" content="AI, agents, LLM, privacy, policy">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="index.html">Introduction</a></li>
+                        <li><a href="quickstart.html">Quickstart</a></li>
+                        <li><a href="examples.html">Examples</a></li>
+                        <li><a href="faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="concepts/architecture.html">Core Architecture</a></li>
+                        <li><a href="concepts/agents.html">Agents</a></li>
+                        <li><a href="concepts/cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="concepts/memory.html">Memory System</a></li>
+                        <li><a href="concepts/orchestration.html">Orchestration</a></li>
+                        <li><a href="concepts/tools.html">Tools</a></li>
+                        <li><a href="concepts/llm.html">LLM Integration</a></li>
+                        <li><a href="concepts/moderation.html">Moderation</a></li>
+                        <li><a href="concepts/monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Privacy Policy</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">This privacy policy explains how we handle data in the Agents Hub framework.</p>
+
+            <div class="info-box">
+                <p><strong>Last Updated:</strong> April 14, 2025</p>
+            </div>
+
+            <h2 id="introduction">Introduction</h2>
+            <p>Agents Hub is an open-source framework for creating, managing, and orchestrating intelligent agent
+                workforces. This privacy policy explains how the framework handles data and what you should know when
+                using it.</p>
+
+            <h2 id="data-collection">Data Collection</h2>
+            <p>As an open-source framework, Agents Hub itself does not collect any data from its users. However, when
+                you use Agents Hub with third-party LLM providers (like OpenAI, Anthropic, Google), those providers may
+                collect data according to their own privacy policies.</p>
+
+            <h3 id="third-party-services">Third-Party Services</h3>
+            <p>Agents Hub integrates with various third-party services:</p>
+            <ul>
+                <li><strong>LLM Providers:</strong> When you use Agents Hub with LLM providers like OpenAI, Anthropic,
+                    or Google, your prompts and data may be sent to these providers. Please refer to their respective
+                    privacy policies for information on how they handle your data.</li>
+                <li><strong>Database Systems:</strong> If you use the memory system with PostgreSQL or other database
+                    backends, your data will be stored according to your database configuration.</li>
+                <li><strong>Monitoring Services:</strong> If you enable monitoring integrations, usage data may be sent
+                    to those services.</li>
+            </ul>
+
+            <h2 id="data-storage">Data Storage</h2>
+            <p>Agents Hub provides memory backends that can store conversation history and other data. By default, this
+                data is stored locally or in the database you configure. You are responsible for securing this data and
+                ensuring it complies with relevant regulations.</p>
+
+            <h2 id="data-security">Data Security</h2>
+            <p>We recommend the following security practices when using Agents Hub:</p>
+            <ul>
+                <li>Store API keys securely using environment variables or a secure key management system</li>
+                <li>Implement proper access controls for any databases used with Agents Hub</li>
+                <li>Regularly update Agents Hub and its dependencies to get the latest security fixes</li>
+                <li>Use the moderation system to filter sensitive content</li>
+            </ul>
+
+            <h2 id="user-responsibilities">User Responsibilities</h2>
+            <p>As a user of Agents Hub, you are responsible for:</p>
+            <ul>
+                <li>Complying with the terms of service of any third-party services you use with Agents Hub</li>
+                <li>Ensuring your use of Agents Hub complies with relevant laws and regulations</li>
+                <li>Securing any sensitive data processed by your implementation</li>
+                <li>Obtaining appropriate consent if you collect personal data from end users</li>
+            </ul>
+
+            <h2 id="changes">Changes to This Policy</h2>
+            <p>We may update this privacy policy from time to time. We will notify users of any significant changes by
+                updating the date at the top of this policy.</p>
+
+            <h2 id="contact">Contact Us</h2>
+            <p>If you have any questions about this privacy policy, please contact us at <a
+                    href="mailto:privacy@emaginest.com">privacy@emaginest.com</a>.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="index.html">Introduction</a></li>
+                            <li><a href="quickstart.html">Quickstart</a></li>
+                            <li><a href="examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

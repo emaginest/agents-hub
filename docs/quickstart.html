@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quickstart - Agents Hub</title>
+
+    <meta name="description"
+        content="Get up and running with Agents Hub in minutes. Learn how to create agents, add tools, and build agent workforces.">
+    <meta name="keywords" content="AI, agents, LLM, quickstart, tutorial, code examples">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="index.html">Introduction</a></li>
+                        <li class="active"><a href="quickstart.html">Quickstart</a></li>
+                        <li><a href="examples.html">Examples</a></li>
+                        <li><a href="faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="concepts/architecture.html">Core Architecture</a></li>
+                        <li><a href="concepts/agents.html">Agents</a></li>
+                        <li><a href="concepts/cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="concepts/memory.html">Memory System</a></li>
+                        <li><a href="concepts/orchestration.html">Orchestration</a></li>
+                        <li><a href="concepts/tools.html">Tools</a></li>
+                        <li><a href="concepts/llm.html">LLM Integration</a></li>
+                        <li><a href="concepts/moderation.html">Moderation</a></li>
+                        <li><a href="concepts/monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Quickstart</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Get up and running with Agents Hub in minutes.</p>
+
+            <h2 id="installation">Installation</h2>
+            <p>Install Agents Hub using pip:</p>
+            <div class="code-block">
+                <pre><code>pip install agents-hub</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>For development or to use the latest features, you can install directly from GitHub:</p>
+            <div class="code-block">
+                <pre><code>pip install git+https://github.com/emaginest/agents-hub.git</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="prerequisites">Prerequisites</h2>
+            <p>To use Agents Hub, you'll need:</p>
+            <ul>
+                <li>Python 3.9 or higher</li>
+                <li>API keys for the LLM providers you want to use (OpenAI, Anthropic, Google, etc.)</li>
+            </ul>
+
+            <div class="info-box">
+                <p><strong>Note:</strong> You can use Ollama for local LLMs without an API key.</p>
+            </div>
+
+            <h2 id="basic-agent">Creating a Basic Agent</h2>
+            <p>Let's start by creating a simple agent using the OpenAI provider:</p>
+            <div class="code-block">
+                <pre><code>import os
+import asyncio
+from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+
+# Initialize LLM provider
+llm = OpenAIProvider(
+    api_key=os.environ.get("OPENAI_API_KEY"),
+    model="gpt-4o"  # You can use other models like "gpt-3.5-turbo"
+)
+
+# Create an agent
+agent = Agent(
+    name="assistant",
+    llm=llm,
+    system_prompt="You are a helpful assistant."
+)
+
+# Use the agent
+async def main():
+    response = await agent.run("What is the capital of France?")
+    print(response)
+
+# Run the async function
+asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3>Using Different LLM Providers</h3>
+            <p>Agents Hub supports multiple LLM providers. Here's how to use Claude:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.providers import ClaudeProvider
+
+# Initialize Claude provider
+llm = ClaudeProvider(
+    api_key=os.environ.get("ANTHROPIC_API_KEY"),
+    model="claude-3-opus-20240229"  # You can use other models like "claude-3-sonnet-20240229"
+)
+
+# Create an agent with Claude
+agent = Agent(
+    name="assistant",
+    llm=llm,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>Or use Ollama for local LLMs:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.llm.providers import OllamaProvider
+
+# Initialize Ollama provider
+llm = OllamaProvider(
+    model="llama3",  # Or any other model you have in Ollama
+    base_url="http://localhost:11434"  # Default Ollama URL
+)
+
+# Create an agent with Ollama
+agent = Agent(
+    name="assistant",
+    llm=llm,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="agent-with-tools">Adding Tools to an Agent</h2>
+            <p>Let's enhance our agent with tools for web search and calculations:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.tools.standard import WebSearchTool, CalculatorTool
+
+# Initialize LLM provider
+llm = OpenAIProvider(api_key=os.environ.get("OPENAI_API_KEY"))
+
+# Initialize tools
+web_search = WebSearchTool()
+calculator = CalculatorTool()
+
+# Create an agent with tools
+agent = Agent(
+    name="research_assistant",
+    llm=llm,
+    tools=[web_search, calculator],
+    system_prompt="You are a research assistant that can search the web and perform calculations."
+)
+
+async def main():
+    response = await agent.run("What is the population of Tokyo and calculate it as a percentage of Japan's population?")
+    print(response)
+
+asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="agent-workforce">Creating an Agent Workforce</h2>
+            <p>Now let's create a team of specialized agents that work together:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub import AgentWorkforce, Agent
+from agents_hub.llm.providers import OpenAIProvider, ClaudeProvider
+
+# Initialize LLM providers
+openai_llm = OpenAIProvider(api_key=os.environ.get("OPENAI_API_KEY"))
+claude_llm = ClaudeProvider(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+
+# Create specialized agents
+researcher = Agent(
+    name="researcher",
+    llm=claude_llm,
+    system_prompt="You are a researcher who finds and analyzes information."
+)
+
+analyst = Agent(
+    name="analyst",
+    llm=openai_llm,
+    system_prompt="You are an analyst who evaluates information and draws insights."
+)
+
+writer = Agent(
+    name="writer",
+    llm=claude_llm,
+    system_prompt="You are a writer who creates clear and engaging content."
+)
+
+# Create a workforce with these agents
+workforce = AgentWorkforce(
+    agents=[researcher, analyst, writer],
+    orchestrator_agent=analyst  # The analyst will coordinate the workflow
+)
+
+async def main():
+    # Execute a task with the workforce
+    result = await workforce.execute(
+        "Research the impact of AI on healthcare and prepare a report",
+        context={
+            "format": "markdown",
+            "max_length": 1000,
+            "focus_areas": ["diagnosis", "treatment", "patient care"]
+        }
+    )
+
+    print(result["result"])
+
+asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="cognitive-agent">Creating a Cognitive Agent</h2>
+            <p>Let's create an agent with advanced cognitive capabilities:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub import CognitiveAgent
+from agents_hub.llm.providers import ClaudeProvider
+from agents_hub.cognitive import CognitiveArchitecture
+
+# Initialize LLM provider
+llm = ClaudeProvider(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+
+# Create cognitive architecture
+cognitive_architecture = CognitiveArchitecture(
+    metacognition_config={
+        "reflection_depth": 2,
+        "confidence_threshold": 0.7,
+    },
+    reasoning_config={
+        "enabled_mechanisms": ["deductive", "inductive", "abductive"],
+        "default_mechanism": "deductive",
+    },
+)
+
+# Create cognitive agent
+agent = CognitiveAgent(
+    name="cognitive_agent",
+    llm=llm,
+    cognitive_architecture=cognitive_architecture,
+    system_prompt="You are a thoughtful assistant with advanced reasoning capabilities.",
+    cognitive_config={
+        "reasoning_trace_enabled": True,
+        "metacognition_enabled": True,
+        "learning_enabled": True,
+    },
+)
+
+async def main():
+    # Use the cognitive agent with different reasoning mechanisms
+    response = await agent.run(
+        "What are the main causes of climate change?",
+        context={"reasoning_mechanism": "deductive"}
+    )
+
+    print(response)
+
+    # You can also access the reasoning trace
+    print("\nReasoning Trace:")
+    print(agent.last_reasoning_trace)
+
+asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="memory-system">Adding Memory to an Agent</h2>
+            <p>Let's create an agent with a memory system:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.memory.backends import PostgreSQLMemory
+
+# Initialize LLM provider
+llm = OpenAIProvider(api_key=os.environ.get("OPENAI_API_KEY"))
+
+# Initialize memory backend
+memory = PostgreSQLMemory(
+    llm=llm,  # For generating embeddings
+    host="localhost",
+    port=5432,
+    database="agents_hub",
+    user="postgres",
+    password="postgres"
+)
+
+# Create an agent with memory
+agent = Agent(
+    name="memory_agent",
+    llm=llm,
+    memory=memory,
+    system_prompt="You are an assistant that remembers past conversations."
+)
+
+async def main():
+    # First interaction
+    response1 = await agent.run("My name is Alice and I'm interested in quantum computing.")
+    print("Response 1:", response1)
+
+    # Second interaction (agent should remember the user's name and interest)
+    response2 = await agent.run("What topics was I interested in again?")
+    print("Response 2:", response2)
+
+asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="next-steps">Next Steps</h2>
+            <p>Now that you've created your first agents, you can explore more advanced features:</p>
+            <ul>
+                <li><a href="examples.html">Check out the examples</a> for more complex use cases</li>
+                <li><a href="concepts/architecture.html">Learn about the core architecture</a> of Agents Hub</li>
+                <li><a href="tutorials/agent-workforce.html">Build sophisticated agent workforces</a> for complex tasks
+                </li>
+                <li><a href="concepts/tools.html">Explore the available tools</a> to extend agent capabilities</li>
+            </ul>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="index.html">Introduction</a></li>
+                            <li><a href="quickstart.html">Quickstart</a></li>
+                            <li><a href="examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a>
+                            </li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

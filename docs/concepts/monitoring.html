@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring - Agents Hub</title>
+    <meta name="description"
+        content="Learn about monitoring capabilities in Agents Hub for tracking agent performance and behavior.">
+    <meta name="keywords" content="AI, agents, LLM, monitoring, analytics, observability, Langfuse">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="index.html">Overview</a></li>
+                        <li><a href="architecture.html">Core Architecture</a></li>
+                        <li><a href="agents.html">Agents</a></li>
+                        <li><a href="cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="memory.html">Memory System</a></li>
+                        <li><a href="orchestration.html">Orchestration</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="llm.html">LLM Integration</a></li>
+                        <li><a href="moderation.html">Moderation</a></li>
+                        <li class="active"><a href="monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Monitoring</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Learn about monitoring capabilities in Agents Hub for tracking agent performance, analyzing
+                conversations, and gathering insights about your agent systems.</p>
+
+            <h2 id="introduction">Introduction to Monitoring</h2>
+            <p>Monitoring in Agents Hub provides comprehensive observability into your agent systems, allowing you to:
+            </p>
+
+            <ul>
+                <li>Track performance metrics like latency and token usage</li>
+                <li>Analyze conversation flows and user interactions</li>
+                <li>Monitor costs associated with LLM usage</li>
+                <li>Identify patterns and trends in agent behavior</li>
+                <li>Set up alerts for anomalies or issues</li>
+                <li>Gather user feedback and satisfaction metrics</li>
+                <li>Generate reports and visualizations</li>
+            </ul>
+
+            <h2 id="monitors">Monitor Types</h2>
+            <p>Agents Hub provides several monitor implementations to suit different needs:</p>
+
+            <h3 id="langfuse">Langfuse Monitor</h3>
+            <p>Integration with Langfuse for comprehensive monitoring and analytics:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.monitoring import LangfuseMonitor
+
+langfuse_monitor = LangfuseMonitor(
+    api_key="your-langfuse-api-key",
+    public_key="your-langfuse-public-key",
+    host="https://cloud.langfuse.com"  # Optional, defaults to Langfuse Cloud
+)
+
+# Add to agent
+agent = Agent(
+    name="monitored_agent",
+    llm=llm,
+    monitor=langfuse_monitor
+)
+
+# The agent will now automatically track all operations</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="console">Console Monitor</h3>
+            <p>Simple monitoring with console output for development:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.monitoring import ConsoleMonitor
+
+console_monitor = ConsoleMonitor(
+    log_level="INFO",  # Can be DEBUG, INFO, WARNING, ERROR
+    include_tokens=True,  # Whether to include token counts
+    include_costs=True   # Whether to include cost estimates
+)
+
+# Add to agent
+agent = Agent(
+    name="dev_agent",
+    llm=llm,
+    monitor=console_monitor
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="custom">Custom Monitor</h3>
+            <p>Create a custom monitoring solution:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.monitoring.base import BaseMonitor
+import aiohttp
+import json
+
+class CustomMonitor(BaseMonitor):
+    def __init__(self, api_key, endpoint):
+        self.api_key = api_key
+        self.endpoint = endpoint
+
+    async def log_request(self, agent_name, request_id, input_text, **kwargs):
+        data = {
+            "agent_name": agent_name,
+            "request_id": request_id,
+            "input_text": input_text,
+            "timestamp": datetime.now().isoformat(),
+            **kwargs
+        }
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                self.endpoint,
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                json=data
+            ) as response:
+                return await response.json()
+
+    async def log_response(self, request_id, output_text, tokens_used, latency, **kwargs):
+        # Implementation for logging responses
+        pass
+
+    async def log_error(self, request_id, error_message, error_type, **kwargs):
+        # Implementation for logging errors
+        pass</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="tracked-metrics">Tracked Metrics</h2>
+            <p>The monitoring system can track various metrics:</p>
+
+            <h3 id="performance">Performance Metrics</h3>
+            <ul>
+                <li><strong>Latency:</strong> Response time for agent operations</li>
+                <li><strong>Token Usage:</strong> Number of tokens consumed by LLM calls (input and output)</li>
+                <li><strong>Cost:</strong> Estimated cost of LLM usage based on token consumption</li>
+                <li><strong>Success Rate:</strong> Percentage of successful agent operations</li>
+                <li><strong>Error Rate:</strong> Percentage of operations that result in errors</li>
+                <li><strong>Throughput:</strong> Number of requests processed per time period</li>
+            </ul>
+
+            <h3 id="usage">Usage Metrics</h3>
+            <ul>
+                <li><strong>Request Volume:</strong> Number of requests by time period</li>
+                <li><strong>User Activity:</strong> Number of active users</li>
+                <li><strong>Session Length:</strong> Duration of user sessions</li>
+                <li><strong>Feature Usage:</strong> Which agent features are being used</li>
+                <li><strong>Tool Usage:</strong> Frequency and success of tool operations</li>
+            </ul>
+
+            <h3 id="quality">Quality Metrics</h3>
+            <ul>
+                <li><strong>User Satisfaction:</strong> Feedback scores from users</li>
+                <li><strong>Response Quality:</strong> Ratings of response quality</li>
+                <li><strong>Moderation Events:</strong> Content moderation actions and violations</li>
+                <li><strong>Completion Rate:</strong> Percentage of conversations that reach completion</li>
+            </ul>
+
+            <h2 id="tracking-conversations">Tracking Conversations</h2>
+            <p>Monitor and analyze entire conversation flows:</p>
+
+            <div class="code-block">
+                <pre><code># Use the agent with conversation tracking
+response = await agent.run(
+    "What is the capital of France?",
+    context={
+        "conversation_id": "user123",
+        "user_id": "user456",
+        "session_id": "session789"
+    }
+)
+
+# Score a conversation
+await langfuse_monitor.score_conversation(
+    conversation_id="user123",
+    name="helpfulness",
+    value=0.9,
+    comment="Very helpful response"
+)
+
+# Add user feedback
+await langfuse_monitor.add_user_feedback(
+    conversation_id="user123",
+    score=5,  # 1-5 scale
+    comment="The agent was very helpful and provided exactly what I needed."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="dashboards">Monitoring Dashboards</h2>
+            <p>With Langfuse integration, you can access comprehensive dashboards for:</p>
+            <ul>
+                <li><strong>Usage Analytics:</strong> Track token usage, costs, and request volumes</li>
+                <li><strong>Performance Metrics:</strong> Monitor latency, success rates, and errors</li>
+                <li><strong>Conversation Analysis:</strong> Analyze conversation flows and user interactions</li>
+                <li><strong>User Feedback:</strong> Track user satisfaction and feedback trends</li>
+                <li><strong>Custom Reports:</strong> Create custom reports and visualizations</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>Langfuse Integration</h4>
+                <p>Langfuse provides a powerful platform for monitoring LLM applications. The Agents Hub integration
+                    with Langfuse gives you access to comprehensive analytics and visualization tools.</p>
+                <p>Learn more at <a href="https://langfuse.com" target="_blank">langfuse.com</a>.</p>
+            </div>
+
+            <h2 id="alerting">Alerting and Notifications</h2>
+            <p>Set up alerts for specific conditions:</p>
+
+            <div class="code-block">
+                <pre><code># Set up alerts for specific conditions
+await langfuse_monitor.create_alert(
+    name="high_error_rate",
+    condition="error_rate > 0.05",  # 5% error rate
+    channels=["email", "slack"],
+    recipients=["alerts@example.com", "#monitoring-channel"]
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="best-practices">Best Practices</h2>
+            <p>Follow these best practices for effective monitoring:</p>
+
+            <h3 id="implementation">Implementation</h3>
+            <ul>
+                <li>Enable monitoring for all production agents</li>
+                <li>Use appropriate log levels for different environments</li>
+                <li>Include relevant context with each request</li>
+                <li>Set up alerts for critical metrics</li>
+                <li>Regularly review monitoring data</li>
+            </ul>
+
+            <h3 id="data-privacy">Data Privacy</h3>
+            <ul>
+                <li>Implement data minimization principles</li>
+                <li>Consider anonymizing sensitive user information</li>
+                <li>Set appropriate data retention policies</li>
+                <li>Ensure compliance with relevant privacy regulations</li>
+                <li>Provide transparency to users about monitoring</li>
+            </ul>
+
+            <h3 id="performance-optimization">Performance Optimization</h3>
+            <ul>
+                <li>Use monitoring data to identify performance bottlenecks</li>
+                <li>Optimize prompt design based on token usage metrics</li>
+                <li>Adjust LLM parameters based on quality vs. cost tradeoffs</li>
+                <li>Monitor tool usage to identify opportunities for improvement</li>
+                <li>Track user satisfaction to guide feature development</li>
+            </ul>
+
+            <h2 id="integration">Integration with Other Modules</h2>
+            <p>The monitoring module integrates with other Agents Hub components:</p>
+            <ul>
+                <li><strong>Moderation Module:</strong> Track moderation events and violations</li>
+                <li><strong>Memory Module:</strong> Monitor memory usage and retrieval performance</li>
+                <li><strong>Tools Module:</strong> Track tool usage and success rates</li>
+                <li><strong>Orchestration:</strong> Monitor workforce performance and agent collaboration</li>
+            </ul>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>Effective monitoring is essential for building reliable, high-performance agent systems. Agents Hub
+                provides comprehensive monitoring capabilities that help you understand how your agents are performing,
+                identify issues, and continuously improve your applications.</p>
+
+            <p>For information on ensuring appropriate agent behavior, see the <a href="moderation.html">Moderation</a>
+                section.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

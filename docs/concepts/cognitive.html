@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Architecture - Agents Hub</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="architecture.html">Core Architecture</a></li>
+                        <li><a href="agents.html">Agents</a></li>
+                        <li class="active"><a href="cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="memory.html">Memory System</a></li>
+                        <li><a href="orchestration.html">Orchestration</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="llm.html">LLM Integration</a></li>
+                        <li><a href="moderation.html">Moderation</a></li>
+                        <li><a href="monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Cognitive Architecture</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Understand the multi-layered cognitive system inspired by human cognition.</p>
+
+            <h2 id="overview">Overview</h2>
+            <p>The cognitive architecture in Agents Hub is inspired by human cognition, providing agents with advanced
+                reasoning, metacognition, and learning capabilities. This architecture enables agents to process
+                information more effectively, reflect on their own thinking, and improve over time.</p>
+
+            <p>The cognitive architecture consists of five main components:</p>
+            <ul>
+                <li><strong>Perception:</strong> Processes input and extracts features</li>
+                <li><strong>Working Memory:</strong> Stores active information</li>
+                <li><strong>Reasoning:</strong> Applies appropriate reasoning mechanisms</li>
+                <li><strong>Metacognition:</strong> Reflects on the reasoning process</li>
+                <li><strong>Learning:</strong> Updates knowledge and strategies based on experience</li>
+            </ul>
+
+            <h2 id="components">Components</h2>
+
+            <h3 id="perception">Perception</h3>
+            <p>The perception layer processes input text and extracts features:</p>
+            <ul>
+                <li><strong>Feature Extraction:</strong> Identifies entities, keywords, and patterns</li>
+                <li><strong>Context Recognition:</strong> Recognizes context from input and history</li>
+                <li><strong>Attention Mechanism:</strong> Focuses on relevant parts of the input</li>
+            </ul>
+
+            <div class="code-block">
+                <pre><code>from agents_hub.cognitive import Perception
+
+# Create perception layer
+perception = Perception(
+    feature_extraction=True,
+    context_recognition=True,
+    attention_mechanism=True,
+    max_features=10,
+)
+
+# Process input
+result = await perception.process(
+    input_text="If all birds can fly, and penguins are birds, can penguins fly?",
+    context={},
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="working-memory">Working Memory</h3>
+            <p>The working memory system stores and manages active information:</p>
+            <ul>
+                <li><strong>Capacity Management:</strong> Limits the amount of information (Miller's Law: 7 ± 2 items)
+                </li>
+                <li><strong>Decay:</strong> Information fades over time if not reinforced</li>
+                <li><strong>Chunking:</strong> Groups related information to increase effective capacity</li>
+                <li><strong>Prioritization:</strong> Focuses on the most important information</li>
+            </ul>
+
+            <div class="code-block">
+                <pre><code>from agents_hub.cognitive import WorkingMemory
+
+# Create working memory
+memory = WorkingMemory(
+    capacity=7,  # Miller's Law: 7 ± 2 items
+    decay_rate=0.1,
+    chunking_enabled=True,
+    prioritization_enabled=True,
+)
+
+# Update memory with new information
+memory_state = await memory.update(
+    perception_result=perception_result,
+    context={},
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="reasoning">Reasoning</h3>
+            <p>The reasoning layer applies different reasoning mechanisms:</p>
+            <ul>
+                <li><strong>Deductive Reasoning:</strong> Drawing conclusions from general principles</li>
+                <li><strong>Inductive Reasoning:</strong> Forming generalizations from specific observations</li>
+                <li><strong>Abductive Reasoning:</strong> Finding the most likely explanation for observations</li>
+                <li><strong>Analogical Reasoning:</strong> Applying knowledge from one domain to another</li>
+                <li><strong>Causal Reasoning:</strong> Understanding cause-and-effect relationships</li>
+            </ul>
+
+            <div class="code-block">
+                <pre><code>from agents_hub.cognitive import ReasoningManager
+
+# Create reasoning manager
+reasoning = ReasoningManager(
+    enabled_mechanisms=["deductive", "inductive", "abductive"],
+    default_mechanism="deductive",
+)
+
+# Apply reasoning
+reasoning_result = await reasoning.reason(
+    memory_state=memory_state,
+    context={"reasoning_mechanism": "deductive"},
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="metacognition">Metacognition</h3>
+            <p>The metacognitive layer reflects on the reasoning process:</p>
+            <ul>
+                <li><strong>Self-Monitoring:</strong> Evaluates the quality of reasoning</li>
+                <li><strong>Confidence Assessment:</strong> Estimates confidence in conclusions</li>
+                <li><strong>Error Detection:</strong> Identifies potential errors or biases</li>
+                <li><strong>Strategy Selection:</strong> Chooses appropriate reasoning strategies</li>
+                <li><strong>Reflection:</strong> Considers alternative approaches</li>
+            </ul>
+
+            <div class="code-block">
+                <pre><code>from agents_hub.cognitive import Metacognition
+
+# Create metacognition layer
+metacognition = Metacognition(
+    reflection_depth=2,
+    confidence_threshold=0.7,
+)
+
+# Reflect on reasoning
+metacognition_result = await metacognition.reflect(
+    reasoning_result=reasoning_result,
+    context={},
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="learning">Learning</h3>
+            <p>The learning layer updates knowledge and strategies based on experience:</p>
+            <ul>
+                <li><strong>Knowledge Updating:</strong> Incorporates new information</li>
+                <li><strong>Strategy Refinement:</strong> Improves reasoning strategies</li>
+                <li><strong>Pattern Recognition:</strong> Identifies recurring patterns</li>
+                <li><strong>Feedback Integration:</strong> Learns from feedback</li>
+            </ul>
+
+            <div class="code-block">
+                <pre><code>from agents_hub.cognitive import Learning
+
+# Create learning layer
+learning = Learning(
+    learning_rate=0.1,
+    feedback_integration="immediate",
+)
+
+# Update knowledge and strategies
+learning_result = await learning.update(
+    metacognition_result=metacognition_result,
+    context={},
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="cognitive-agent">Cognitive Agent</h2>
+            <p>The CognitiveAgent class integrates the cognitive architecture with the base Agent:</p>
+
+            <div class="code-block">
+                <pre><code>from agents_hub import CognitiveAgent
+from agents_hub.llm.providers import ClaudeProvider
+from agents_hub.cognitive import CognitiveArchitecture
+
+# Initialize LLM provider
+llm = ClaudeProvider(api_key="your-anthropic-api-key")
+
+# Create cognitive architecture
+cognitive_architecture = CognitiveArchitecture(
+    metacognition_config={
+        "reflection_depth": 2,
+        "confidence_threshold": 0.7,
+    },
+    reasoning_config={
+        "enabled_mechanisms": ["deductive", "inductive", "abductive"],
+        "default_mechanism": "deductive",
+    },
+)
+
+# Create cognitive agent
+agent = CognitiveAgent(
+    name="cognitive_agent",
+    llm=llm,
+    cognitive_architecture=cognitive_architecture,
+    system_prompt="You are a thoughtful assistant with advanced reasoning capabilities.",
+    cognitive_config={
+        "reasoning_trace_enabled": True,
+        "metacognition_enabled": True,
+        "learning_enabled": True,
+    },
+)
+
+# Use the agent
+response = await agent.run(
+    "What are the main causes of climate change?",
+    context={"reasoning_mechanism": "deductive"}
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="reasoning-trace">Reasoning Trace</h2>
+            <p>One of the key features of the cognitive architecture is the reasoning trace, which provides transparency
+                into the agent's thinking process:</p>
+
+            <div class="code-block">
+                <pre><code># Access the reasoning trace after running the agent
+print(agent.last_reasoning_trace)
+
+# Example output:
+"""
+Perception:
+- Identified topic: climate change
+- Identified task: explain causes
+- Context: scientific explanation
+
+Reasoning (Deductive):
+1. Climate change refers to long-term shifts in temperatures and weather patterns.
+2. These shifts can be natural, but since the 1800s, human activities have been the main driver.
+3. The primary human activity affecting climate is burning fossil fuels.
+
+Metacognition:
+- Confidence: High (scientific consensus)
+- Potential biases: None identified
+- Alternative perspectives considered: Natural climate cycles
+- Areas for improvement: Could provide more quantitative data
+
+Final conclusion:
+The main causes of climate change are human activities, primarily:
+1. Burning fossil fuels (coal, oil, gas) which releases greenhouse gases
+2. Deforestation which reduces CO2 absorption
+3. Industrial processes and agriculture which release methane and other greenhouse gases
+"""</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="benefits">Benefits of Cognitive Architecture</h2>
+            <p>Using the cognitive architecture provides several benefits:</p>
+            <ul>
+                <li><strong>Improved Reasoning:</strong> More structured and effective reasoning processes</li>
+                <li><strong>Transparency:</strong> Clear reasoning traces for explainability</li>
+                <li><strong>Self-Improvement:</strong> Agents can learn and improve over time</li>
+                <li><strong>Error Detection:</strong> Metacognitive capabilities help identify and correct errors</li>
+                <li><strong>Adaptability:</strong> Different reasoning mechanisms for different types of problems</li>
+            </ul>
+
+            <h2 id="use-cases">Use Cases</h2>
+            <p>The cognitive architecture is particularly useful for:</p>
+            <ul>
+                <li><strong>Complex Problem Solving:</strong> Tasks requiring multi-step reasoning</li>
+                <li><strong>Educational Applications:</strong> Explaining concepts and guiding learning</li>
+                <li><strong>Research Assistance:</strong> Analyzing information and drawing conclusions</li>
+                <li><strong>Decision Support:</strong> Evaluating options and making recommendations</li>
+                <li><strong>Critical Thinking:</strong> Identifying biases and logical fallacies</li>
+            </ul>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emagine-solutions/agents-hub" target="_blank">GitHub</a>
+                            </li>
+                            <li><a href="https://github.com/emagine-solutions/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emagine.solutions" target="_blank">Emagine Solutions</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emagine-solutions/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2024 Emagine Solutions Technology. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

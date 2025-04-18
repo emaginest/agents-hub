@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moderation - Agents Hub</title>
+    <meta name="description" content="Learn about content moderation in Agents Hub for ensuring safe and appropriate agent interactions.">
+    <meta name="keywords" content="AI, agents, LLM, moderation, content filtering, safety">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i> PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="architecture.html">Core Architecture</a></li>
+                        <li><a href="agents.html">Agents</a></li>
+                        <li><a href="cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="memory.html">Memory System</a></li>
+                        <li><a href="orchestration.html">Orchestration</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="llm.html">LLM Integration</a></li>
+                        <li class="active"><a href="moderation.html">Moderation</a></li>
+                        <li><a href="monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Moderation</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Learn about content moderation in Agents Hub, which helps ensure that agent interactions are safe, appropriate, and aligned with your organization's policies.</p>
+
+            <h2 id="introduction">Introduction to Moderation</h2>
+            <p>Content moderation in Agents Hub provides mechanisms to filter, flag, and modify agent inputs and outputs to ensure they meet safety and appropriateness standards. The moderation system helps:</p>
+            
+            <ul>
+                <li>Prevent harmful, offensive, or inappropriate content</li>
+                <li>Detect and block jailbreak attempts</li>
+                <li>Enforce content policies specific to your organization</li>
+                <li>Protect users from potentially harmful interactions</li>
+                <li>Ensure compliance with legal and ethical standards</li>
+            </ul>
+
+            <p>By implementing robust moderation, you can create safer, more reliable agent applications that align with your values and requirements.</p>
+
+            <h2 id="moderation-architecture">Moderation Architecture</h2>
+            <p>The moderation system in Agents Hub follows a layered architecture:</p>
+
+            <div class="code-block">
+                <pre><code>┌─────────────────────────────────────────────────────────────┐
+│                     Moderation System                        │
+├─────────────┬─────────────┬─────────────┬─────────────┬──────┘
+│             │             │             │             │
+▼             ▼             ▼             ▼             ▼
+┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────────┐
+│ Input   │ │ Output  │ │Jailbreak│ │ Policy  │ │ Audit &     │
+│Filtering│ │Filtering│ │Detection│ │Enforcer │ │ Reporting   │
+└─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────────┘</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>These components work together to provide comprehensive moderation throughout the agent interaction lifecycle.</p>
+
+            <h2 id="content-moderator">Content Moderator</h2>
+            <p>The primary interface for moderation in Agents Hub is the ContentModerator:</p>
+
+            <div class="code-block">
+                <pre><code>from agents_hub.moderation import ContentModerator
+
+moderator = ContentModerator(
+    api_key="your-moderation-api-key",  # If using an external moderation service
+    content_policy={
+        "profanity": "block",
+        "hate_speech": "block",
+        "sexual_content": "block",
+        "violence": "warn",
+        "self_harm": "block",
+        "harassment": "block",
+        "illegal_activity": "block"
+    },
+    jailbreak_detection_enabled=True,
+    custom_rules=[
+        {
+            "pattern": r"how to hack",
+            "action": "block",
+            "message": "Discussions about hacking are not permitted."
+        }
+    ]
+)
+
+agent = Agent(
+    name="moderated_assistant",
+    llm=llm,
+    moderator=moderator,
+    system_prompt="You are a helpful assistant."
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="moderation-components">Moderation Components</h2>
+            <p>The moderation system consists of several key components:</p>
+
+            <h3 id="input-filtering">Input Filtering</h3>
+            <p>Filters user inputs to prevent harmful or inappropriate requests:</p>
+            <div class="code-block">
+                <pre><code># Input filtering happens automatically when an agent processes a request
+try:
+    response = await agent.run("How do I make an explosive device?")
+except agents_hub.moderation.ModerationError as e:
+    print(f"Input was blocked: {e}")
+    # Handle the blocked input appropriately</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="output-filtering">Output Filtering</h3>
+            <p>Filters agent responses to prevent harmful or inappropriate content:</p>
+            <div class="code-block">
+                <pre><code># Output filtering happens automatically before an agent returns a response
+response = await agent.run("Tell me a joke")
+
+# If the response contains inappropriate content, it will be modified or blocked
+# depending on the moderation settings</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="jailbreak-detection">Jailbreak Detection</h3>
+            <p>Detects and blocks attempts to bypass the agent's safety mechanisms:</p>
+            <div class="code-block">
+                <pre><code>moderator = ContentModerator(
+    jailbreak_detection_enabled=True,
+    jailbreak_detection_config={
+        "sensitivity": "high",  # Can be "low", "medium", or "high"
+        "detection_patterns": [
+            r"ignore previous instructions",
+            r"ignore your programming",
+            r"pretend to be",
+            r"you are now",
+            r"disregard your previous instructions"
+        ],
+        "action": "block",  # Can be "block", "warn", or "log"
+        "message": "This request appears to be attempting to bypass safety measures."
+    }
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="policy-enforcer">Policy Enforcer</h3>
+            <p>Enforces organization-specific content policies:</p>
+            <div class="code-block">
+                <pre><code>moderator = ContentModerator(
+    content_policy={
+        "profanity": "block",
+        "hate_speech": "block",
+        "sexual_content": "block",
+        "violence": "warn",
+        "self_harm": "block",
+        "harassment": "block",
+        "illegal_activity": "block"
+    },
+    custom_rules=[
+        {
+            "pattern": r"competitor product",
+            "action": "replace",
+            "replacement": "[REDACTED]",
+            "message": "We do not discuss competitor products."
+        },
+        {
+            "pattern": r"(social security|credit card) number",
+            "action": "block",
+            "message": "We do not process sensitive personal information."
+        },
+        {
+            "pattern": r"company (secrets|confidential)",
+            "action": "warn",
+            "message": "Be careful when discussing sensitive company information."
+        }
+    ]
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="audit-reporting">Audit and Reporting</h3>
+            <p>Logs and reports moderation actions for review and compliance:</p>
+            <div class="code-block">
+                <pre><code>moderator = ContentModerator(
+    audit_config={
+        "enabled": True,
+        "log_level": "info",  # Can be "debug", "info", "warning", or "error"
+        "storage": {
+            "type": "database",  # Can be "file", "database", or "external"
+            "connection_string": "postgresql://user:password@localhost:5432/agents_hub",
+            "table_name": "moderation_logs"
+        },
+        "retention_period": "90d"  # How long to keep logs
+    }
+)
+
+# Later, you can retrieve moderation logs
+logs = await moderator.get_audit_logs(
+    start_time="2025-04-01T00:00:00Z",
+    end_time="2025-04-14T23:59:59Z",
+    action_types=["block", "warn"],
+    user_ids=["user123"]
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="moderation-providers">Moderation Providers</h2>
+            <p>Agents Hub supports several moderation providers:</p>
+
+            <h3 id="built-in-moderation">Built-in Moderation</h3>
+            <p>Uses pattern matching and rule-based filtering:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.moderation.providers import BuiltInModerator
+
+moderator = ContentModerator(
+    provider=BuiltInModerator(
+        rules_file="path/to/rules.json",  # Custom rules file
+        sensitivity="medium"  # Default sensitivity level
+    )
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="openai-moderation">OpenAI Moderation</h3>
+            <p>Uses OpenAI's moderation API:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.moderation.providers import OpenAIModerator
+
+moderator = ContentModerator(
+    provider=OpenAIModerator(
+        api_key="your-openai-api-key",
+        model="text-moderation-latest"
+    )
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="custom-provider">Custom Moderation Provider</h3>
+            <p>Create a custom moderation provider:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.moderation.base import BaseModerationProvider
+import aiohttp
+
+class CustomModerationProvider(BaseModerationProvider):
+    def __init__(self, api_key, base_url="https://api.custommod.com/v1/moderate"):
+        self.api_key = api_key
+        self.base_url = base_url
+    
+    async def moderate_content(self, content, content_type="text"):
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        data = {
+            "content": content,
+            "content_type": content_type
+        }
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.base_url, headers=headers, json=data) as response:
+                if response.status == 200:
+                    result = await response.json()
+                    return {
+                        "flagged": result["flagged"],
+                        "categories": result["categories"],
+                        "score": result["score"],
+                        "action": result["recommended_action"]
+                    }
+                else:
+                    error_data = await response.text()
+                    raise Exception(f"Moderation API call failed: {error_data}")
+
+# Use the custom provider
+moderator = ContentModerator(
+    provider=CustomModerationProvider(api_key="your-custom-api-key")
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="moderation-actions">Moderation Actions</h2>
+            <p>The moderation system can take several actions when content is flagged:</p>
+
+            <h3 id="block">Block</h3>
+            <p>Completely block the content and return an error:</p>
+            <div class="code-block">
+                <pre><code>moderator = ContentModerator(
+    content_policy={
+        "hate_speech": "block",
+        "illegal_activity": "block"
+    }
+)
+
+# When blocked content is detected
+try:
+    response = await agent.run("How do I hack into someone's account?")
+except agents_hub.moderation.ModerationError as e:
+    print(f"Content blocked: {e.message}")
+    # e.message might be "This content has been blocked as it may relate to illegal activity."</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="warn">Warn</h3>
+            <p>Allow the content but add a warning:</p>
+            <div class="code-block">
+                <pre><code>moderator = ContentModerator(
+    content_policy={
+        "violence": "warn"
+    }
+)
+
+# When warned content is detected
+response = await agent.run("Tell me about historical battles.")
+# Response might include a warning like:
+# "Note: This content contains references to violence in a historical context."</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="replace">Replace</h3>
+            <p>Replace the flagged content with alternative text:</p>
+            <div class="code-block">
+                <pre><code>moderator = ContentModerator(
+    content_policy={
+        "profanity": "replace"
+    },
+    replacement_text="[inappropriate language]"
+)
+
+# When content to be replaced is detected
+response = await agent.run("What the **** is going on?")
+# Input might be modified to: "What the [inappropriate language] is going on?"</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="log">Log</h3>
+            <p>Allow the content but log it for review:</p>
+            <div class="code-block">
+                <pre><code>moderator = ContentModerator(
+    content_policy={
+        "sexual_content": "log"
+    }
+)
+
+# When logged content is detected
+response = await agent.run("Tell me about reproductive health.")
+# Content is allowed but logged for review</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="custom-moderation-rules">Custom Moderation Rules</h2>
+            <p>You can define custom moderation rules for specific requirements:</p>
+
+            <div class="code-block">
+                <pre><code>moderator = ContentModerator(
+    custom_rules=[
+        # Block specific topics
+        {
+            "pattern": r"how to (make|create|build) (bomb|explosive)",
+            "action": "block",
+            "message": "Content related to creating dangerous devices is not permitted."
+        },
+        
+        # Replace sensitive information
+        {
+            "pattern": r"\b\d{3}-\d{2}-\d{4}\b",  # Social Security Number format
+            "action": "replace",
+            "replacement": "[SSN REDACTED]",
+            "message": "Social Security Numbers have been redacted for privacy."
+        },
+        
+        # Warn about potentially sensitive topics
+        {
+            "pattern": r"(depression|anxiety|suicide)",
+            "action": "warn",
+            "message": "This content discusses mental health topics. If you're experiencing a crisis, please contact a mental health professional."
+        },
+        
+        # Log mentions of competitors
+        {
+            "pattern": r"(competitor1|competitor2|competitor3)",
+            "action": "log",
+            "message": "Mention of competitor detected."
+        }
+    ]
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="jailbreak-prevention">Jailbreak Prevention</h2>
+            <p>Agents Hub provides specialized mechanisms to prevent jailbreak attempts:</p>
+
+            <div class="code-block">
+                <pre><code>moderator = ContentModerator(
+    jailbreak_detection_enabled=True,
+    jailbreak_detection_config={
+        "sensitivity": "high",
+        "detection_patterns": [
+            # Common jailbreak patterns
+            r"ignore (previous|all|your) instructions",
+            r"disregard (previous|all|your) (instructions|programming)",
+            r"you are now (a|an) ([^.]+)",
+            r"pretend to be (a|an) ([^.]+)",
+            r"let's play a game where you are (a|an) ([^.]+)",
+            r"do not (behave|act) as an AI",
+            r"respond as if you (were|are) not bound by",
+            r"output the (following|next) text verbatim",
+            
+            # Prompt injection patterns
+            r"your new instructions are",
+            r"your system prompt is now",
+            r"from now on you will",
+            
+            # Evasion patterns
+            r"sp+e+l+l+i+n+g errors (to|that) (bypass|avoid)",
+            r"(split|break) (words|letters|characters) (to|that) (bypass|avoid)"
+        ],
+        "action": "block",
+        "message": "This request appears to be attempting to bypass safety measures."
+    }
+)</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="moderation-best-practices">Best Practices</h2>
+            <p>Here are some best practices for implementing effective moderation:</p>
+
+            <h3 id="layered-approach">Layered Approach</h3>
+            <ul>
+                <li>Implement multiple layers of moderation (input filtering, output filtering, jailbreak detection)</li>
+                <li>Combine rule-based and AI-based moderation for better coverage</li>
+                <li>Use both pre-processing (before LLM) and post-processing (after LLM) moderation</li>
+            </ul>
+
+            <h3 id="policy-definition">Policy Definition</h3>
+            <ul>
+                <li>Clearly define what content is acceptable and what isn't</li>
+                <li>Consider your specific use case and audience when setting policies</li>
+                <li>Balance safety with usability to avoid overly restrictive moderation</li>
+                <li>Regularly review and update policies based on user feedback and emerging issues</li>
+            </ul>
+
+            <h3 id="transparency">Transparency</h3>
+            <ul>
+                <li>Be transparent with users about moderation policies</li>
+                <li>Provide clear explanations when content is blocked or modified</li>
+                <li>Offer appeals or feedback mechanisms for users who believe content was incorrectly moderated</li>
+            </ul>
+
+            <h3 id="monitoring-improvement">Monitoring and Improvement</h3>
+            <ul>
+                <li>Regularly review moderation logs to identify patterns and issues</li>
+                <li>Update moderation rules based on observed bypass attempts</li>
+                <li>Collect feedback on false positives and false negatives</li>
+                <li>Continuously improve moderation effectiveness</li>
+            </ul>
+
+            <h2 id="conclusion">Conclusion</h2>
+            <p>Content moderation is a critical component of responsible AI deployment. Agents Hub provides a comprehensive moderation system that helps ensure agent interactions are safe, appropriate, and aligned with your organization's policies. By implementing effective moderation, you can build more trustworthy and reliable agent applications.</p>
+
+            <p>For more information on monitoring agent behavior, see the <a href="monitoring.html">Monitoring</a> section.</p>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions" target="_blank">Discussions</a></li>
+                            <li><a href="../development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE" target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

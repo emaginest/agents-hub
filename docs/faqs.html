@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs - Agents Hub</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emagine-solutions/agents-hub" target="_blank">GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="index.html">Introduction</a></li>
+                        <li><a href="quickstart.html">Quickstart</a></li>
+                        <li><a href="examples.html">Examples</a></li>
+                        <li class="active"><a href="faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="concepts/architecture.html">Core Architecture</a></li>
+                        <li><a href="concepts/agents.html">Agents</a></li>
+                        <li><a href="concepts/cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="concepts/memory.html">Memory System</a></li>
+                        <li><a href="concepts/orchestration.html">Orchestration</a></li>
+                        <li><a href="concepts/tools.html">Tools</a></li>
+                        <li><a href="concepts/llm.html">LLM Integration</a></li>
+                        <li><a href="concepts/moderation.html">Moderation</a></li>
+                        <li><a href="concepts/monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="development/contributing.html">Contributing</a></li>
+                        
+                        <li><a href="development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Frequently Asked Questions</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Find answers to common questions about Agents Hub.</p>
+
+            <h2 id="general">General Questions</h2>
+
+            <h3 id="what-is">What is Agents Hub?</h3>
+            <p>Agents Hub is an advanced agent orchestration framework that allows you to create, manage, and
+                orchestrate intelligent agent workforces. It provides a comprehensive solution for building multi-agent
+                systems with emergent intelligence capabilities.</p>
+
+            <h3 id="vs-langchain">How does Agents Hub compare to LangChain?</h3>
+            <p>While both frameworks provide tools for building LLM-powered applications, Agents Hub focuses
+                specifically on multi-agent orchestration with advanced cognitive capabilities. Key differences include:
+            </p>
+            <ul>
+                <li>Agents Hub has a built-in cognitive architecture inspired by human cognition</li>
+                <li>Agents Hub provides more sophisticated agent orchestration mechanisms</li>
+                <li>Agents Hub includes specialized workforces for specific domains like software development</li>
+                <li>Agents Hub has integrated moderation and safety mechanisms</li>
+            </ul>
+
+            <h3 id="license">What license is Agents Hub released under?</h3>
+            <p>Agents Hub is released under the MIT License, which allows for both personal and commercial use with
+                minimal restrictions.</p>
+
+            <h2 id="technical">Technical Questions</h2>
+
+            <h3 id="python-version">What Python version is required?</h3>
+            <p>Agents Hub requires Python 3.9 or higher.</p>
+
+            <h3 id="llm-providers">Which LLM providers are supported?</h3>
+            <p>Agents Hub supports multiple LLM providers:</p>
+            <ul>
+                <li>OpenAI (GPT-4o, GPT-4, GPT-3.5-Turbo)</li>
+                <li>Anthropic (Claude 3 Opus, Sonnet, Haiku)</li>
+                <li>Google (Gemini models)</li>
+                <li>Ollama (local models)</li>
+                <li>Azure OpenAI</li>
+                <li>Hugging Face</li>
+            </ul>
+
+            <h3 id="memory-backends">What memory backends are supported?</h3>
+            <p>Agents Hub supports multiple memory backends:</p>
+            <ul>
+                <li>PostgreSQL (with pgvector)</li>
+                <li>Redis</li>
+                <li>In-memory</li>
+                <li>File-based</li>
+            </ul>
+
+            <h3 id="async">Does Agents Hub support async/await?</h3>
+            <p>Yes, Agents Hub is built with asyncio and supports async/await throughout the framework.</p>
+
+            <h2 id="usage">Usage Questions</h2>
+
+            <h3 id="api-keys">Do I need API keys for the LLM providers?</h3>
+            <p>Yes, you need API keys for the cloud-based LLM providers (OpenAI, Anthropic, Google). However, you can
+                use Ollama for local LLMs without an API key.</p>
+
+            <h3 id="cost">How much does it cost to use Agents Hub?</h3>
+            <p>Agents Hub itself is free and open source. However, you will need to pay for the API usage of the LLM
+                providers you choose to use. The cost depends on the provider, model, and usage volume.</p>
+
+            <h3 id="production">Is Agents Hub ready for production use?</h3>
+            <p>Agents Hub is currently in early development (version 0.1.0) and may not be fully stable for production
+                use. We recommend using it for research, prototyping, and non-critical applications while we work
+                towards a stable 1.0 release.</p>
+
+            <h3 id="deployment">How do I deploy Agents Hub in production?</h3>
+            <p>Agents Hub can be deployed like any Python application. We recommend using Docker for containerization
+                and a production-ready ASGI server like Uvicorn or Hypercorn behind a reverse proxy like Nginx.</p>
+
+            <h2 id="support">Support Questions</h2>
+
+            <h3 id="bugs">How do I report bugs?</h3>
+            <p>You can report bugs by <a href="https://github.com/emagine-solutions/agents-hub/issues"
+                    target="_blank">creating an issue</a> on GitHub. Please include detailed steps to reproduce the bug,
+                expected behavior, and actual behavior.</p>
+
+            <h3 id="features">How do I request features?</h3>
+            <p>You can request features by <a href="https://github.com/emagine-solutions/agents-hub/issues"
+                    target="_blank">creating an issue</a> on GitHub with the "feature request" label. Please describe
+                the feature in detail and explain why it would be valuable.</p>
+
+            <h3 id="help">Where can I get help?</h3>
+            <p>You can get help through the following channels:</p>
+            <ul>
+                <li><a href="https://github.com/emagine-solutions/agents-hub/discussions" target="_blank">GitHub
+                        Discussions</a> for general questions and discussions</li>
+                <li><a href="https://github.com/emagine-solutions/agents-hub/issues" target="_blank">GitHub Issues</a>
+                    for bug reports and feature requests</li>
+                <li>The documentation (this website) for guides and reference material</li>
+            </ul>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="index.html">Introduction</a></li>
+                            <li><a href="quickstart.html">Quickstart</a></li>
+                            <li><a href="examples.html">Examples</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emagine-solutions/agents-hub" target="_blank">GitHub</a>
+                            </li>
+                            <li><a href="https://github.com/emagine-solutions/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="development/contributing.html">Contributing</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emagine.solutions" target="_blank">Emagine Solutions</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emagine-solutions/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023-2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

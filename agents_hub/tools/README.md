@@ -7,7 +7,6 @@ This module provides a collection of tools that agents can use to interact with 
 ### Standard Tools
 
 - **ScraperTool**: Scrape and extract content from websites
-- **PGVectorTool**: Store and retrieve vector embeddings in PostgreSQL
 - **CalculatorTool**: Perform mathematical calculations
 - **WebSearchTool**: Search the web for information
 - **WebFetchTool**: Fetch and parse web content

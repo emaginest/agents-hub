@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changelog - Agents Hub</title>
+
+    <meta name="description" content="View the changelog for Agents Hub framework.">
+    <meta name="keywords" content="AI, agents, LLM, changelog, releases, versions">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="../concepts/architecture.html">Core Architecture</a></li>
+                        <li><a href="../concepts/agents.html">Agents</a></li>
+                        <li><a href="../concepts/cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="../concepts/memory.html">Memory System</a></li>
+                        <li><a href="../concepts/orchestration.html">Orchestration</a></li>
+                        <li><a href="../concepts/tools.html">Tools</a></li>
+                        <li><a href="../concepts/llm.html">LLM Integration</a></li>
+                        <li><a href="../concepts/moderation.html">Moderation</a></li>
+                        <li><a href="../concepts/monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="contributing.html">Contributing</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                        <li class="active"><a href="changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Changelog</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">View the history of changes and updates to the Agents Hub framework.</p>
+
+            <div class="info-box">
+                <p><strong>Latest:</strong> Version 0.1.1 released on April 17, 2025.</p>
+            </div>
+
+            <h2 id="unreleased">Unreleased</h2>
+            <p>Features planned for future releases:</p>
+
+            <h3>Added</h3>
+            <ul>
+                <li>Coding module with specialized agents for software development
+                    <ul>
+                        <li>Project Manager Agent</li>
+                        <li>Analyst Agent</li>
+                        <li>Backend Developer Agent</li>
+                        <li>Frontend Developer Agent</li>
+                        <li>DevOps Engineer Agent</li>
+                        <li>Security Engineer Agent</li>
+                        <li>QA Tester Agent</li>
+                    </ul>
+                </li>
+                <li>Coding tools for software development
+                    <ul>
+                        <li>Git Tool with human approval for critical operations</li>
+                        <li>AWS CDK Tool with human approval for deployments</li>
+                        <li>Code Generator Tool</li>
+                        <li>Code Analyzer Tool</li>
+                        <li>Testing Tool</li>
+                    </ul>
+                </li>
+                <li>CodingWorkforce class for coordinating specialized coding agents</li>
+                <li>Human approval interface for critical operations</li>
+                <li>Code templates for FastAPI, React, and AWS CDK</li>
+                <li>Comprehensive documentation for all modules</li>
+                <li>Example applications demonstrating framework capabilities</li>
+            </ul>
+
+            <h3>Changed</h3>
+            <ul>
+                <li>Improved project structure for better organization and clarity</li>
+                <li>Enhanced documentation with detailed README files for each module</li>
+                <li>Updated examples to use the new module structure</li>
+            </ul>
+
+            <h3>Fixed</h3>
+            <ul>
+                <li>Removed duplicate and obsolete code</li>
+                <li>Cleaned up temporary and generated files</li>
+                <li>Fixed import statements to reflect the new structure</li>
+            </ul>
+
+            <h2 id="0-1-1">Version 0.1.1 (April 17, 2025)</h2>
+
+            <h3>Added</h3>
+            <ul>
+                <li>InMemoryMemory implementation for simple in-memory storage</li>
+                <li>New memory_example demonstrating long-term memory with PostgreSQL</li>
+                <li>Docker support for local memory testing with PostgreSQL</li>
+                <li>Interactive memory commands (stats, history, search) in memory example</li>
+                <li>Support for continuing conversations across sessions with conversation IDs</li>
+            </ul>
+
+            <h3>Changed</h3>
+            <ul>
+                <li>Updated memory module to expose both PostgreSQL and InMemory backends</li>
+                <li>Improved memory interface with consistent method signatures</li>
+                <li>Enhanced documentation for memory systems</li>
+            </ul>
+
+            <h3>Fixed</h3>
+            <ul>
+                <li>Fixed context handling in Agent.run() method for conversation IDs</li>
+                <li>Added optional python-Levenshtein dependency to address fuzzywuzzy warning</li>
+            </ul>
+
+            <h2 id="0-1-0">Version 0.1.0 (April 3, 2025)</h2>
+
+            <h3>Added</h3>
+            <ul>
+                <li>Initial release of the Agents Hub framework</li>
+                <li>Multi-agent orchestration capabilities</li>
+                <li>Support for multiple LLM providers (OpenAI, Claude, Gemini, Ollama)</li>
+                <li>Content moderation system</li>
+                <li>Web scraping and search capabilities</li>
+                <li>Document processing utilities</li>
+                <li>RAG capabilities with PostgreSQL/pgvector</li>
+                <li>Model Context Protocol (MCP) integration</li>
+                <li>Monitoring and analytics with Langfuse</li>
+                <li>Cognitive architecture with metacognitive capabilities</li>
+                <li>Memory system with multiple backend options</li>
+                <li>Dynamic task routing and agent collaboration</li>
+                <li>Example applications demonstrating framework capabilities</li>
+            </ul>
+
+            <div class="feedback-section">
+                <p>Was this page helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="btn btn-sm">Yes</button>
+                    <button class="btn btn-sm">No</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html">Agents-hub</a>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Documentation</h4>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quickstart</a></li>
+                            <li><a href="../examples.html">Examples</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
+                            <li><a href="contributing.html">Contributing</a></li>
+                            <li><a href="roadmap.html">Roadmap</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>More</h4>
+                        <ul>
+                            <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
+                            <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                            <li><a href="../privacy.html">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Emaginest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
