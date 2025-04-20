@@ -15,14 +15,23 @@ from agents_hub.monitoring.base import BaseMonitor
 
 class AgentConfig(BaseModel):
     """Configuration for an agent."""
+
     name: str = Field(..., description="Unique name for the agent")
-    description: str = Field("", description="Description of the agent's purpose and capabilities")
+    description: str = Field(
+        "", description="Description of the agent's purpose and capabilities"
+    )
     system_prompt: str = Field("", description="System prompt for the agent")
     temperature: float = Field(0.7, description="Temperature for LLM generation")
     max_tokens: int = Field(1000, description="Maximum tokens for LLM generation")
-    tools_enabled: bool = Field(True, description="Whether tools are enabled for this agent")
-    moderation_enabled: bool = Field(False, description="Whether content moderation is enabled")
-    on_moderation_violation: Literal["block", "warn", "log"] = Field("block", description="Action to take on moderation violation")
+    tools_enabled: bool = Field(
+        True, description="Whether tools are enabled for this agent"
+    )
+    moderation_enabled: bool = Field(
+        False, description="Whether content moderation is enabled"
+    )
+    on_moderation_violation: Literal["block", "warn", "log"] = Field(
+        "block", description="Action to take on moderation violation"
+    )
     monitoring_enabled: bool = Field(False, description="Whether monitoring is enabled")
 
 
@@ -91,7 +100,9 @@ class Agent:
         # Set up monitoring if provided
         self.monitor = monitor
 
-    async def run(self, input_text: str, context: Optional[Dict[str, Any]] = None) -> str:
+    async def run(
+        self, input_text: str, context: Optional[Dict[str, Any]] = None
+    ) -> str:
         """
         Run the agent on the given input text.
 
@@ -107,10 +118,20 @@ class Agent:
 
         # Start monitoring if enabled
         if self.config.monitoring_enabled and self.monitor:
+            # Start a conversation trace with user_id
+            await self.monitor.start_conversation(
+                conversation_id=conversation_id,
+                agent_name=self.config.name,
+                user_id=context.get("user_id"),
+                metadata=context.get("metadata"),
+            )
+
+            # Track the user message
             await self.monitor.track_user_message(
                 message=input_text,
                 conversation_id=conversation_id,
                 agent_name=self.config.name,
+                user_id=context.get("user_id"),
                 metadata=context.get("metadata"),
             )
 
@@ -144,6 +165,8 @@ class Agent:
                 messages=messages,
                 conversation_id=conversation_id,
                 agent_name=self.config.name,
+                user_id=context.get("user_id"),
+                input_tokens=context.get("input_tokens"),
             )
 
         try:
@@ -163,17 +186,23 @@ class Agent:
                     result=response.model_dump(),
                     conversation_id=conversation_id,
                     agent_name=self.config.name,
+                    user_id=context.get("user_id"),
+                    input_tokens=context.get("input_tokens"),
                 )
 
             # Process tool calls if any
             if response.tool_calls and self.config.tools_enabled:
-                final_response = await self._process_tool_calls(response.tool_calls, messages, context)
+                final_response = await self._process_tool_calls(
+                    response.tool_calls, messages, context
+                )
             else:
                 final_response = response.content
 
             # Apply moderation to output if enabled
             if self.config.moderation_enabled and self.moderation_middleware:
-                final_response = await self.moderation_middleware.process_output(final_response)
+                final_response = await self.moderation_middleware.process_output(
+                    final_response
+                )
 
         except Exception as e:
             # Track error if monitoring is enabled
@@ -182,6 +211,7 @@ class Agent:
                     error=str(e),
                     conversation_id=conversation_id,
                     agent_name=self.config.name,
+                    user_id=context.get("user_id"),
                 )
             raise
 
@@ -199,12 +229,15 @@ class Agent:
                 message=final_response,
                 conversation_id=conversation_id,
                 agent_name=self.config.name,
+                user_id=context.get("user_id"),
                 metadata=context.get("metadata"),
             )
 
         return final_response
 
-    def _prepare_messages(self, input_text: str, history: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    def _prepare_messages(
+        self, input_text: str, history: List[Dict[str, str]]
+    ) -> List[Dict[str, str]]:
         """
         Prepare messages for the LLM.
 
@@ -224,7 +257,9 @@ class Agent:
         # Add conversation history
         for entry in history:
             messages.append({"role": "user", "content": entry["user_message"]})
-            messages.append({"role": "assistant", "content": entry["assistant_message"]})
+            messages.append(
+                {"role": "assistant", "content": entry["assistant_message"]}
+            )
 
         # Add current user message
         messages.append({"role": "user", "content": input_text})
@@ -235,7 +270,7 @@ class Agent:
         self,
         tool_calls: List[Dict[str, Any]],
         messages: List[Dict[str, Any]],
-        context: Dict[str, Any]
+        context: Dict[str, Any],
     ) -> str:
         """
         Process tool calls from the LLM.
@@ -301,6 +336,7 @@ class Agent:
                             output_data=None,  # Will be updated after tool execution
                             conversation_id=conversation_id,
                             agent_name=self.config.name,
+                            user_id=context.get("user_id"),
                         )
 
                     # Run the tool
@@ -314,6 +350,7 @@ class Agent:
                             output_data=tool_result,
                             conversation_id=conversation_id,
                             agent_name=self.config.name,
+                            user_id=context.get("user_id"),
                         )
                 except Exception as e:
                     error_message = f"Error running tool '{tool_name}': {str(e)}"
@@ -325,6 +362,7 @@ class Agent:
                             error=error_message,
                             conversation_id=conversation_id,
                             agent_name=self.config.name,
+                            user_id=context.get("user_id"),
                         )
 
             # Get the tool call ID
@@ -333,12 +371,18 @@ class Agent:
                 continue  # Skip if no ID
 
             # Add the tool result message immediately after the assistant message
-            tool_result_str = json.dumps(tool_result) if isinstance(tool_result, dict) else str(tool_result)
-            messages.append({
-                "role": "tool",
-                "tool_call_id": tool_call_id,
-                "content": tool_result_str,
-            })
+            tool_result_str = (
+                json.dumps(tool_result)
+                if isinstance(tool_result, dict)
+                else str(tool_result)
+            )
+            messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": tool_call_id,
+                    "content": tool_result_str,
+                }
+            )
 
         # Get final response from LLM
         final_response = await self.llm.generate(

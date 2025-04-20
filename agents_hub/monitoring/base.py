@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 
 class MonitoringLevel(str, Enum):
     """Monitoring level for the monitoring system."""
+
     BASIC = "basic"  # Track only basic events (conversations, messages)
     DETAILED = "detailed"  # Track detailed events (tools, memory)
     COMPREHENSIVE = "comprehensive"  # Track all events (including internal operations)
@@ -18,6 +19,7 @@ class MonitoringLevel(str, Enum):
 
 class MonitoringEvent(str, Enum):
     """Event types for the monitoring system."""
+
     CONVERSATION_START = "conversation_start"
     CONVERSATION_END = "conversation_end"
     USER_MESSAGE = "user_message"
@@ -34,21 +36,29 @@ class MonitoringEvent(str, Enum):
 
 class EventData(BaseModel):
     """Data for a monitoring event."""
+
     event_type: MonitoringEvent = Field(..., description="Type of the event")
-    timestamp: float = Field(default_factory=time.time, description="Timestamp of the event")
+    timestamp: float = Field(
+        default_factory=time.time, description="Timestamp of the event"
+    )
     conversation_id: Optional[str] = Field(None, description="ID of the conversation")
     agent_name: Optional[str] = Field(None, description="Name of the agent")
+    user_id: Optional[str] = Field(None, description="ID of the user")
     data: Dict[str, Any] = Field(default_factory=dict, description="Event data")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Event metadata")
+    input_tokens: Optional[int] = Field(None, description="Number of input tokens")
+    output_tokens: Optional[int] = Field(None, description="Number of output tokens")
+    total_tokens: Optional[int] = Field(None, description="Total number of tokens")
+    cost: Optional[float] = Field(None, description="Estimated cost of the operation")
 
 
 class BaseMonitor:
     """
     Base class for monitoring systems.
-    
+
     This abstract class defines the interface that all monitoring systems must implement.
     """
-    
+
     def __init__(
         self,
         level: MonitoringLevel = MonitoringLevel.DETAILED,
@@ -57,7 +67,7 @@ class BaseMonitor:
     ):
         """
         Initialize the monitor.
-        
+
         Args:
             level: Monitoring level
             include_events: List of events to include (None for all)
@@ -66,25 +76,25 @@ class BaseMonitor:
         self.level = level
         self.include_events = include_events
         self.exclude_events = exclude_events
-    
+
     def should_track(self, event_type: MonitoringEvent) -> bool:
         """
         Check if an event should be tracked.
-        
+
         Args:
             event_type: Type of the event
-            
+
         Returns:
             True if the event should be tracked, False otherwise
         """
         # Check if event is explicitly excluded
         if self.exclude_events and event_type in self.exclude_events:
             return False
-        
+
         # Check if event is explicitly included
         if self.include_events and event_type not in self.include_events:
             return False
-        
+
         # Check monitoring level
         if self.level == MonitoringLevel.BASIC:
             return event_type in [
@@ -98,118 +108,141 @@ class BaseMonitor:
             return event_type != MonitoringEvent.CUSTOM
         else:  # COMPREHENSIVE
             return True
-    
+
     async def track_event(
         self,
         event_type: MonitoringEvent,
         conversation_id: Optional[str] = None,
         agent_name: Optional[str] = None,
+        user_id: Optional[str] = None,
         data: Optional[Dict[str, Any]] = None,
         metadata: Optional[Dict[str, Any]] = None,
+        input_tokens: Optional[int] = None,
+        output_tokens: Optional[int] = None,
+        total_tokens: Optional[int] = None,
+        cost: Optional[float] = None,
     ) -> Optional[str]:
         """
         Track an event.
-        
+
         Args:
             event_type: Type of the event
             conversation_id: Optional ID of the conversation
             agent_name: Optional name of the agent
+            user_id: Optional ID of the user
             data: Optional event data
             metadata: Optional event metadata
-            
+            input_tokens: Optional number of input tokens
+            output_tokens: Optional number of output tokens
+            total_tokens: Optional total number of tokens
+            cost: Optional estimated cost of the operation
+
         Returns:
             Optional event ID
         """
         if not self.should_track(event_type):
             return None
-        
+
         event_data = EventData(
             event_type=event_type,
             conversation_id=conversation_id,
             agent_name=agent_name,
+            user_id=user_id,
             data=data or {},
             metadata=metadata or {},
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            total_tokens=total_tokens,
+            cost=cost,
         )
-        
+
         return await self._track_event(event_data)
-    
+
     async def _track_event(self, event_data: EventData) -> Optional[str]:
         """
         Track an event (implementation).
-        
+
         Args:
             event_data: Event data
-            
+
         Returns:
             Optional event ID
         """
         raise NotImplementedError("Subclasses must implement _track_event()")
-    
+
     async def start_conversation(
         self,
         conversation_id: Optional[str] = None,
         agent_name: Optional[str] = None,
+        user_id: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> str:
         """
         Start tracking a conversation.
-        
+
         Args:
             conversation_id: Optional ID of the conversation (generated if not provided)
             agent_name: Optional name of the agent
+            user_id: Optional ID of the user
             metadata: Optional metadata for the conversation
-            
+
         Returns:
             Conversation ID
         """
         conversation_id = conversation_id or str(uuid.uuid4())
-        
+
         await self.track_event(
             event_type=MonitoringEvent.CONVERSATION_START,
             conversation_id=conversation_id,
             agent_name=agent_name,
+            user_id=user_id,
             metadata=metadata,
         )
-        
+
         return conversation_id
-    
+
     async def end_conversation(
         self,
         conversation_id: str,
         agent_name: Optional[str] = None,
+        user_id: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
         """
         End tracking a conversation.
-        
+
         Args:
             conversation_id: ID of the conversation
             agent_name: Optional name of the agent
+            user_id: Optional ID of the user
             metadata: Optional metadata for the conversation
         """
         await self.track_event(
             event_type=MonitoringEvent.CONVERSATION_END,
             conversation_id=conversation_id,
             agent_name=agent_name,
+            user_id=user_id,
             metadata=metadata,
         )
-    
+
     async def track_user_message(
         self,
         message: str,
         conversation_id: str,
         agent_name: Optional[str] = None,
+        user_id: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> Optional[str]:
         """
         Track a user message.
-        
+
         Args:
             message: User message
             conversation_id: ID of the conversation
             agent_name: Optional name of the agent
+            user_id: Optional ID of the user
             metadata: Optional metadata for the message
-            
+
         Returns:
             Optional event ID
         """
@@ -217,26 +250,29 @@ class BaseMonitor:
             event_type=MonitoringEvent.USER_MESSAGE,
             conversation_id=conversation_id,
             agent_name=agent_name,
+            user_id=user_id,
             data={"message": message},
             metadata=metadata,
         )
-    
+
     async def track_assistant_message(
         self,
         message: str,
         conversation_id: str,
         agent_name: Optional[str] = None,
+        user_id: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> Optional[str]:
         """
         Track an assistant message.
-        
+
         Args:
             message: Assistant message
             conversation_id: ID of the conversation
             agent_name: Optional name of the agent
+            user_id: Optional ID of the user
             metadata: Optional metadata for the message
-            
+
         Returns:
             Optional event ID
         """
@@ -244,10 +280,11 @@ class BaseMonitor:
             event_type=MonitoringEvent.ASSISTANT_MESSAGE,
             conversation_id=conversation_id,
             agent_name=agent_name,
+            user_id=user_id,
             data={"message": message},
             metadata=metadata,
         )
-    
+
     async def track_tool_usage(
         self,
         tool_name: str,
@@ -255,21 +292,23 @@ class BaseMonitor:
         output_data: Any,
         conversation_id: str,
         agent_name: Optional[str] = None,
+        user_id: Optional[str] = None,
         error: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> Optional[str]:
         """
         Track tool usage.
-        
+
         Args:
             tool_name: Name of the tool
             input_data: Input data for the tool
             output_data: Output data from the tool
             conversation_id: ID of the conversation
             agent_name: Optional name of the agent
+            user_id: Optional ID of the user
             error: Optional error message
             metadata: Optional metadata for the tool usage
-            
+
         Returns:
             Optional event ID
         """
@@ -278,18 +317,19 @@ class BaseMonitor:
             "input": input_data,
             "output": output_data,
         }
-        
+
         if error:
             data["error"] = error
-        
+
         return await self.track_event(
             event_type=MonitoringEvent.TOOL_CALL,
             conversation_id=conversation_id,
             agent_name=agent_name,
+            user_id=user_id,
             data=data,
             metadata=metadata,
         )
-    
+
     async def track_llm_call(
         self,
         provider: str,
@@ -297,19 +337,23 @@ class BaseMonitor:
         messages: List[Dict[str, Any]],
         conversation_id: str,
         agent_name: Optional[str] = None,
+        user_id: Optional[str] = None,
+        input_tokens: Optional[int] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> Optional[str]:
         """
         Track an LLM call.
-        
+
         Args:
             provider: LLM provider name
             model: LLM model name
             messages: Messages sent to the LLM
             conversation_id: ID of the conversation
             agent_name: Optional name of the agent
+            user_id: Optional ID of the user
+            input_tokens: Optional number of input tokens
             metadata: Optional metadata for the LLM call
-            
+
         Returns:
             Optional event ID
         """
@@ -317,6 +361,8 @@ class BaseMonitor:
             event_type=MonitoringEvent.LLM_CALL,
             conversation_id=conversation_id,
             agent_name=agent_name,
+            user_id=user_id,
+            input_tokens=input_tokens,
             data={
                 "provider": provider,
                 "model": model,
@@ -324,7 +370,7 @@ class BaseMonitor:
             },
             metadata=metadata,
         )
-    
+
     async def track_llm_result(
         self,
         provider: str,
@@ -332,19 +378,29 @@ class BaseMonitor:
         result: Any,
         conversation_id: str,
         agent_name: Optional[str] = None,
+        user_id: Optional[str] = None,
+        input_tokens: Optional[int] = None,
+        output_tokens: Optional[int] = None,
+        total_tokens: Optional[int] = None,
+        cost: Optional[float] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> Optional[str]:
         """
         Track an LLM result.
-        
+
         Args:
             provider: LLM provider name
             model: LLM model name
             result: Result from the LLM
             conversation_id: ID of the conversation
             agent_name: Optional name of the agent
+            user_id: Optional ID of the user
+            input_tokens: Optional number of input tokens
+            output_tokens: Optional number of output tokens
+            total_tokens: Optional total number of tokens
+            cost: Optional estimated cost of the operation
             metadata: Optional metadata for the LLM result
-            
+
         Returns:
             Optional event ID
         """
@@ -352,6 +408,11 @@ class BaseMonitor:
             event_type=MonitoringEvent.LLM_RESULT,
             conversation_id=conversation_id,
             agent_name=agent_name,
+            user_id=user_id,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            total_tokens=total_tokens,
+            cost=cost,
             data={
                 "provider": provider,
                 "model": model,
@@ -359,23 +420,25 @@ class BaseMonitor:
             },
             metadata=metadata,
         )
-    
+
     async def track_error(
         self,
         error: str,
         conversation_id: Optional[str] = None,
         agent_name: Optional[str] = None,
+        user_id: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> Optional[str]:
         """
         Track an error.
-        
+
         Args:
             error: Error message
             conversation_id: Optional ID of the conversation
             agent_name: Optional name of the agent
+            user_id: Optional ID of the user
             metadata: Optional metadata for the error
-            
+
         Returns:
             Optional event ID
         """
@@ -383,38 +446,42 @@ class BaseMonitor:
             event_type=MonitoringEvent.ERROR,
             conversation_id=conversation_id,
             agent_name=agent_name,
+            user_id=user_id,
             data={"error": error},
             metadata=metadata,
         )
-    
+
     async def track_custom_event(
         self,
         event_name: str,
         data: Any,
         conversation_id: Optional[str] = None,
         agent_name: Optional[str] = None,
+        user_id: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> Optional[str]:
         """
         Track a custom event.
-        
+
         Args:
             event_name: Name of the event
             data: Event data
             conversation_id: Optional ID of the conversation
             agent_name: Optional name of the agent
+            user_id: Optional ID of the user
             metadata: Optional metadata for the event
-            
+
         Returns:
             Optional event ID
         """
         metadata = metadata or {}
         metadata["event_name"] = event_name
-        
+
         return await self.track_event(
             event_type=MonitoringEvent.CUSTOM,
             conversation_id=conversation_id,
             agent_name=agent_name,
+            user_id=user_id,
             data=data,
             metadata=metadata,
         )

@@ -14,6 +14,11 @@ from agents_hub.monitoring.base import (
     MonitoringLevel,
     EventData,
 )
+from agents_hub.monitoring.utils import (
+    count_tokens,
+    count_tokens_for_messages,
+    estimate_cost,
+)
 
 # Flag to indicate if Langfuse is available
 LANGFUSE_AVAILABLE = True
@@ -150,6 +155,10 @@ class LangfuseMonitor(BaseMonitor):
         metadata = self._sanitize_metadata(event_data.metadata)
         metadata["agent_name"] = event_data.agent_name
 
+        # Add user_id to metadata if available
+        if event_data.user_id:
+            metadata["user_id"] = event_data.user_id
+
         # Create a trace for the conversation using the new API
         try:
             trace_obj = await asyncio.to_thread(
@@ -158,6 +167,7 @@ class LangfuseMonitor(BaseMonitor):
                 name="conversation",
                 metadata=metadata,
                 release=self.release,
+                user_id=event_data.user_id,  # Pass user_id directly to Langfuse
             )
             trace = trace_obj
         except Exception as e:
@@ -215,6 +225,9 @@ class LangfuseMonitor(BaseMonitor):
         trace_id = self.active_traces[conversation_id]
         message = event_data.data.get("message", "")
 
+        # Get the timestamp for the event
+        timestamp = event_data.timestamp
+
         # Create a span for the user message using the new API
         try:
             span = await asyncio.to_thread(
@@ -223,6 +236,8 @@ class LangfuseMonitor(BaseMonitor):
                 name="user-message",
                 input=self._sanitize_text(message),
                 metadata=self._sanitize_metadata(event_data.metadata),
+                start_time=timestamp,
+                end_time=timestamp,  # For user messages, start and end time are the same
             )
         except Exception as e:
             logger.exception(f"Error creating span in Langfuse: {e}")
@@ -247,6 +262,9 @@ class LangfuseMonitor(BaseMonitor):
         trace_id = self.active_traces[conversation_id]
         message = event_data.data.get("message", "")
 
+        # Get the timestamp for the event
+        timestamp = event_data.timestamp
+
         # Create a span for the assistant message using the new API
         try:
             span = await asyncio.to_thread(
@@ -255,6 +273,8 @@ class LangfuseMonitor(BaseMonitor):
                 name="assistant-message",
                 output=self._sanitize_text(message),
                 metadata=self._sanitize_metadata(event_data.metadata),
+                start_time=timestamp,
+                end_time=timestamp,  # For assistant messages, start and end time are the same
             )
         except Exception as e:
             logger.exception(f"Error creating span in Langfuse: {e}")
@@ -282,6 +302,29 @@ class LangfuseMonitor(BaseMonitor):
         output_data = event_data.data.get("output", {})
         error = event_data.data.get("error")
 
+        # Get the timestamp for the event
+        timestamp = event_data.timestamp
+
+        # For tool usage, we need to track when the tool was called and when it returned
+        # If output_data is present, it means the tool has completed execution
+        # If not, it means the tool is still executing
+        has_output = bool(output_data) or error is not None
+
+        # Store the tool call timestamp if this is the initial call
+        tool_key = f"{conversation_id}:tool:{tool_name}"
+        if not has_output and tool_name not in self.active_spans:
+            self.active_spans[f"{tool_key}:start_time"] = timestamp
+            start_time = timestamp
+            end_time = None  # Tool is still executing
+        elif has_output:
+            # This is the result of a tool call
+            start_time = self.active_spans.get(f"{tool_key}:start_time", timestamp)
+            end_time = timestamp  # Tool has completed execution
+        else:
+            # Default case
+            start_time = timestamp
+            end_time = timestamp if has_output else None
+
         # Create a span for the tool usage using the new API
         try:
             span = await asyncio.to_thread(
@@ -289,8 +332,10 @@ class LangfuseMonitor(BaseMonitor):
                 trace_id=trace_id,
                 name=f"tool-{tool_name}",
                 input=self._sanitize_data(input_data),
-                output=self._sanitize_data(output_data),
+                output=self._sanitize_data(output_data) if has_output else None,
                 metadata=self._sanitize_metadata(event_data.metadata),
+                start_time=start_time,
+                end_time=end_time,
             )
 
             # Update span with error if present
@@ -303,6 +348,10 @@ class LangfuseMonitor(BaseMonitor):
                     )
                 except Exception as e:
                     logger.exception(f"Error updating span in Langfuse: {e}")
+
+            # Clean up stored timestamps if the tool has completed execution
+            if has_output and f"{tool_key}:start_time" in self.active_spans:
+                del self.active_spans[f"{tool_key}:start_time"]
         except Exception as e:
             logger.exception(f"Error creating span in Langfuse: {e}")
             return None
@@ -328,6 +377,23 @@ class LangfuseMonitor(BaseMonitor):
         model = event_data.data.get("model", "unknown")
         messages = event_data.data.get("messages", [])
 
+        # Count input tokens if not already provided
+        input_tokens = event_data.input_tokens
+        if input_tokens is None and messages:
+            token_counts = count_tokens_for_messages(messages, model)
+            input_tokens = token_counts.get("input_tokens", 0)
+
+        # Prepare metadata with token information
+        metadata = self._sanitize_metadata(event_data.metadata)
+        if input_tokens is not None:
+            metadata["input_tokens"] = input_tokens
+
+        # Store the timestamp when the LLM call was made
+        start_time = event_data.timestamp
+        self.active_spans[f"{conversation_id}:llm:{provider}:{model}:start_time"] = (
+            start_time
+        )
+
         # Create a generation for the LLM call using the new API
         try:
             generation = await asyncio.to_thread(
@@ -339,15 +405,20 @@ class LangfuseMonitor(BaseMonitor):
                     "provider": provider,
                 },
                 input=self._sanitize_data(messages),
-                metadata=self._sanitize_metadata(event_data.metadata),
+                metadata=metadata,
+                start_time=start_time,  # Set the start_time explicitly
             )
         except Exception as e:
             logger.exception(f"Error creating generation in Langfuse: {e}")
             return None
 
-        # Store the generation ID for later use
+        # Store the generation ID and input tokens for later use
         span_key = f"{conversation_id}:llm:{provider}:{model}"
         self.active_spans[span_key] = generation.id
+
+        # Store input tokens for cost calculation when result comes in
+        if input_tokens is not None:
+            self.active_spans[f"{span_key}:input_tokens"] = input_tokens
 
         return generation.id
 
@@ -369,16 +440,51 @@ class LangfuseMonitor(BaseMonitor):
         model = event_data.data.get("model", "unknown")
         result = event_data.data.get("result", {})
 
+        # Get token counts from event_data or calculate them
+        input_tokens = event_data.input_tokens
+        output_tokens = event_data.output_tokens
+        total_tokens = event_data.total_tokens
+        cost = event_data.cost
+
         # Find the corresponding generation
         span_key = f"{conversation_id}:llm:{provider}:{model}"
         generation_id = self.active_spans.get(span_key)
+
+        # Get stored input tokens if available
+        if input_tokens is None:
+            input_tokens = self.active_spans.get(f"{span_key}:input_tokens")
+
+        # Count output tokens if not provided
+        if output_tokens is None and result:
+            result_str = str(result)
+            output_tokens = count_tokens(result_str, model)
+
+        # Calculate total tokens if not provided
+        if (
+            total_tokens is None
+            and input_tokens is not None
+            and output_tokens is not None
+        ):
+            total_tokens = input_tokens + output_tokens
+
+        # Estimate cost if not provided
+        if cost is None and input_tokens is not None and output_tokens is not None:
+            cost = estimate_cost(provider, model, input_tokens, output_tokens)
 
         if not generation_id:
             # Create a new generation if we don't have one
             return await self._track_generic_event(event_data)
 
-        # In the current Langfuse API, we can't directly update a generation
-        # Instead, we'll create a new span for the result
+        # Get the start time of the generation
+        start_time = self.active_spans.get(f"{span_key}:start_time")
+        # Get the current time as the end time
+        end_time = event_data.timestamp
+
+        # Note: We can't directly update the generation in the current Langfuse API
+        # The Langfuse Python SDK doesn't have a get_generation method
+        # Instead, we'll just create a new span for the result with proper timestamps
+
+        # Create a new span for the result with proper timestamps
         try:
             # Get the trace ID from the conversation ID
             trace_id = self.active_traces.get(conversation_id)
@@ -388,17 +494,35 @@ class LangfuseMonitor(BaseMonitor):
                 )
                 return None
 
-            # Create a new span for the result
+            # Prepare metadata with token and cost information
+            metadata = self._sanitize_metadata(event_data.metadata)
+            metadata.update(
+                {
+                    "provider": provider,
+                    "model": model,
+                    "generation_id": generation_id,
+                }
+            )
+
+            # Add token counts and cost to metadata
+            if input_tokens is not None:
+                metadata["input_tokens"] = input_tokens
+            if output_tokens is not None:
+                metadata["output_tokens"] = output_tokens
+            if total_tokens is not None:
+                metadata["total_tokens"] = total_tokens
+            if cost is not None:
+                metadata["cost"] = cost
+
+            # Create a new span for the result with proper timestamps
             await asyncio.to_thread(
                 self.langfuse.span,
                 trace_id=trace_id,
                 name=f"llm-result-{provider}-{model}",
                 output=self._sanitize_data(result),
-                metadata={
-                    "provider": provider,
-                    "model": model,
-                    "generation_id": generation_id,
-                },
+                metadata=metadata,
+                start_time=start_time if start_time else None,
+                end_time=end_time,
             )
         except Exception as e:
             logger.exception(f"Error creating result span in Langfuse: {e}")
@@ -406,6 +530,10 @@ class LangfuseMonitor(BaseMonitor):
 
         # Remove from active spans
         del self.active_spans[span_key]
+        if f"{span_key}:input_tokens" in self.active_spans:
+            del self.active_spans[f"{span_key}:input_tokens"]
+        if f"{span_key}:start_time" in self.active_spans:
+            del self.active_spans[f"{span_key}:start_time"]
 
         return generation_id
 
@@ -426,6 +554,9 @@ class LangfuseMonitor(BaseMonitor):
         trace_id = self.active_traces[conversation_id]
         error = event_data.data.get("error", "Unknown error")
 
+        # Get the timestamp for the event
+        timestamp = event_data.timestamp
+
         # Create a span for the error using the new API
         try:
             span = await asyncio.to_thread(
@@ -435,6 +566,8 @@ class LangfuseMonitor(BaseMonitor):
                 input=self._sanitize_text(error),
                 metadata=self._sanitize_metadata(event_data.metadata),
                 level="ERROR",
+                start_time=timestamp,
+                end_time=timestamp,  # For errors, start and end time are the same
             )
         except Exception as e:
             logger.exception(f"Error creating span in Langfuse: {e}")
@@ -458,6 +591,9 @@ class LangfuseMonitor(BaseMonitor):
 
         trace_id = self.active_traces[conversation_id]
 
+        # Get the timestamp for the event
+        timestamp = event_data.timestamp
+
         # Create a span for the event using the new API
         try:
             span = await asyncio.to_thread(
@@ -466,6 +602,8 @@ class LangfuseMonitor(BaseMonitor):
                 name=event_data.event_type.value,
                 input=self._sanitize_data(event_data.data),
                 metadata=self._sanitize_metadata(event_data.metadata),
+                start_time=timestamp,
+                end_time=timestamp,  # For generic events, start and end time are the same
             )
         except Exception as e:
             logger.exception(f"Error creating span in Langfuse: {e}")
@@ -479,6 +617,7 @@ class LangfuseMonitor(BaseMonitor):
         name: str,
         value: float,
         comment: Optional[str] = None,
+        user_id: Optional[str] = None,
     ) -> None:
         """
         Score a conversation in Langfuse.
@@ -488,11 +627,17 @@ class LangfuseMonitor(BaseMonitor):
             name: Name of the score
             value: Score value
             comment: Optional comment
+            user_id: Optional ID of the user
         """
         if not conversation_id or conversation_id not in self.active_traces:
             return None
 
         trace_id = self.active_traces[conversation_id]
+
+        # Create metadata with user information
+        metadata = {}
+        if user_id:
+            metadata["user_id"] = user_id
 
         # Create a score for the conversation using the new API
         try:
@@ -502,9 +647,50 @@ class LangfuseMonitor(BaseMonitor):
                 name=name,
                 value=value,
                 comment=comment,
+                metadata=metadata,
             )
         except Exception as e:
             logger.exception(f"Error creating score in Langfuse: {e}")
+            return None
+
+    async def add_user_feedback(
+        self,
+        conversation_id: str,
+        score: int,
+        comment: Optional[str] = None,
+        user_id: Optional[str] = None,
+    ) -> None:
+        """
+        Add user feedback to a conversation in Langfuse.
+
+        Args:
+            conversation_id: ID of the conversation
+            score: Feedback score (typically 1-5)
+            comment: Optional feedback comment
+            user_id: Optional ID of the user
+        """
+        if not conversation_id or conversation_id not in self.active_traces:
+            return None
+
+        trace_id = self.active_traces[conversation_id]
+
+        # Create metadata with user information
+        metadata = {}
+        if user_id:
+            metadata["user_id"] = user_id
+
+        # Create a score for the user feedback
+        try:
+            await asyncio.to_thread(
+                self.langfuse.score,
+                trace_id=trace_id,
+                name="user_feedback",
+                value=float(score),
+                comment=comment,
+                metadata=metadata,
+            )
+        except Exception as e:
+            logger.exception(f"Error creating user feedback in Langfuse: {e}")
             return None
 
     def _sanitize_text(self, text: str) -> str:

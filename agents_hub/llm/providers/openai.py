@@ -23,7 +23,7 @@ class OpenAIProvider(BaseLLM):
         model: str = "gpt-4o-mini",
         base_url: Optional[str] = None,
         embedding_model: str = "text-embedding-3-small",
-        **kwargs
+        **kwargs,
     ):
         """
         Initialize the OpenAI provider.
@@ -45,7 +45,7 @@ class OpenAIProvider(BaseLLM):
         tools: Optional[List[BaseTool]] = None,
         temperature: float = 0.7,
         max_tokens: int = 1000,
-        **kwargs
+        **kwargs,
     ) -> LLMResponse:
         """
         Generate a response from the OpenAI model.
@@ -70,7 +70,7 @@ class OpenAIProvider(BaseLLM):
                         "name": tool.name,
                         "description": tool.description,
                         "parameters": tool.parameters,
-                    }
+                    },
                 }
                 for tool in tools
             ]
@@ -82,7 +82,7 @@ class OpenAIProvider(BaseLLM):
             tools=openai_tools,
             temperature=temperature,
             max_tokens=max_tokens,
-            **kwargs
+            **kwargs,
         )
 
         # Extract the response content and tool calls
@@ -100,14 +100,20 @@ class OpenAIProvider(BaseLLM):
                 except json.JSONDecodeError:
                     arguments = tool_call.function.arguments
 
-                tool_calls.append({
-                    "id": tool_call.id,
-                    "type": "function",
-                    "function": {
-                        "name": tool_call.function.name,
-                        "arguments": json.dumps(arguments) if isinstance(arguments, dict) else arguments,
+                tool_calls.append(
+                    {
+                        "id": tool_call.id,
+                        "type": "function",
+                        "function": {
+                            "name": tool_call.function.name,
+                            "arguments": (
+                                json.dumps(arguments)
+                                if isinstance(arguments, dict)
+                                else arguments
+                            ),
+                        },
                     }
-                })
+                )
 
         return LLMResponse(
             content=content,
@@ -160,6 +166,17 @@ class OpenAIProvider(BaseLLM):
     def model_name(self) -> str:
         """
         Get the name of the model being used.
+
+        Returns:
+            Model name
+        """
+        return self._model
+
+    @property
+    def model(self) -> str:
+        """
+        Get the name of the model being used.
+        This property is used by the monitoring system.
 
         Returns:
             Model name
