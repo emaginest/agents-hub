@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LLM Integration - Agents Hub</title>
-    <meta name="description" content="Learn about LLM integration in Agents Hub and how to work with different language model providers.">
+    <meta name="description"
+        content="Learn about LLM integration in Agents Hub and how to work with different language model providers.">
     <meta name="keywords" content="AI, agents, LLM, integration, OpenAI, Claude, Gemini, Ollama">
     <meta name="author" content="Emaginest">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -21,8 +26,10 @@
             </div>
             <nav>
                 <ul class="main-nav">
-                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
-                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i> PyPI</a></li>
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
                 </ul>
             </nav>
             <div class="search-bar">
@@ -61,17 +68,18 @@
                         <li><a href="memory.html">Memory System</a></li>
                         <li><a href="orchestration.html">Orchestration</a></li>
                         <li><a href="tools.html">Tools</a></li>
+                        <li><a href="mcp.html">Model Context Protocol</a></li>
                         <li class="active"><a href="llm.html">LLM Integration</a></li>
                         <li><a href="moderation.html">Moderation</a></li>
                         <li><a href="monitoring.html">Monitoring</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="nav-section">
                     <h3>Development</h3>
                     <ul>
                         <li><a href="../development/contributing.html">Contributing</a></li>
-                        
+
                         <li><a href="../development/changelog.html">Changelog</a></li>
                     </ul>
                 </div>
@@ -84,11 +92,13 @@
                 <button title="Copy page URL"><i class="fas fa-link"></i></button>
             </div>
 
-            <p class="lead">Learn about LLM integration in Agents Hub, which provides a unified interface for working with different language model providers and models.</p>
+            <p class="lead">Learn about LLM integration in Agents Hub, which provides a unified interface for working
+                with different language model providers and models.</p>
 
             <h2 id="introduction">Introduction to LLM Integration</h2>
-            <p>Agents Hub is designed to be provider-agnostic, allowing you to use different language model providers and models based on your needs. The LLM integration system provides:</p>
-            
+            <p>Agents Hub is designed to be provider-agnostic, allowing you to use different language model providers
+                and models based on your needs. The LLM integration system provides:</p>
+
             <ul>
                 <li>A unified interface for different LLM providers</li>
                 <li>Support for multiple popular LLM providers (OpenAI, Claude, Google, etc.)</li>
@@ -97,7 +107,8 @@
                 <li>Extensibility for adding custom providers</li>
             </ul>
 
-            <p>This flexibility allows you to choose the best LLM for each agent based on capabilities, cost, and other factors.</p>
+            <p>This flexibility allows you to choose the best LLM for each agent based on capabilities, cost, and other
+                factors.</p>
 
             <h2 id="supported-providers">Supported Providers</h2>
             <p>Agents Hub supports several LLM providers out of the box:</p>
@@ -205,18 +216,18 @@ class CustomLLMProvider(BaseLLMProvider):
         self.model = model
         self.additional_params = kwargs
         self.client = self._initialize_client()
-        
+
     def _initialize_client(self):
         # Initialize the client for your LLM provider
         # This is just a placeholder
         return {"api_key": self.api_key}
-    
+
     async def generate(self, prompt, **kwargs):
         # Implement the actual API call to your LLM provider
         # This is just a placeholder
         response = await self._call_api(prompt, **kwargs)
         return response
-    
+
     async def _call_api(self, prompt, **kwargs):
         # Implement the specific API call logic
         # This is just a placeholder
@@ -406,13 +417,13 @@ class CustomLLMProvider(BaseLLMProvider):
         self.model = model
         self.base_url = "https://api.customllm.com/v1/completions"
         self.additional_params = kwargs
-    
+
     async def generate(self, prompt, **kwargs):
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json"
         }
-        
+
         data = {
             "model": self.model,
             "prompt": prompt,
@@ -420,7 +431,7 @@ class CustomLLMProvider(BaseLLMProvider):
             "temperature": kwargs.get("temperature", 0.7),
             **self.additional_params
         }
-        
+
         async with aiohttp.ClientSession() as session:
             async with session.post(self.base_url, headers=headers, json=data) as response:
                 if response.status == 200:
@@ -445,18 +456,18 @@ class StreamingLLMProvider(BaseLLMProvider):
         self.model = model
         self.base_url = "https://api.streamingllm.com/v1/completions"
         self.additional_params = kwargs
-    
+
     async def generate(self, prompt, **kwargs):
         # Non-streaming version
         return await self._generate_complete(prompt, **kwargs)
-    
+
     async def generate_streaming(self, prompt, callback, **kwargs):
         # Streaming version with callback
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json"
         }
-        
+
         data = {
             "model": self.model,
             "prompt": prompt,
@@ -465,7 +476,7 @@ class StreamingLLMProvider(BaseLLMProvider):
             "stream": True,
             **self.additional_params
         }
-        
+
         async with aiohttp.ClientSession() as session:
             async with session.post(self.base_url, headers=headers, json=data) as response:
                 if response.status == 200:
@@ -487,14 +498,14 @@ class StreamingLLMProvider(BaseLLMProvider):
                 else:
                     error_data = await response.text()
                     raise Exception(f"API call failed with status {response.status}: {error_data}")
-    
+
     async def _generate_complete(self, prompt, **kwargs):
         # Implementation for non-streaming version
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json"
         }
-        
+
         data = {
             "model": self.model,
             "prompt": prompt,
@@ -503,7 +514,7 @@ class StreamingLLMProvider(BaseLLMProvider):
             "stream": False,
             **self.additional_params
         }
-        
+
         async with aiohttp.ClientSession() as session:
             async with session.post(self.base_url, headers=headers, json=data) as response:
                 if response.status == 200:
@@ -546,9 +557,19 @@ class StreamingLLMProvider(BaseLLMProvider):
             </ul>
 
             <h2 id="conclusion">Conclusion</h2>
-            <p>The LLM integration system in Agents Hub provides a flexible, provider-agnostic way to work with different language models. By understanding the available providers, configuration options, and advanced features, you can choose the right LLM for each agent and optimize performance, cost, and reliability.</p>
+            <p>The LLM integration system in Agents Hub provides a flexible, provider-agnostic way to work with
+                different language models. By understanding the available providers, configuration options, and advanced
+                features, you can choose the right LLM for each agent and optimize performance, cost, and reliability.
+            </p>
 
-            <p>For practical examples of using different LLM providers, see the <a href="../tutorials/agent-workforce.html">Building Agent Workforces tutorial</a> and the <a href="../examples.html">Examples</a> page.</p>
+            <p>For practical examples of using different LLM providers, see the <a
+                    href="../tutorials/agent-workforce.html">Building Agent Workforces tutorial</a> and the <a
+                    href="../examples.html">Examples</a> page.</p>
+
+            <div class="pagination">
+                <a href="mcp.html" class="prev">← Model Context Protocol</a>
+                <a href="moderation.html" class="next">Moderation →</a>
+            </div>
 
             <div class="feedback-section">
                 <p>Was this page helpful?</p>
@@ -573,16 +594,17 @@ class StreamingLLMProvider(BaseLLMProvider):
                             <li><a href="../index.html">Introduction</a></li>
                             <li><a href="../quickstart.html">Quickstart</a></li>
                             <li><a href="../examples.html">Examples</a></li>
-                            
+
                         </ul>
                     </div>
                     <div class="footer-column">
                         <h4>Community</h4>
                         <ul>
                             <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
-                            <li><a href="https://github.com/emaginest/agents-hub/discussions" target="_blank">Discussions</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
                             <li><a href="../development/contributing.html">Contributing</a></li>
-                            
+
                         </ul>
                     </div>
                     <div class="footer-column">
@@ -590,7 +612,8 @@ class StreamingLLMProvider(BaseLLMProvider):
                         <ul>
                             <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
                             <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
-                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE" target="_blank">License</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
                             <li><a href="../privacy.html">Privacy Policy</a></li>
                         </ul>
                     </div>
@@ -604,4 +627,5 @@ class StreamingLLMProvider(BaseLLMProvider):
 
     <script src="../js/main.js"></script>
 </body>
+
 </html>

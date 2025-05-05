@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Context Protocol (MCP) - Agents Hub</title>
+
+    <meta name="description"
+        content="Learn about the Model Context Protocol (MCP) integration in Agents Hub and how to connect agents to external resources.">
+    <meta name="keywords" content="AI, agents, MCP, Model Context Protocol, tools, integration">
+    <meta name="author" content="Emaginest">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="../index.html">Agents-hub</a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Get Started</h3>
+                    <ul>
+                        <li><a href="../index.html">Introduction</a></li>
+                        <li><a href="../quickstart.html">Quickstart</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Tutorials</h3>
+                    <ul>
+                        <li><a href="../tutorials/agent-workforce.html">Building Agent Workforces</a></li>
+                        <li><a href="../tutorials/cognitive-agents.html">Cognitive Agents</a></li>
+                        <li><a href="../tutorials/rag-systems.html">Building RAG Systems</a></li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li><a href="index.html">Overview</a></li>
+                        <li><a href="architecture.html">Core Architecture</a></li>
+                        <li><a href="agents.html">Agents</a></li>
+                        <li><a href="cognitive.html">Cognitive Architecture</a></li>
+                        <li><a href="memory.html">Memory System</a></li>
+                        <li><a href="orchestration.html">Orchestration</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li class="active"><a href="mcp.html">Model Context Protocol</a></li>
+                        <li><a href="llm.html">LLM Integration</a></li>
+                        <li><a href="moderation.html">Moderation</a></li>
+                        <li><a href="monitoring.html">Monitoring</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3>Development</h3>
+                    <ul>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                        <li><a href="../development/changelog.html">Changelog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <h1>Model Context Protocol (MCP)</h1>
+            <div class="copy-button">
+                <button title="Copy page URL"><i class="fas fa-link"></i></button>
+            </div>
+
+            <p class="lead">Connect your agents to external resources using the Model Context Protocol (MCP).</p>
+
+            <h2 id="overview">Overview</h2>
+            <p>The Model Context Protocol (MCP) is a standardized protocol for connecting language models to external resources, tools, and capabilities. Agents Hub provides a robust implementation of the MCP client through the MCPTool, allowing agents to interact with MCP servers to access tools, resources, and prompts.</p>
+
+            <div class="info-box">
+                <p><strong>Note:</strong> The MCPTool requires the <code>mcp</code> package. Install it with <code>pip install mcp[cli]</code>.</p>
+            </div>
+
+            <h2 id="key-features">Key Features</h2>
+            <ul>
+                <li><strong>Multiple Transport Options:</strong> Connect to MCP servers using either stdio or SSE transport</li>
+                <li><strong>Resource Management:</strong> Proper resource cleanup with context manager support</li>
+                <li><strong>Error Handling:</strong> Robust error handling with detailed error messages</li>
+                <li><strong>Agent Integration:</strong> Seamless integration with Agents Hub agents</li>
+                <li><strong>Tool Operations:</strong> List and call tools provided by MCP servers</li>
+                <li><strong>Resource Operations:</strong> List and read resources from MCP servers</li>
+                <li><strong>Prompt Operations:</strong> List and use prompts from MCP servers</li>
+            </ul>
+
+            <h2 id="usage">Usage</h2>
+            <p>The MCPTool can be used in two ways: as an async context manager (recommended) or with manual cleanup.</p>
+
+            <h3 id="context-manager">Using as a Context Manager (Recommended)</h3>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import MCPTool
+
+# Create an MCP tool for filesystem access
+async with MCPTool(
+    server_name="filesystem",
+    server_command="npx",
+    server_args=["-y", "@modelcontextprotocol/server-filesystem", "./"],
+    transport="stdio",
+) as filesystem_tool:
+    # List available tools
+    tools_result = await filesystem_tool.run({"operation": "list_tools"})
+    
+    # Call a tool
+    tool_result = await filesystem_tool.run({
+        "operation": "call_tool",
+        "tool_name": "list_directory",
+        "tool_arguments": {"path": "./"},
+    })
+    
+    # Read a resource
+    resource_result = await filesystem_tool.run({
+        "operation": "read_resource",
+        "resource_path": "file://./README.md",
+    })
+</code></pre>
+            </div>
+
+            <h3 id="manual-cleanup">Using with Manual Cleanup</h3>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import MCPTool
+
+# Create an MCP tool for filesystem access
+filesystem_tool = MCPTool(
+    server_name="filesystem",
+    server_command="npx",
+    server_args=["-y", "@modelcontextprotocol/server-filesystem", "./"],
+    transport="stdio",
+)
+
+try:
+    # List available tools
+    tools_result = await filesystem_tool.run({"operation": "list_tools"})
+    
+    # Call a tool
+    tool_result = await filesystem_tool.run({
+        "operation": "call_tool",
+        "tool_name": "list_directory",
+        "tool_arguments": {"path": "./"},
+    })
+finally:
+    # Always close the tool to clean up resources
+    await filesystem_tool.close()
+</code></pre>
+            </div>
+
+            <h2 id="agent-integration">Agent Integration</h2>
+            <p>The MCPTool can be integrated with agents to provide them with access to external resources:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.tools.standard import MCPTool
+
+# Create an MCP tool
+mcp_tool = MCPTool(
+    server_name="example-server",
+    server_url="http://localhost:8000/sse",
+    transport="sse",
+)
+
+try:
+    # Create an agent with the MCP tool
+    agent = Agent(
+        name="mcp_agent",
+        llm=OpenAIProvider(api_key="your-api-key", model="gpt-4o"),
+        tools=[mcp_tool],
+        system_prompt=(
+            "You are an assistant that can use a custom MCP server to perform various operations. "
+            "You have access to a tool called mcp_example-server that can perform mathematical operations "
+            "and provide weather information."
+        ),
+    )
+    
+    # Use the agent
+    response = await agent.run("What is 25 + 17?")
+    print(response)
+finally:
+    # Always close the tool to clean up resources
+    await mcp_tool.close()
+</code></pre>
+            </div>
+
+            <h2 id="transport-options">Transport Options</h2>
+            <p>The MCPTool supports two transport options:</p>
+
+            <h3 id="stdio-transport">stdio Transport</h3>
+            <p>The stdio transport launches an MCP server as a subprocess and communicates with it using standard input/output:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import MCPTool
+
+# Create an MCP tool using stdio transport
+stdio_tool = MCPTool(
+    server_name="filesystem",
+    server_command="npx",
+    server_args=["-y", "@modelcontextprotocol/server-filesystem", "./"],
+    transport="stdio",
+)
+</code></pre>
+            </div>
+
+            <h3 id="sse-transport">SSE Transport</h3>
+            <p>The SSE transport connects to an existing MCP server using Server-Sent Events:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import MCPTool
+
+# Create an MCP tool using SSE transport
+sse_tool = MCPTool(
+    server_name="custom-server",
+    server_url="http://localhost:8000/sse",
+    transport="sse",
+)
+</code></pre>
+            </div>
+
+            <h2 id="operations">Operations</h2>
+            <p>The MCPTool supports the following operations:</p>
+
+            <h3 id="list-tools">List Tools</h3>
+            <div class="code-block">
+                <pre><code>tools_result = await mcp_tool.run({"operation": "list_tools"})</code></pre>
+            </div>
+
+            <h3 id="call-tool">Call Tool</h3>
+            <div class="code-block">
+                <pre><code>tool_result = await mcp_tool.run({
+    "operation": "call_tool",
+    "tool_name": "add",
+    "tool_arguments": {"a": 5, "b": 3},
+})</code></pre>
+            </div>
+
+            <h3 id="list-resources">List Resources</h3>
+            <div class="code-block">
+                <pre><code>resources_result = await mcp_tool.run({"operation": "list_resources"})</code></pre>
+            </div>
+
+            <h3 id="read-resource">Read Resource</h3>
+            <div class="code-block">
+                <pre><code>resource_result = await mcp_tool.run({
+    "operation": "read_resource",
+    "resource_path": "file://./README.md",
+})</code></pre>
+            </div>
+
+            <h3 id="list-prompts">List Prompts</h3>
+            <div class="code-block">
+                <pre><code>prompts_result = await mcp_tool.run({"operation": "list_prompts"})</code></pre>
+            </div>
+
+            <h3 id="get-prompt">Get Prompt</h3>
+            <div class="code-block">
+                <pre><code>prompt_result = await mcp_tool.run({
+    "operation": "get_prompt",
+    "prompt_name": "greeting",
+    "prompt_arguments": {"name": "John"},
+})</code></pre>
+            </div>
+
+            <h2 id="error-handling">Error Handling</h2>
+            <p>The MCPTool provides detailed error information when operations fail:</p>
+            <div class="code-block">
+                <pre><code>result = await mcp_tool.run({
+    "operation": "call_tool",
+    "tool_name": "non_existent_tool",
+    "tool_arguments": {},
+})
+
+if "error" in result:
+    print(f"Error: {result['error']}")
+    print(f"Status: {result['status']}")
+    print(f"Operation: {result['operation']}")
+</code></pre>
+            </div>
+
+            <h2 id="examples">Examples</h2>
+            <p>Check out the following examples to learn more about using the MCPTool:</p>
+            <ul>
+                <li><a href="../examples.html#mcp-agent">MCP Agent Example</a> - Using an agent with an MCP tool</li>
+                <li><a href="../examples.html#mcp-server">MCP Server Example</a> - Creating a custom MCP server</li>
+            </ul>
+
+            <div class="pagination">
+                <a href="tools.html" class="prev">← Tools</a>
+                <a href="llm.html" class="next">LLM Integration →</a>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Agents Hub</h3>
+                    <p>An advanced agent orchestration framework</p>
+                    <p>&copy; 2025 Emaginest. All rights reserved.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Links</h3>
+                    <ul>
+                        <li><a href="https://github.com/emaginest/agents-hub">GitHub</a></li>
+                        <li><a href="https://pypi.org/project/agents-hub/">PyPI</a></li>
+                        <li><a href="https://emaginest.com">Emaginest</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="../index.html">Documentation</a></li>
+                        <li><a href="../examples.html">Examples</a></li>
+                        <li><a href="../development/contributing.html">Contributing</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/scripts.js"></script>
+</body>
+
+</html>

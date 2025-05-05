@@ -62,12 +62,14 @@
                 <div class="nav-section">
                     <h3>Core Concepts</h3>
                     <ul>
+                        <li><a href="../concepts/index.html">Overview</a></li>
                         <li><a href="../concepts/architecture.html">Core Architecture</a></li>
                         <li><a href="../concepts/agents.html">Agents</a></li>
                         <li><a href="../concepts/cognitive.html">Cognitive Architecture</a></li>
                         <li><a href="../concepts/memory.html">Memory System</a></li>
                         <li><a href="../concepts/orchestration.html">Orchestration</a></li>
                         <li><a href="../concepts/tools.html">Tools</a></li>
+                        <li><a href="../concepts/mcp.html">Model Context Protocol</a></li>
                         <li><a href="../concepts/llm.html">LLM Integration</a></li>
                         <li><a href="../concepts/moderation.html">Moderation</a></li>
                         <li><a href="../concepts/monitoring.html">Monitoring</a></li>
@@ -94,8 +96,62 @@
             <p class="lead">View the history of changes and updates to the Agents Hub framework.</p>
 
             <div class="info-box">
-                <p><strong>Latest:</strong> Version 0.1.1 released on April 17, 2025.</p>
+                <p><strong>Latest:</strong> Version 0.1.2 released on April 25, 2025.</p>
             </div>
+
+            <h2 id="0-1-2">Version 0.1.2 (April 25, 2025)</h2>
+
+            <h3>Added</h3>
+            <ul>
+                <li>WebSearchTool for searching the web using the Tavily API
+                    <ul>
+                        <li>Basic and advanced search capabilities</li>
+                        <li>Customizable results with domain filtering</li>
+                        <li>Answer generation based on search results</li>
+                        <li>RAG integration with context generation</li>
+                        <li>Direct question answering functionality</li>
+                    </ul>
+                </li>
+                <li>PlaywrightScraperTool for advanced web scraping of JavaScript-heavy websites
+                    <ul>
+                        <li>JavaScript rendering capabilities</li>
+                        <li>Anti-detection techniques to avoid scraping blocks</li>
+                        <li>Dynamic interaction with websites through JavaScript scenarios</li>
+                        <li>Resource blocking for improved performance</li>
+                        <li>Infinite scroll handling for lazy-loaded content</li>
+                    </ul>
+                </li>
+                <li>Enhanced MCPTool with improved resource management and error handling
+                    <ul>
+                        <li>Added async context manager support for clean resource management</li>
+                        <li>Improved error handling with detailed error messages</li>
+                        <li>Added proper cleanup of resources to prevent memory leaks</li>
+                        <li>Enhanced agent integration with better parameter handling</li>
+                        <li>Added comprehensive examples demonstrating MCP usage patterns</li>
+                    </ul>
+                </li>
+                <li>New examples demonstrating the WebSearchTool, PlaywrightScraperTool, and MCPTool capabilities</li>
+                <li>Added dedicated MCP documentation page with detailed usage examples</li>
+                <li>Updated documentation with detailed information about all new tools</li>
+            </ul>
+
+            <h3>Changed</h3>
+            <ul>
+                <li>Increased default timeout for web operations to improve reliability</li>
+                <li>Enhanced error handling in web-related tools</li>
+                <li>Updated requirements to include Playwright, Tavily, and MCP dependencies</li>
+                <li>Improved documentation for web-related tools with detailed examples</li>
+                <li>Refactored MCPTool to better handle agent integration and resource management</li>
+            </ul>
+
+            <h3>Fixed</h3>
+            <ul>
+                <li>Fixed resource cleanup issues in MCPTool to prevent memory leaks</li>
+                <li>Fixed parameter handling in MCPTool to work correctly with agents</li>
+                <li>Improved error messages for common web scraping issues</li>
+                <li>Added better handling of timeouts in network operations</li>
+                <li>Fixed error handling in MCP server connections</li>
+            </ul>
 
             <h2 id="unreleased">Unreleased</h2>
             <p>Features planned for future releases:</p>

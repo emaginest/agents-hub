@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moderation - Agents Hub</title>
-    <meta name="description" content="Learn about content moderation in Agents Hub for ensuring safe and appropriate agent interactions.">
+    <meta name="description"
+        content="Learn about content moderation in Agents Hub for ensuring safe and appropriate agent interactions.">
     <meta name="keywords" content="AI, agents, LLM, moderation, content filtering, safety">
     <meta name="author" content="Emaginest">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -21,8 +26,10 @@
             </div>
             <nav>
                 <ul class="main-nav">
-                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
-                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i> PyPI</a></li>
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
                 </ul>
             </nav>
             <div class="search-bar">
@@ -61,17 +68,18 @@
                         <li><a href="memory.html">Memory System</a></li>
                         <li><a href="orchestration.html">Orchestration</a></li>
                         <li><a href="tools.html">Tools</a></li>
+                        <li><a href="mcp.html">Model Context Protocol</a></li>
                         <li><a href="llm.html">LLM Integration</a></li>
                         <li class="active"><a href="moderation.html">Moderation</a></li>
                         <li><a href="monitoring.html">Monitoring</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="nav-section">
                     <h3>Development</h3>
                     <ul>
                         <li><a href="../development/contributing.html">Contributing</a></li>
-                        
+
                         <li><a href="../development/changelog.html">Changelog</a></li>
                     </ul>
                 </div>
@@ -84,11 +92,13 @@
                 <button title="Copy page URL"><i class="fas fa-link"></i></button>
             </div>
 
-            <p class="lead">Learn about content moderation in Agents Hub, which helps ensure that agent interactions are safe, appropriate, and aligned with your organization's policies.</p>
+            <p class="lead">Learn about content moderation in Agents Hub, which helps ensure that agent interactions are
+                safe, appropriate, and aligned with your organization's policies.</p>
 
             <h2 id="introduction">Introduction to Moderation</h2>
-            <p>Content moderation in Agents Hub provides mechanisms to filter, flag, and modify agent inputs and outputs to ensure they meet safety and appropriateness standards. The moderation system helps:</p>
-            
+            <p>Content moderation in Agents Hub provides mechanisms to filter, flag, and modify agent inputs and outputs
+                to ensure they meet safety and appropriateness standards. The moderation system helps:</p>
+
             <ul>
                 <li>Prevent harmful, offensive, or inappropriate content</li>
                 <li>Detect and block jailbreak attempts</li>
@@ -97,7 +107,8 @@
                 <li>Ensure compliance with legal and ethical standards</li>
             </ul>
 
-            <p>By implementing robust moderation, you can create safer, more reliable agent applications that align with your values and requirements.</p>
+            <p>By implementing robust moderation, you can create safer, more reliable agent applications that align with
+                your values and requirements.</p>
 
             <h2 id="moderation-architecture">Moderation Architecture</h2>
             <p>The moderation system in Agents Hub follows a layered architecture:</p>
@@ -115,7 +126,8 @@
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
             </div>
 
-            <p>These components work together to provide comprehensive moderation throughout the agent interaction lifecycle.</p>
+            <p>These components work together to provide comprehensive moderation throughout the agent interaction
+                lifecycle.</p>
 
             <h2 id="content-moderator">Content Moderator</h2>
             <p>The primary interface for moderation in Agents Hub is the ContentModerator:</p>
@@ -302,18 +314,18 @@ class CustomModerationProvider(BaseModerationProvider):
     def __init__(self, api_key, base_url="https://api.custommod.com/v1/moderate"):
         self.api_key = api_key
         self.base_url = base_url
-    
+
     async def moderate_content(self, content, content_type="text"):
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json"
         }
-        
+
         data = {
             "content": content,
             "content_type": content_type
         }
-        
+
         async with aiohttp.ClientSession() as session:
             async with session.post(self.base_url, headers=headers, json=data) as response:
                 if response.status == 200:
@@ -416,7 +428,7 @@ response = await agent.run("Tell me about reproductive health.")
             "action": "block",
             "message": "Content related to creating dangerous devices is not permitted."
         },
-        
+
         # Replace sensitive information
         {
             "pattern": r"\b\d{3}-\d{2}-\d{4}\b",  # Social Security Number format
@@ -424,14 +436,14 @@ response = await agent.run("Tell me about reproductive health.")
             "replacement": "[SSN REDACTED]",
             "message": "Social Security Numbers have been redacted for privacy."
         },
-        
+
         # Warn about potentially sensitive topics
         {
             "pattern": r"(depression|anxiety|suicide)",
             "action": "warn",
             "message": "This content discusses mental health topics. If you're experiencing a crisis, please contact a mental health professional."
         },
-        
+
         # Log mentions of competitors
         {
             "pattern": r"(competitor1|competitor2|competitor3)",
@@ -461,12 +473,12 @@ response = await agent.run("Tell me about reproductive health.")
             r"do not (behave|act) as an AI",
             r"respond as if you (were|are) not bound by",
             r"output the (following|next) text verbatim",
-            
+
             # Prompt injection patterns
             r"your new instructions are",
             r"your system prompt is now",
             r"from now on you will",
-            
+
             # Evasion patterns
             r"sp+e+l+l+i+n+g errors (to|that) (bypass|avoid)",
             r"(split|break) (words|letters|characters) (to|that) (bypass|avoid)"
@@ -483,7 +495,8 @@ response = await agent.run("Tell me about reproductive health.")
 
             <h3 id="layered-approach">Layered Approach</h3>
             <ul>
-                <li>Implement multiple layers of moderation (input filtering, output filtering, jailbreak detection)</li>
+                <li>Implement multiple layers of moderation (input filtering, output filtering, jailbreak detection)
+                </li>
                 <li>Combine rule-based and AI-based moderation for better coverage</li>
                 <li>Use both pre-processing (before LLM) and post-processing (after LLM) moderation</li>
             </ul>
@@ -512,9 +525,18 @@ response = await agent.run("Tell me about reproductive health.")
             </ul>
 
             <h2 id="conclusion">Conclusion</h2>
-            <p>Content moderation is a critical component of responsible AI deployment. Agents Hub provides a comprehensive moderation system that helps ensure agent interactions are safe, appropriate, and aligned with your organization's policies. By implementing effective moderation, you can build more trustworthy and reliable agent applications.</p>
+            <p>Content moderation is a critical component of responsible AI deployment. Agents Hub provides a
+                comprehensive moderation system that helps ensure agent interactions are safe, appropriate, and aligned
+                with your organization's policies. By implementing effective moderation, you can build more trustworthy
+                and reliable agent applications.</p>
 
-            <p>For more information on monitoring agent behavior, see the <a href="monitoring.html">Monitoring</a> section.</p>
+            <p>For more information on monitoring agent behavior, see the <a href="monitoring.html">Monitoring</a>
+                section.</p>
+
+            <div class="pagination">
+                <a href="llm.html" class="prev">← LLM Integration</a>
+                <a href="monitoring.html" class="next">Monitoring →</a>
+            </div>
 
             <div class="feedback-section">
                 <p>Was this page helpful?</p>
@@ -539,16 +561,17 @@ response = await agent.run("Tell me about reproductive health.")
                             <li><a href="../index.html">Introduction</a></li>
                             <li><a href="../quickstart.html">Quickstart</a></li>
                             <li><a href="../examples.html">Examples</a></li>
-                            
+
                         </ul>
                     </div>
                     <div class="footer-column">
                         <h4>Community</h4>
                         <ul>
                             <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
-                            <li><a href="https://github.com/emaginest/agents-hub/discussions" target="_blank">Discussions</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
                             <li><a href="../development/contributing.html">Contributing</a></li>
-                            
+
                         </ul>
                     </div>
                     <div class="footer-column">
@@ -556,7 +579,8 @@ response = await agent.run("Tell me about reproductive health.")
                         <ul>
                             <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
                             <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
-                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE" target="_blank">License</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
                             <li><a href="../privacy.html">Privacy Policy</a></li>
                         </ul>
                     </div>
@@ -570,4 +594,5 @@ response = await agent.run("Tell me about reproductive health.")
 
     <script src="../js/main.js"></script>
 </body>
+
 </html>

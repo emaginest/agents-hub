@@ -140,10 +140,10 @@ class PGVector(BaseTool):
         }
 
         # Log connection parameters for debugging (without password)
-        debug_params = self.connection_params.copy()
-        if "password" in debug_params:
-            debug_params["password"] = "*****"
-        logger.info(f"PGVector initialized with connection parameters: {debug_params}")
+        # debug_params = self.connection_params.copy()
+        # if "password" in debug_params:
+        #     debug_params["password"] = "*****"
+        logger.info(f"PGVector initialized")
 
         self.schema = schema
         self.embedding_dimension = embedding_dimension
@@ -155,12 +155,10 @@ class PGVector(BaseTool):
         """Initialize the database schema."""
         try:
             # Log connection attempt
-            debug_params = self.connection_params.copy()
-            if "password" in debug_params:
-                debug_params["password"] = "*****"
-            logger.info(
-                f"Attempting to connect to PostgreSQL with parameters: {debug_params}"
-            )
+            # debug_params = self.connection_params.copy()
+            # if "password" in debug_params:
+            #     debug_params["password"] = "*****"
+            logger.info(f"Attempting to connect to PostgreSQL")
 
             with psycopg2.connect(**self.connection_params) as conn:
                 with conn.cursor() as cur:

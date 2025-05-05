@@ -38,6 +38,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cleaned up temporary and generated files
 - Fixed import statements to reflect the new structure
 
+## [0.1.2] - 2025-04-20
+
+### Added
+- Recursive character text splitter with configurable chunk size, chunk overlap, and custom separators
+- Enhanced RAG capabilities for document ingestion (PDFs, docs, URLs)
+- Improved monitoring with Langfuse integration for tracking costs and user IDs
+
+### Changed
+- Updated LLM provider interfaces to expose model property for better monitoring
+- Enhanced monitoring system to track latency accurately
+- Improved error handling in document processing utilities
+
+### Fixed
+- Fixed latency tracking in Langfuse monitoring to show accurate values
+- Fixed cost tracking for different LLM providers (OpenAI, Claude, Gemini)
+- Fixed model name detection for various model variants
+
 ## [0.1.1] - 2025-04-17
 
 ### Added

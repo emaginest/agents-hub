@@ -1,0 +1,8 @@
+# Core dependencies
+python-dotenv>=1.0.0
+openai>=1.0.0
+playwright>=1.40.0
+beautifulsoup4>=4.9.0
+
+# Install agents-hub in development mode
+-e ../..

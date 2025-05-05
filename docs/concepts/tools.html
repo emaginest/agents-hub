@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +12,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -21,8 +25,10 @@
             </div>
             <nav>
                 <ul class="main-nav">
-                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
-                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i> PyPI</a></li>
+                    <li><a href="https://github.com/emaginest/agents-hub" target="_blank"><i class="fab fa-github"></i>
+                            GitHub</a></li>
+                    <li><a href="https://pypi.org/project/agents-hub/" target="_blank"><i class="fab fa-python"></i>
+                            PyPI</a></li>
                 </ul>
             </nav>
             <div class="search-bar">
@@ -55,23 +61,25 @@
                 <div class="nav-section">
                     <h3>Core Concepts</h3>
                     <ul>
+                        <li><a href="index.html">Overview</a></li>
                         <li><a href="architecture.html">Core Architecture</a></li>
                         <li><a href="agents.html">Agents</a></li>
                         <li><a href="cognitive.html">Cognitive Architecture</a></li>
                         <li><a href="memory.html">Memory System</a></li>
                         <li><a href="orchestration.html">Orchestration</a></li>
                         <li class="active"><a href="tools.html">Tools</a></li>
+                        <li><a href="mcp.html">Model Context Protocol</a></li>
                         <li><a href="llm.html">LLM Integration</a></li>
                         <li><a href="moderation.html">Moderation</a></li>
                         <li><a href="monitoring.html">Monitoring</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="nav-section">
                     <h3>Development</h3>
                     <ul>
                         <li><a href="../development/contributing.html">Contributing</a></li>
-                        
+
                         <li><a href="../development/changelog.html">Changelog</a></li>
                     </ul>
                 </div>
@@ -84,11 +92,18 @@
                 <button title="Copy page URL"><i class="fas fa-link"></i></button>
             </div>
 
-            <p class="lead">Learn about the tools system in Agents Hub that extends agent capabilities, allowing them to interact with external systems, access information, and perform actions in the real world.</p>
+            <p class="lead">Learn about the tools system in Agents Hub that extends agent capabilities, allowing them to
+                interact with external systems, access information, and perform actions in the real world.</p>
+
+            <div class="info-box">
+                <p><strong>Note:</strong> Tools marked with <span class="badge">Coming Soon</span> are planned for
+                    future releases and are not yet implemented in the current version of Agents Hub.</p>
+            </div>
 
             <h2 id="introduction">Introduction to Tools</h2>
-            <p>Tools in Agents Hub are modular components that extend agent capabilities beyond simple text generation. They enable agents to:</p>
-            
+            <p>Tools in Agents Hub are modular components that extend agent capabilities beyond simple text generation.
+                They enable agents to:</p>
+
             <ul>
                 <li>Access external information (web search, databases, APIs)</li>
                 <li>Perform calculations and data processing</li>
@@ -98,7 +113,8 @@
                 <li>Interact with vector databases for retrieval-augmented generation (RAG)</li>
             </ul>
 
-            <p>The tools system is designed to be extensible, allowing you to create custom tools for specific use cases or integrate with existing systems.</p>
+            <p>The tools system is designed to be extensible, allowing you to create custom tools for specific use cases
+                or integrate with existing systems.</p>
 
             <h2 id="tool-architecture">Tool Architecture</h2>
             <p>The tools system in Agents Hub follows a consistent architecture:</p>
@@ -116,7 +132,7 @@ class CalculatorTool(BaseTool):
     name = "calculator"
     description = "Evaluate mathematical expressions"
     input_schema = CalculatorInput
-    
+
     async def _execute(self, expression: str) -> str:
         try:
             result = eval(expression)
@@ -129,7 +145,8 @@ class CalculatorTool(BaseTool):
             <p>Key components of a tool:</p>
             <ul>
                 <li><strong>name:</strong> A unique identifier for the tool</li>
-                <li><strong>description:</strong> A description of what the tool does (used by the LLM to decide when to use it)</li>
+                <li><strong>description:</strong> A description of what the tool does (used by the LLM to decide when to
+                    use it)</li>
                 <li><strong>input_schema:</strong> A Pydantic model defining the expected input parameters</li>
                 <li><strong>_execute:</strong> The method that implements the tool's functionality</li>
             </ul>
@@ -149,11 +166,11 @@ class CalculatorTool(BaseTool):
             <p>Agents Hub provides a set of standard tools for common tasks:</p>
 
             <h3 id="web-search">Web Search Tool</h3>
-            <p>Search the web for information:</p>
+            <p>Search the web for information using the Tavily API:</p>
             <div class="code-block">
                 <pre><code>from agents_hub.tools.standard import WebSearchTool
 
-search_tool = WebSearchTool(api_key="your-search-api-key")
+search_tool = WebSearchTool(api_key="your-tavily-api-key")
 
 agent = Agent(
     name="research_assistant",
@@ -164,6 +181,43 @@ agent = Agent(
 # The agent can now search the web
 response = await agent.run("What are the latest developments in quantum computing?")</code></pre>
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>The WebSearchTool provides powerful web search capabilities using the Tavily API:</p>
+            <ul>
+                <li><strong>Basic and Advanced Search:</strong> Choose between quick basic searches or more thorough
+                    advanced searches</li>
+                <li><strong>Customizable Results:</strong> Control the number of results and filter by domains</li>
+                <li><strong>Answer Generation:</strong> Optionally include AI-generated answers based on search results
+                </li>
+                <li><strong>RAG Integration:</strong> Generate formatted context for retrieval-augmented generation</li>
+                <li><strong>Direct QnA:</strong> Get direct answers to questions with a single method call</li>
+            </ul>
+
+            <p>Example of advanced usage with parameters:</p>
+            <div class="code-block">
+                <pre><code># Advanced search with parameters
+result = await web_search.run({
+    "query": "Climate change solutions",
+    "search_depth": "advanced",
+    "max_results": 3,
+    "exclude_domains": ["wikipedia.org"],
+    "include_answer": True,
+})
+
+# Generate search context for RAG applications
+context = web_search.get_search_context("Space exploration recent missions")
+
+# Get a direct answer to a question
+answer = web_search.qna_search("Who won the Nobel Prize in Physics in 2023?")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <div class="info-box">
+                <p><strong>Note:</strong> To use the WebSearchTool, you need to install the Tavily Python package with
+                    <code>pip install tavily-python</code> and get an API key from <a href="https://app.tavily.com"
+                        target="_blank">app.tavily.com</a>.
+                </p>
             </div>
 
             <h3 id="calculator">Calculator Tool</h3>
@@ -184,7 +238,7 @@ response = await agent.run("What is the square root of 144 plus 50?")</code></pr
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
             </div>
 
-            <h3 id="weather">Weather Tool</h3>
+            <h3 id="weather">Weather Tool <span class="badge">Coming Soon</span></h3>
             <p>Get weather information for a location:</p>
             <div class="code-block">
                 <pre><code>from agents_hub.tools.standard import WeatherTool
@@ -202,7 +256,7 @@ response = await agent.run("What's the weather like in San Francisco today?")</c
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
             </div>
 
-            <h3 id="wikipedia">Wikipedia Tool</h3>
+            <h3 id="wikipedia">Wikipedia Tool <span class="badge">Coming Soon</span></h3>
             <p>Search and retrieve information from Wikipedia:</p>
             <div class="code-block">
                 <pre><code>from agents_hub.tools.standard import WikipediaTool
@@ -220,10 +274,106 @@ response = await agent.run("Tell me about the history of artificial intelligence
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
             </div>
 
+            <h3 id="playwright-scraper">Playwright Scraper Tool</h3>
+            <p>Advanced web scraping for JavaScript-heavy websites using Playwright:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import PlaywrightScraperTool
+
+# Initialize the Playwright scraper tool
+playwright_scraper = PlaywrightScraperTool()
+
+# Create an agent with the Playwright scraper tool
+agent = Agent(
+    name="web_researcher",
+    llm=llm,
+    tools=[playwright_scraper],
+    system_prompt="You are a web researcher that can scrape and analyze content from JavaScript-heavy websites."
+)
+
+# The agent can now scrape dynamic websites
+response = await agent.run("Scrape and summarize the content from https://example.com")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>The PlaywrightScraperTool provides advanced capabilities for scraping JavaScript-heavy websites:</p>
+            <ul>
+                <li><strong>JavaScript Rendering:</strong> Fully renders JavaScript-powered websites</li>
+                <li><strong>Anti-Detection:</strong> Uses stealth mode to avoid being blocked by websites</li>
+                <li><strong>Dynamic Interaction:</strong> Can execute JavaScript scenarios to interact with websites
+                </li>
+                <li><strong>Resource Blocking:</strong> Improves performance by blocking unnecessary resources</li>
+                <li><strong>Infinite Scroll Handling:</strong> Can automatically scroll to load lazy-loaded content</li>
+            </ul>
+
+            <p>Example of advanced usage with JavaScript interaction:</p>
+            <div class="code-block">
+                <pre><code># Execute a JavaScript scenario (e.g., login to a website)
+result = await playwright_scraper.run({
+    "url": "https://example.com/login",
+    "extract_type": "text",
+    "js_scenario": [
+        {"click": {"selector": "#login-button"}},
+        {"fill": {"selector": "#username", "value": "testuser"}},
+        {"fill": {"selector": "#password", "value": "password123"}},
+        {"click": {"selector": "#submit-button"}},
+        {"wait_for_navigation": {"timeout": 5000}},
+    ],
+    "wait_for_selector": ".dashboard",
+    "timeout": 60000  # 60 seconds timeout
+})</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h3 id="mcp-tool">Model Context Protocol (MCP) Tool</h3>
+            <p>Connect to MCP servers to access external tools, resources, and prompts:</p>
+            <div class="code-block">
+                <pre><code>from agents_hub.tools.standard import MCPTool
+
+# Create an MCP tool using stdio transport
+filesystem_tool = MCPTool(
+    server_name="filesystem",
+    server_command="npx",
+    server_args=["-y", "@modelcontextprotocol/server-filesystem", "./"],
+    transport="stdio",
+)
+
+# Create an MCP tool using SSE transport
+sse_tool = MCPTool(
+    server_name="example-server",
+    server_url="http://localhost:8000/sse",
+    transport="sse",
+)
+
+# Create an agent with MCP tools
+agent = Agent(
+    name="mcp_agent",
+    llm=llm,
+    tools=[filesystem_tool, sse_tool],
+    system_prompt="You are an assistant that can access the filesystem and other external resources."
+)
+
+# The agent can now use MCP tools
+response = await agent.run("List the files in the current directory and summarize their contents.")</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <p>The MCPTool provides a standardized way to connect to MCP servers, which expose tools, resources, and
+                prompts:</p>
+            <ul>
+                <li><strong>Multiple Transport Options:</strong> Connect using stdio (subprocess) or SSE (HTTP)</li>
+                <li><strong>Resource Management:</strong> Proper resource cleanup with context manager support</li>
+                <li><strong>Tool Operations:</strong> List and call tools provided by MCP servers</li>
+                <li><strong>Resource Operations:</strong> List and read resources from MCP servers</li>
+                <li><strong>Prompt Operations:</strong> List and use prompts from MCP servers</li>
+            </ul>
+
+            <p>For more details on the Model Context Protocol integration, see the <a href="mcp.html">MCP
+                    documentation</a>.</p>
+
             <h2 id="specialized-tools">Specialized Tools</h2>
             <p>Agents Hub also provides specialized tools for specific use cases:</p>
 
-            <h3 id="pgvector-rag">PGVector RAG Tool</h3>
+            <h3 id="pgvector-rag">PGVector RAG Tool <span class="badge">Coming Soon</span></h3>
             <p>Implement retrieval-augmented generation with PostgreSQL and pgvector:</p>
             <div class="code-block">
                 <pre><code>from agents_hub.tools.rag import PGVectorRAGTool
@@ -246,7 +396,7 @@ response = await agent.run("What does our company policy say about remote work?"
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
             </div>
 
-            <h3 id="code-execution">Code Execution Tool</h3>
+            <h3 id="code-execution">Code Execution Tool <span class="badge">Coming Soon</span></h3>
             <p>Execute code in various languages:</p>
             <div class="code-block">
                 <pre><code>from agents_hub.tools.code import CodeExecutionTool
@@ -271,7 +421,7 @@ response = await agent.run("Write a Python function to calculate the Fibonacci s
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
             </div>
 
-            <h3 id="file-operations">File Operations Tool</h3>
+            <h3 id="file-operations">File Operations Tool <span class="badge">Coming Soon</span></h3>
             <p>Read, write, and manipulate files:</p>
             <div class="code-block">
                 <pre><code>from agents_hub.tools.file import FileOperationsTool
@@ -311,17 +461,17 @@ class TranslationTool(BaseTool):
     name = "translator"
     description = "Translate text from one language to another"
     input_schema = TranslationInput
-    
+
     def __init__(self, api_key):
         super().__init__()
         self.api_key = api_key
         self.client = self._initialize_client()
-    
+
     def _initialize_client(self):
         # Initialize your translation API client
         # This is just a placeholder
         return {"api_key": self.api_key}
-    
+
     async def _execute(self, text: str, source_language: str, target_language: str) -> str:
         # Implement the actual translation logic
         # This is just a placeholder
@@ -344,16 +494,16 @@ class StockPriceTool(BaseTool):
     name = "stock_price"
     description = "Get the current price of a stock"
     input_schema = StockPriceInput
-    
+
     def __init__(self, api_key):
         super().__init__()
         self.api_key = api_key
         self.base_url = "https://api.example.com/stocks"
-    
+
     async def _execute(self, symbol: str) -> str:
         url = f"{self.base_url}/{symbol}"
         headers = {"Authorization": f"Bearer {self.api_key}"}
-        
+
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers) as response:
                 if response.status == 200:
@@ -380,31 +530,31 @@ class DatabaseQueryTool(BaseTool):
     name = "database_query"
     description = "Query the company database for information"
     input_schema = QueryInput
-    
+
     def __init__(self, connection_string):
         super().__init__()
         self.connection_string = connection_string
         self.pool = None
-    
+
     async def initialize(self):
         self.pool = await asyncpg.create_pool(self.connection_string)
-    
+
     async def _execute(self, query_type: str, parameters: dict) -> str:
         if not self.pool:
             await self.initialize()
-        
+
         # Predefined safe queries
         queries = {
             "customer": "SELECT name, email, signup_date FROM customers WHERE customer_id = $1",
             "order": "SELECT order_id, order_date, status FROM orders WHERE customer_id = $1 ORDER BY order_date DESC LIMIT $2",
             "product": "SELECT name, price, category FROM products WHERE category = $1"
         }
-        
+
         if query_type not in queries:
             return f"Invalid query type: {query_type}"
-        
+
         query = queries[query_type]
-        
+
         try:
             if query_type == "customer":
                 async with self.pool.acquire() as conn:
@@ -413,7 +563,7 @@ class DatabaseQueryTool(BaseTool):
                         return f"Customer: {row['name']}, Email: {row['email']}, Signup Date: {row['signup_date']}"
                     else:
                         return "Customer not found"
-            
+
             elif query_type == "order":
                 async with self.pool.acquire() as conn:
                     rows = await conn.fetch(query, parameters.get("customer_id"), parameters.get("limit", 5))
@@ -424,7 +574,7 @@ class DatabaseQueryTool(BaseTool):
                         return result
                     else:
                         return "No orders found"
-            
+
             elif query_type == "product":
                 async with self.pool.acquire() as conn:
                     rows = await conn.fetch(query, parameters.get("category"))
@@ -435,7 +585,7 @@ class DatabaseQueryTool(BaseTool):
                         return result
                     else:
                         return "No products found"
-        
+
         except Exception as e:
             return f"Error executing query: {str(e)}"</code></pre>
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
@@ -452,7 +602,7 @@ from pydantic import BaseModel, Field, validator
 
 class SQLQueryInput(BaseModel):
     query: str = Field(..., description="The SQL query to execute")
-    
+
     @validator("query")
     def validate_query(cls, v):
         # Disallow potentially dangerous operations
@@ -473,19 +623,19 @@ from agents_hub.security import PermissionManager
 class SensitiveOperationTool(BaseTool):
     name = "sensitive_operation"
     description = "Perform a sensitive operation"
-    
+
     def __init__(self, permission_manager):
         super().__init__()
         self.permission_manager = permission_manager
-    
+
     async def _execute(self, **kwargs) -> str:
         # Check permissions before executing
         user_id = kwargs.get("user_id")
         operation = kwargs.get("operation")
-        
+
         if not await self.permission_manager.has_permission(user_id, f"sensitive_operation:{operation}"):
             return "Permission denied: You do not have access to this operation"
-        
+
         # Proceed with the operation if permitted
         return await self._perform_operation(operation)</code></pre>
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
@@ -500,19 +650,19 @@ from agents_hub.security import RateLimiter
 class APITool(BaseTool):
     name = "api_tool"
     description = "Access an external API"
-    
+
     def __init__(self, api_key, rate_limiter):
         super().__init__()
         self.api_key = api_key
         self.rate_limiter = rate_limiter
-    
+
     async def _execute(self, **kwargs) -> str:
         # Check rate limits before executing
         user_id = kwargs.get("user_id")
-        
+
         if not await self.rate_limiter.allow_request(user_id, self.name):
             return "Rate limit exceeded: Please try again later"
-        
+
         # Proceed with the API call if within rate limits
         return await self._call_api(**kwargs)</code></pre>
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
@@ -547,9 +697,17 @@ class APITool(BaseTool):
             </ul>
 
             <h2 id="conclusion">Conclusion</h2>
-            <p>The tools system in Agents Hub provides a powerful way to extend agent capabilities beyond simple text generation. By understanding how to use built-in tools and create custom tools, you can build agents that can interact with external systems, access information, and perform actions in the real world.</p>
+            <p>The tools system in Agents Hub provides a powerful way to extend agent capabilities beyond simple text
+                generation. By understanding how to use built-in tools and create custom tools, you can build agents
+                that can interact with external systems, access information, and perform actions in the real world.</p>
 
-            <p>For practical examples of using tools, see the <a href="../tutorials/rag-systems.html">Building RAG Systems tutorial</a> and the <a href="../examples.html">Examples</a> page.</p>
+            <p>For practical examples of using tools, see the <a href="../tutorials/rag-systems.html">Building RAG
+                    Systems tutorial</a> and the <a href="../examples.html">Examples</a> page.</p>
+
+            <div class="pagination">
+                <a href="orchestration.html" class="prev">← Orchestration</a>
+                <a href="mcp.html" class="next">Model Context Protocol →</a>
+            </div>
 
             <div class="feedback-section">
                 <p>Was this page helpful?</p>
@@ -574,16 +732,17 @@ class APITool(BaseTool):
                             <li><a href="../index.html">Introduction</a></li>
                             <li><a href="../quickstart.html">Quickstart</a></li>
                             <li><a href="../examples.html">Examples</a></li>
-                            
+
                         </ul>
                     </div>
                     <div class="footer-column">
                         <h4>Community</h4>
                         <ul>
                             <li><a href="https://github.com/emaginest/agents-hub" target="_blank">GitHub</a></li>
-                            <li><a href="https://github.com/emaginest/agents-hub/discussions" target="_blank">Discussions</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/discussions"
+                                    target="_blank">Discussions</a></li>
                             <li><a href="../development/contributing.html">Contributing</a></li>
-                            
+
                         </ul>
                     </div>
                     <div class="footer-column">
@@ -591,7 +750,8 @@ class APITool(BaseTool):
                         <ul>
                             <li><a href="https://emaginest.com" target="_blank">Emaginest</a></li>
                             <li><a href="https://pypi.org/project/agents-hub/" target="_blank">PyPI</a></li>
-                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE" target="_blank">License</a></li>
+                            <li><a href="https://github.com/emaginest/agents-hub/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
                             <li><a href="../privacy.html">Privacy Policy</a></li>
                         </ul>
                     </div>
@@ -605,4 +765,5 @@ class APITool(BaseTool):
 
     <script src="../js/main.js"></script>
 </body>
+
 </html>

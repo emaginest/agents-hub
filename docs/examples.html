@@ -60,6 +60,7 @@
                         <li><a href="concepts/memory.html">Memory System</a></li>
                         <li><a href="concepts/orchestration.html">Orchestration</a></li>
                         <li><a href="concepts/tools.html">Tools</a></li>
+                        <li><a href="concepts/mcp.html">Model Context Protocol</a></li>
                         <li><a href="concepts/llm.html">LLM Integration</a></li>
                         <li><a href="concepts/moderation.html">Moderation</a></li>
                         <li><a href="concepts/monitoring.html">Monitoring</a></li>
@@ -458,6 +459,149 @@ async def main():
     print(f"Response: {response}")
 
 if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="playwright-scraper">Advanced Web Scraping</h2>
+            <p>This example demonstrates how to use the PlaywrightScraperTool for advanced web scraping of
+                JavaScript-heavy websites:</p>
+            <div class="code-block">
+                <pre><code>import asyncio
+import os
+from dotenv import load_dotenv
+
+from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.tools.standard import PlaywrightScraperTool
+
+# Load environment variables
+load_dotenv()
+
+# Initialize LLM provider
+llm = OpenAIProvider(api_key=os.getenv("OPENAI_API_KEY"))
+
+# Initialize the Playwright scraper tool
+playwright_scraper = PlaywrightScraperTool()
+
+async def main():
+    # Create an agent with the Playwright scraper tool
+    agent = Agent(
+        name="web_researcher",
+        llm=llm,
+        tools=[playwright_scraper],
+        system_prompt="You are a web researcher that can scrape and analyze content from JavaScript-heavy websites."
+    )
+
+    # Use the agent to scrape a JavaScript-heavy website
+    print("Asking agent to scrape and analyze a website...")
+    response = await agent.run("Scrape and summarize the content from https://developer.mozilla.org/en-US/docs/Learn/Python")
+    print(f"Agent response: {response}")
+
+    # Direct usage of the tool for more control
+    print("\nDirect tool usage with JavaScript interaction:")
+    result = await playwright_scraper.run({
+        "url": "https://github.com/trending",
+        "extract_type": "text",
+        "selector": "article.Box-row h1",
+        "wait_for_selector": "article.Box-row",
+        "timeout": 60000,  # 60 seconds timeout
+        "js_scenario": [
+            # Select the "Python" language from the dropdown
+            {"click": {"selector": "[data-hovercard-type='language']"}},
+            {"wait_for_selector": {"selector": "a[href='/trending/python']"}},
+            {"click": {"selector": "a[href='/trending/python']"}},
+            {"wait_for_navigation": {"timeout": 5000}},
+        ],
+    })
+
+    if "error" in result:
+        print(f"Error: {result['error']}")
+    else:
+        print(f"Trending Python repositories: {result['text'][:500]}...")
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+                <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
+            </div>
+
+            <h2 id="mcp-agent">Model Context Protocol (MCP) Integration</h2>
+            <p>This example demonstrates how to use the MCPTool to connect agents to external resources:</p>
+            <div class="code-block">
+                <pre><code>import os
+import asyncio
+from dotenv import load_dotenv
+
+from agents_hub import Agent
+from agents_hub.llm.providers import OpenAIProvider
+from agents_hub.tools.standard import MCPTool
+
+# Load environment variables
+load_dotenv()
+
+async def main():
+    # Initialize LLM provider
+    llm = OpenAIProvider(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+        model="gpt-4o"
+    )
+
+    # Create an MCP tool using SSE transport
+    # The tool name will be "mcp_example-server" (prefix "mcp_" is added automatically)
+    mcp_tool = MCPTool(
+        server_name="example-server",
+        server_url="http://localhost:8000/sse",
+        transport="sse",
+    )
+
+    try:
+        # Create an agent with the MCP tool
+        agent = Agent(
+            name="mcp_agent",
+            llm=llm,
+            tools=[mcp_tool],
+            system_prompt=(
+                "You are an assistant that can use a custom MCP server to perform various operations. "
+                "You have access to a tool called mcp_example-server that can perform mathematical operations "
+                "and provide weather information."
+            ),
+        )
+
+        # Use the agent to add two numbers
+        print("Asking agent to add two numbers...")
+        query = "What is 25 + 17? Use the mcp_example-server tool to calculate this."
+        print(f"Query: {query}")
+        response = await agent.run(query)
+        print(f"Agent response: {response}")
+
+        # Use the agent to multiply two numbers
+        print("\nAsking agent to multiply two numbers...")
+        query = "What is 8 × 12? Use the mcp_example-server tool to calculate this."
+        print(f"Query: {query}")
+        response = await agent.run(query)
+        print(f"Agent response: {response}")
+
+        # Use the agent to get weather information
+        print("\nAsking agent to get weather information...")
+        query = "What's the weather like in Tokyo? Use the mcp_example-server tool to find out."
+        print(f"Query: {query}")
+        response = await agent.run(query)
+        print(f"Agent response: {response}")
+
+        # Use the agent for a more complex task
+        print("\nAsking agent to perform a more complex task...")
+        query = "Calculate the area of a circle with radius 5 and then get the weather in London."
+        print(f"Query: {query}")
+        response = await agent.run(query)
+        print(f"Agent response: {response}")
+
+    finally:
+        # Always close the MCP tool to clean up resources
+        await mcp_tool.close()
+
+if __name__ == "__main__":
+    # Before running this example, start the MCP server with:
+    # python examples/tools/mcp_server_example.py --transport sse
     asyncio.run(main())</code></pre>
                 <button class="copy-code" title="Copy code"><i class="fas fa-copy"></i></button>
             </div>
