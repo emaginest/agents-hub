@@ -38,6 +38,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cleaned up temporary and generated files
 - Fixed import statements to reflect the new structure
 
+## [0.1.3] - 2025-04-25
+
+### Added
+- Enhanced MCPTool with improved resource management and error handling
+  - Added async context manager support for clean resource management
+  - Added proper cleanup of resources to prevent memory leaks
+  - Added comprehensive examples demonstrating MCP usage patterns
+- New dedicated MCP documentation page with detailed usage examples
+- Updated all HTML documentation to include MCP navigation links
+- Added MCP example to the examples page
+
+### Changed
+- Refactored MCPTool to better handle agent integration
+  - Improved parameter handling for agent tool integration
+  - Enhanced error reporting with detailed error messages
+  - Better handling of tool name prefixing
+- Updated examples to print both queries and responses for better readability
+- Improved documentation structure with consistent navigation
+
+### Fixed
+- Fixed resource cleanup issues in MCPTool to prevent memory leaks
+- Fixed parameter handling in MCPTool to work correctly with agents
+- Fixed error handling in MCP server connections
+- Fixed pagination links in documentation for better navigation
+
 ## [0.1.2] - 2025-04-20
 
 ### Added

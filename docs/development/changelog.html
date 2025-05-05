@@ -96,10 +96,47 @@
             <p class="lead">View the history of changes and updates to the Agents Hub framework.</p>
 
             <div class="info-box">
-                <p><strong>Latest:</strong> Version 0.1.2 released on April 25, 2025.</p>
+                <p><strong>Latest:</strong> Version 0.1.3 released on April 25, 2025.</p>
             </div>
 
-            <h2 id="0-1-2">Version 0.1.2 (April 25, 2025)</h2>
+            <h2 id="0-1-3">Version 0.1.3 (April 25, 2025)</h2>
+
+            <h3>Added</h3>
+            <ul>
+                <li>Enhanced MCPTool with improved resource management and error handling
+                    <ul>
+                        <li>Added async context manager support for clean resource management</li>
+                        <li>Added proper cleanup of resources to prevent memory leaks</li>
+                        <li>Added comprehensive examples demonstrating MCP usage patterns</li>
+                    </ul>
+                </li>
+                <li>New dedicated MCP documentation page with detailed usage examples</li>
+                <li>Updated all HTML documentation to include MCP navigation links</li>
+                <li>Added MCP example to the examples page</li>
+            </ul>
+
+            <h3>Changed</h3>
+            <ul>
+                <li>Refactored MCPTool to better handle agent integration
+                    <ul>
+                        <li>Improved parameter handling for agent tool integration</li>
+                        <li>Enhanced error reporting with detailed error messages</li>
+                        <li>Better handling of tool name prefixing</li>
+                    </ul>
+                </li>
+                <li>Updated examples to print both queries and responses for better readability</li>
+                <li>Improved documentation structure with consistent navigation</li>
+            </ul>
+
+            <h3>Fixed</h3>
+            <ul>
+                <li>Fixed resource cleanup issues in MCPTool to prevent memory leaks</li>
+                <li>Fixed parameter handling in MCPTool to work correctly with agents</li>
+                <li>Fixed error handling in MCP server connections</li>
+                <li>Fixed pagination links in documentation for better navigation</li>
+            </ul>
+
+            <h2 id="0-1-2">Version 0.1.2 (April 20, 2025)</h2>
 
             <h3>Added</h3>
             <ul>
@@ -121,36 +158,22 @@
                         <li>Infinite scroll handling for lazy-loaded content</li>
                     </ul>
                 </li>
-                <li>Enhanced MCPTool with improved resource management and error handling
-                    <ul>
-                        <li>Added async context manager support for clean resource management</li>
-                        <li>Improved error handling with detailed error messages</li>
-                        <li>Added proper cleanup of resources to prevent memory leaks</li>
-                        <li>Enhanced agent integration with better parameter handling</li>
-                        <li>Added comprehensive examples demonstrating MCP usage patterns</li>
-                    </ul>
-                </li>
-                <li>New examples demonstrating the WebSearchTool, PlaywrightScraperTool, and MCPTool capabilities</li>
-                <li>Added dedicated MCP documentation page with detailed usage examples</li>
-                <li>Updated documentation with detailed information about all new tools</li>
+                <li>New examples demonstrating the WebSearchTool and PlaywrightScraperTool capabilities</li>
+                <li>Updated documentation with detailed information about the new web tools</li>
             </ul>
 
             <h3>Changed</h3>
             <ul>
                 <li>Increased default timeout for web operations to improve reliability</li>
                 <li>Enhanced error handling in web-related tools</li>
-                <li>Updated requirements to include Playwright, Tavily, and MCP dependencies</li>
+                <li>Updated requirements to include Playwright and Tavily dependencies</li>
                 <li>Improved documentation for web-related tools with detailed examples</li>
-                <li>Refactored MCPTool to better handle agent integration and resource management</li>
             </ul>
 
             <h3>Fixed</h3>
             <ul>
-                <li>Fixed resource cleanup issues in MCPTool to prevent memory leaks</li>
-                <li>Fixed parameter handling in MCPTool to work correctly with agents</li>
                 <li>Improved error messages for common web scraping issues</li>
                 <li>Added better handling of timeouts in network operations</li>
-                <li>Fixed error handling in MCP server connections</li>
             </ul>
 
             <h2 id="unreleased">Unreleased</h2>
