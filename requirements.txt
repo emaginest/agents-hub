@@ -35,6 +35,9 @@ langfuse>=2.0.0
 # Tavily dependencies
 tavily-python>=0.2.0
 
+# MCP dependencies
+mcp[cli]>=0.1.0
+
 # Document processing dependencies
 PyPDF2>=2.0.0
 python-docx>=0.8.10

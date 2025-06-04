@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agents-hub"
-version = "0.1.3"
+version = "0.1.4"
 description = "Advanced Agent Orchestration Framework"
 readme = "README.md"
 authors = [
@@ -45,6 +45,7 @@ dependencies = [
     "nltk>=3.6.0",
     "langfuse>=2.0.0",
     "tavily-python>=0.2.0",
+    "mcp[cli]>=0.1.0",
     "gitpython>=3.1.0",
     "pytest>=7.0.0",
     "python-dotenv>=1.0.0",
