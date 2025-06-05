@@ -38,6 +38,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cleaned up temporary and generated files
 - Fixed import statements to reflect the new structure
 
+## [0.1.5] - 2025-01-27
+
+### Added
+- Robust JSON parser (`agents_hub.utils.json_parser`) with multiple extraction strategies
+  - Bracket-based extraction with proper string handling
+  - Regex-based extraction for JSON objects
+  - Code block extraction for markdown-wrapped JSON
+  - Line-based extraction for multiline JSON structures
+- Intelligent agent selector (`agents_hub.orchestration.agent_selector`) for content-based agent selection
+  - Multi-factor scoring system (keywords, capabilities, description similarity, name relevance)
+  - Context-aware scoring that reduces ambiguous term weights in technical contexts
+  - Domain-specific keyword enhancement for coding, writing, and research agents
+- Comprehensive test suite with 69 tests covering all orchestration scenarios
+
+### Changed
+- Enhanced AgentWorkforce orchestration system with intelligent fallback logic
+- Improved orchestrator prompts with clearer JSON format requirements
+- Better error handling and logging throughout the orchestration process
+- Agent selection now uses content analysis instead of defaulting to first agent
+
+### Fixed
+- **Critical Bug**: JSON parsing failures that caused "Expecting value: line 1 column 1 (char 0)" errors
+- **Critical Bug**: Poor fallback logic that defaulted to first agent regardless of task content
+- **Critical Bug**: Incorrect agent routing when orchestration failed
+- **Critical Bug**: Limited error context and poor debugging information
+- JSON parsing now handles explanatory text before/after JSON responses
+- Agent selection now intelligently matches tasks to appropriate specialized agents
+- Unknown agent references now trigger intelligent substitution instead of errors
+- Comprehensive error tracking with fallback reason reporting
+
 ## [0.1.3] - 2025-04-25
 
 ### Added
